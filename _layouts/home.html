@@ -10,9 +10,36 @@ layout: default
   {{ content }}
 
   {%- if site.posts.size > 0 -%}
+    {%- assign pinned_posts = site.posts | where: "pinned", true -%}
+    {%- assign regular_posts = site.posts | where_exp: "post", "post.pinned != true" -%}
+
+    {%- if pinned_posts.size > 0 -%}
+    <h2 class="post-list-heading">Pinned Posts</h2>
+    <ul class="post-list post-list-pinned">
+      {%- for post in pinned_posts -%}
+      <li class="post-item-pinned">
+        <div class="pinned-card-header">
+          <span class="label label-blue">Pinned</span>
+          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+          <span class="post-meta">{{ post.date | date: date_format }}</span>
+        </div>
+        <h3>
+          <a class="post-link" href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+          </a>
+        </h3>
+        <div class="pinned-card-excerpt">
+          {{ post.excerpt | strip_html | truncatewords: 30 }}
+        </div>
+      </li>
+      {%- endfor -%}
+    </ul>
+    {%- endif -%}
+
+    {%- if regular_posts.size > 0 -%}
     <h2 class="post-list-heading">{{ page.list_title | default: "Recent Posts" }}</h2>
     <ul class="post-list">
-      {%- for post in site.posts -%}
+      {%- for post in regular_posts -%}
       <li>
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <span class="post-meta">{{ post.date | date: date_format }}</span>
@@ -27,6 +54,7 @@ layout: default
       </li>
       {%- endfor -%}
     </ul>
+    {%- endif -%}
 
     <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
   {%- endif -%}
