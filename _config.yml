@@ -1,3 +1,26 @@
-theme: jekyll-theme-minimal
-title: misc
-description: Notes and misc
+title: My Blog
+description: Blog powered by GitHub Issues
+url: "https://and.github.io" # Change 'username' to your GitHub username
+
+# Theme
+theme: minima
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - .github/
+
+# Permalink structure
+permalink: /:year/:month/:day/:title/
+
+# Pagination (optional)
+# paginate: 5
+# paginate_path: "/page:num/"
