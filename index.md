@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Home
+title: "What's new on My Blog"
 ---
 
-Welcome
+Welcome to my blog, powered by GitHub Issues. Explore the latest posts and updates below.
