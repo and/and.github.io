@@ -36,7 +36,7 @@ layout: default
     {%- if regular_posts.size > 0 -%}
     <h2 class="post-list-heading">Recent Posts</h2>
     <ul class="post-list">
-      {%- for post in regular_posts -%}
+      {%- for post in regular_posts limit:5 -%}
       <li>
         <a class="post-link" href="{{ post.url | relative_url }}">
           {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
@@ -46,6 +46,11 @@ layout: default
       </li>
       {%- endfor -%}
     </ul>
+    {%- if regular_posts.size > 5 -%}
+    <div class="more-posts">
+      <a href="{{ "/archive/" | relative_url }}" class="more-link">more...</a>
+    </div>
+    {%- endif -%}
     {%- endif -%}
 
     <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>

@@ -20,11 +20,11 @@
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --max-width: 680px;
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 2rem;
-  --spacing-lg: 3rem;
-  --spacing-xl: 4.5rem;
+  --spacing-xs: 0.375rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1.25rem;
+  --spacing-lg: 1.75rem;
+  --spacing-xl: 2.5rem;
 }
 
 * {
@@ -55,7 +55,7 @@ body {
 /* Header */
 header.site-header {
   border-bottom: 1px solid var(--color-border);
-  padding: var(--spacing-lg) 0;
+  padding: var(--spacing-md) 0;
   background: var(--color-bg);
 }
 
@@ -129,24 +129,24 @@ header.site-header {
 
 /* Hero Section */
 .hero {
-  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  padding: var(--spacing-lg) 0 var(--spacing-md);
   border-bottom: 1px solid var(--color-border);
 }
 
 .page-heading {
   font-family: var(--font-display);
-  font-size: 4rem;
+  font-size: 2.75rem;
   font-weight: 300;
   line-height: 1.1;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   letter-spacing: -0.035em;
   font-optical-sizing: auto;
   color: var(--color-text);
 }
 
 .page-description {
-  font-size: 1.125rem;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.6;
   color: var(--color-text-secondary);
   max-width: 540px;
   font-weight: 300;
@@ -154,7 +154,7 @@ header.site-header {
 
 /* Posts Section */
 .posts-section {
-  padding: var(--spacing-xl) 0 var(--spacing-xl);
+  padding: var(--spacing-lg) 0 var(--spacing-md);
 }
 
 .section-heading, .post-list-heading {
@@ -163,13 +163,31 @@ header.site-header {
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--color-text-tertiary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
   display: block;
 }
 
 .post-list {
   list-style: none;
   border-top: 2px solid var(--color-accent);
+}
+
+.more-posts {
+  margin-top: var(--spacing-md);
+  text-align: right;
+}
+
+.more-link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-style: italic;
+  transition: opacity 0.2s ease;
+}
+
+.more-link:hover {
+  opacity: 0.7;
 }
 
 .post-list li, .post-item {
