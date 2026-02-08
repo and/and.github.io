@@ -165,11 +165,13 @@ header.site-header {
   color: var(--color-text-tertiary);
   margin-bottom: var(--spacing-lg);
   display: block;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-accent);
 }
 
 .post-list {
   list-style: none;
-  border-top: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-accent);
 }
 
 .post-list li, .post-item {
@@ -396,15 +398,15 @@ pre code {
 }
 
 .rss-link, .rss-subscribe a {
-  color: var(--color-text);
+  color: var(--color-accent);
   text-decoration: none;
-  font-weight: 400;
+  font-weight: 500;
   transition: opacity 0.2s ease;
   position: relative;
 }
 
 .rss-link:hover, .rss-subscribe a:hover {
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .rss-subscribe {
