@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Field Notes is where I write up what I'm learning. Right now that's data structures and algorithms. Maths, cooking and other subjects will follow.
+This is where I write up what I'm learning. Right now that's data structures and algorithms. Maths, cooking and other subjects will follow.
 
 ## Three reading levels
 
