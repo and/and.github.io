@@ -1,0 +1,26 @@
+---
+layout: default
+title: Topics
+permalink: /topics/
+---
+<h1 class="page-heading">Topics</h1>
+{%- assign topics = site.categories | sort -%}
+{%- if topics.size == 0 %}
+<p class="page-description">No topics yet.</p>
+{%- else %}
+<nav class="topic-index" aria-label="Jump to a topic">
+  {%- for t in topics %}
+  <a href="#{{ t[0] | slugify }}">{{ t[0] }} <span>{{ t[1].size }}</span></a>
+  {%- endfor %}
+</nav>
+{%- for t in topics %}
+<section class="topic-block" id="{{ t[0] | slugify }}">
+  <h2>{{ t[0] }} <span>{{ t[1].size }} {% if t[1].size == 1 %}post{% else %}posts{% endif %}</span></h2>
+  <ul class="post-list">
+    {%- for post in t[1] %}
+    {% include post-row.html post=post %}
+    {%- endfor %}
+  </ul>
+</section>
+{%- endfor %}
+{%- endif %}

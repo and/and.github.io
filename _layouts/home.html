@@ -37,13 +37,7 @@ layout: default
     <h2 class="post-list-heading">Recent Posts</h2>
     <ul class="post-list">
       {%- for post in regular_posts limit:5 -%}
-      <li>
-        <a class="post-link" href="{{ post.url | relative_url }}">
-          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-          <div class="post-meta">{{ post.date | date: date_format }}</div>
-          <h3 class="post-title">{{ post.title | escape }}</h3>
-        </a>
-      </li>
+      {% include post-row.html post=post %}
       {%- endfor -%}
     </ul>
     {%- if regular_posts.size > 5 -%}

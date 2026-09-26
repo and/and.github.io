@@ -24,6 +24,9 @@ layout: default
         {% endfor %}
       {%- endif -%}
     </p>
+    {%- if page.categories.size > 0 %}
+    <p class="post-topics">{% for c in page.categories %}<a href="{{ "/topics/" | relative_url }}#{{ c | slugify }}">{{ c }}</a>{% endfor %}</p>
+    {%- endif %}
   </header>
   <div class="post-content e-content" itemprop="articleBody">
     {{ content }}

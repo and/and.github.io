@@ -1,0 +1,10 @@
+<li class="post-row">
+  {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+  <div class="post-meta">{{ include.post.date | date: date_format }}</div>
+  <div class="post-main">
+    <a class="post-link" href="{{ include.post.url | relative_url }}"><h3 class="post-title">{{ include.post.title | escape }}</h3></a>
+    {%- if include.post.categories.size > 0 %}
+    <div class="post-topics">{% for c in include.post.categories %}<a href="{{ "/topics/" | relative_url }}#{{ c | slugify }}">{{ c }}</a>{% endfor %}</div>
+    {%- endif %}
+  </div>
+</li>
