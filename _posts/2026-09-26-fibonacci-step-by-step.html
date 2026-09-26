@@ -1,0 +1,347 @@
+---
+layout: null
+title: "Fibonacci, Step by Step"
+date: 2026-09-26
+categories: [dsa]
+permalink: /dsa/fibonacci/
+excerpt: "An interactive walkthrough of the Fibonacci sequence: how each number is built, the squares it tiles, and why the ratio settles at 1.618. Read it as a beginner, an intermediate or an expert."
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }} | {{ site.title }}</title>
+<meta name="description" content="{{ page.excerpt | strip_html | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link type="application/atom+xml" rel="alternate" href="{{ "/feed.xml" | relative_url }}" title="{{ site.title | escape }}">
+{% raw %}<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap">
+<style>
+:root{
+  --bg:#fffef9;--surface:#FFFFFF;--ink:#0a0a0a;--muted:#5a5a5a;--rule:#e5e5e5;--code-bg:#f5f5f4;
+  --cur:#c2410c;--cur-bg:#fdeee4;--cur-ink:#7c2d12;
+  --src:#1e40af;--src-bg:#e8eefb;--src-ink:#1e3a8a;
+  --bad:#991b1b;--bad-bg:#fdecec;
+  --display:"Fraunces",Georgia,serif;
+  --body:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:"IBM Plex Mono",Menlo,monospace;
+}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;font-weight:300;line-height:1.75;letter-spacing:-.011em;-webkit-font-smoothing:antialiased;padding-inline:20px;padding-block:0 4rem}
+.col{max-width:680px;margin-inline:auto}
+.wide{max-width:880px;margin-inline:auto}
+header.col{padding-block:4rem 1.5rem}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--cur)}
+h1{font-family:var(--display);font-weight:300;font-size:clamp(38px,7vw,56px);line-height:1.08;letter-spacing:-.035em;margin:.6rem 0 1rem;text-wrap:balance}
+.dek{font-family:var(--display);font-size:22px;line-height:1.5;color:var(--muted);margin:0;font-style:italic;font-weight:400}
+h2{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.2;letter-spacing:-.01em;margin:3rem 0 .75rem;text-wrap:balance}
+p{margin:0 0 1.1rem}
+code,.m{font-family:var(--mono);font-size:.84em}
+p code{background:var(--code-bg);padding:.1em .35em;border-radius:4px}
+.rule-card{display:grid;gap:.35rem;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:1.1rem 1.25rem;font-family:var(--mono);font-size:17px;margin:1.5rem 0}
+.rule-card span{color:var(--muted);font-size:14px;margin-left:.6rem;font-family:var(--body);font-style:italic}
+
+figure{margin:2rem auto 2.5rem;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:1.25rem}
+figcaption{font-size:15px;color:var(--muted);line-height:1.5;margin-top:.9rem}
+figcaption b{font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin-right:.4rem}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:.75rem}
+button{font-family:var(--mono);font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:8px;padding:.45rem .8rem;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--cur);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-left:auto;font-size:14px;color:var(--muted)}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px;border:1.5px solid}
+.scroll{overflow-x:auto}
+.scroll svg{min-width:560px}
+svg{display:block;width:100%;height:auto}
+.formula{font-family:var(--mono);font-size:16px;line-height:1.7;margin-top:.5rem;font-variant-numeric:tabular-nums}
+.formula .note{font-family:var(--body);font-size:15px;color:var(--muted);margin-top:.35rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:1rem}
+.stat{background:var(--bg);border-radius:8px;padding:.7rem .9rem}
+.stat div:first-child{font-size:13px;color:var(--muted)}
+.stat div:last-child{font-family:var(--mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.slider{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:.5rem}
+.slider input{flex:1;accent-color:var(--cur)}
+
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:1.5rem 0}
+.pane{border-radius:10px;padding:1rem;border:1px solid var(--rule);background:var(--surface)}
+.pane h3{font-family:var(--display);font-size:18px;font-weight:400;margin:0 0 .5rem}
+.pane.bad h3{color:var(--bad)}
+.pane.good h3{color:var(--cur)}
+pre{font-family:var(--mono);font-size:14px;line-height:1.6;background:var(--code-bg);border-radius:8px;padding:.8rem 1rem;margin:0;overflow-x:auto}
+.pane pre{font-size:13px}
+.pane p{font-size:15px;color:var(--muted);margin:.6rem 0 0;line-height:1.5}
+.k{color:var(--src)}.fn{color:var(--cur)}.hl{background:var(--bad-bg);color:var(--bad);border-radius:3px}.ok{background:var(--cur-bg);color:var(--cur-ink);border-radius:3px}
+.reader{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--rule);padding-block:.6rem;margin-bottom:1rem}
+.reader .col{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.reader .lab{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:9px;padding:3px;gap:3px;background:var(--surface)}
+.seg button{border:0;border-radius:6px;padding:.35rem .75rem;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--cur-bg);color:var(--cur-ink);font-weight:500}
+body[data-reader="beginner"] [data-level]:not([data-level~="beginner"]),
+body[data-reader="intermediate"] [data-level]:not([data-level~="intermediate"]),
+body[data-reader="expert"] [data-level]:not([data-level~="expert"]){display:none}
+.todo{border:1.5px dashed var(--bad);border-radius:10px;padding:.9rem 1.1rem;margin:0 0 1.1rem;color:var(--muted);font-size:16px}
+.todo b{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--bad);margin-bottom:.25rem}
+footer.col{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--rule);font-size:15px;color:var(--muted)}
+@media (max-width:520px){body{font-size:18px}.dek{font-size:19px}h2{font-size:24px}.legend{margin-left:0}}
+
+.topbar{max-width:880px;margin-inline:auto;display:flex;justify-content:space-between;align-items:baseline;padding-block:1.1rem;border-bottom:1px solid var(--rule)}
+.topbar a{font-family:var(--display);font-size:1.4rem;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.topbar a.nav{font-family:var(--body);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.topbar a:hover{color:var(--cur)}
+body{margin:0}
+</style>
+{% endraw %}
+</head>
+<body data-reader="intermediate">
+<nav class="topbar" aria-label="Site"><a href="{{ "/" | relative_url }}">{{ site.title | escape }}</a><a class="nav" href="{{ "/archive/" | relative_url }}">All posts</a></nav>
+{% raw %}
+<header class="col">
+  <div class="eyebrow">Recursion · Sequences</div>
+  <h1>Fibonacci, Step by Step</h1>
+  <p class="dek">One rule, two starting numbers, and a pattern that turns up in sunflower heads and in almost every first lesson on recursion.</p>
+</header>
+
+<div class="reader">
+  <div class="col">
+    <span class="lab" id="reader-lab">Reading as</span>
+    <div class="seg" role="group" aria-labelledby="reader-lab">
+      <button type="button" data-set="beginner" aria-pressed="false">Novice</button>
+      <button type="button" data-set="intermediate" aria-pressed="true">Intro programmer</button>
+      <button type="button" data-set="expert" aria-pressed="false">Expert</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var L=['beginner','intermediate','expert'],lv='intermediate';
+  try{var s=localStorage.getItem('reader-level');if(L.indexOf(s)>-1)lv=s}catch(e){}
+  var q=new URLSearchParams(location.search).get('level'),h=location.hash.slice(1);
+  if(L.indexOf(q)>-1)lv=q;else if(L.indexOf(h)>-1)lv=h;
+  function set(v){
+    document.body.setAttribute('data-reader',v);
+    document.querySelectorAll('.seg button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.set===v?'true':'false')});
+    try{localStorage.setItem('reader-level',v)}catch(e){}
+  }
+  set(lv);
+  document.querySelectorAll('.seg button').forEach(function(b){b.addEventListener('click',function(){set(b.dataset.set)})});
+})();
+</script>
+
+<main>
+<section class="col">
+  <p>The Fibonacci sequence starts with 0 and 1. Every number after that is the sum of the two numbers before it.</p>
+  <div class="rule-card" aria-label="Fibonacci definition">
+    <div>F(0) = 0 <span>given</span></div>
+    <div>F(1) = 1 <span>given</span></div>
+    <div>F(n) = F(n−1) + F(n−2) <span>for every n ≥ 2</span></div>
+  </div>
+  <p>That gives 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 and onward. Step through it below. The green box is the number being calculated. The two purple boxes are the numbers it is built from.</p>
+</section>
+
+<figure class="wide" id="fig-build">
+  <div class="controls">
+    <button id="b-prev" type="button" aria-label="Previous step">← Back</button>
+    <button id="b-next" type="button">Next →</button>
+    <button id="b-reset" type="button">Reset</button>
+    <div class="legend" aria-hidden="true">
+      <span><i class="sw" style="background:var(--cur-bg);border-color:var(--cur)"></i>calculating</span>
+      <span><i class="sw" style="background:var(--src-bg);border-color:var(--src)"></i>added together</span>
+    </div>
+  </div>
+  <div class="scroll"><div id="row"></div></div>
+  <div class="formula" aria-live="polite">
+    <div id="f1"></div>
+    <div id="f2"></div>
+    <div class="note" id="f3"></div>
+  </div>
+  <figcaption><b>Fig. 1</b>Small numbers above the boxes are positions. Numbers inside the boxes are values.</figcaption>
+</figure>
+
+<section class="col">
+  <h2>A position is not a value</h2>
+  <div class="todo" data-level="beginner"><b>Draft · beginner version</b>Explain position vs value with no code, using Figure 1 only. For example: seat numbers in a row versus the people sitting in them.</div>
+  <div data-level="intermediate expert">
+  <p>Look at the two kinds of number in Figure 1. The small number above each box is a <em>position</em>, n. The number inside the box is the <em>value</em> stored there, F(n). At position 6 the value is 8. The rule adds the values at positions 5 and 4, which are 5 and 3. It does not add 5 and 4.</p>
+  <p>This is the most common mistake when writing Fibonacci as a recursive function. <code>n - 1</code> is a position. <code>fibonacci(n - 1)</code> is the value at that position. Mix them up and the code runs without errors, but gives wrong answers from F(3) on.</p>
+  </div>
+</section>
+
+<div class="wide" data-level="intermediate expert">
+<div class="compare">
+  <div class="pane bad">
+    <h3>Adds a position</h3>
+<pre><span class="k">def</span> <span class="fn">fibonacci</span>(n):
+    <span class="k">if</span> n == 0: <span class="k">return</span> 0
+    <span class="k">if</span> n == 1: <span class="k">return</span> 1
+    <span class="k">return</span> <span class="hl">(n - 1)</span> + fibonacci(n - 2)</pre>
+    <p>fibonacci(3) = (3 − 1) + fibonacci(1) = 2 + 1 = <strong>3</strong>. The right answer is 2.</p>
+  </div>
+  <div class="pane good">
+    <h3>Adds two values</h3>
+<pre><span class="k">def</span> <span class="fn">fibonacci</span>(n):
+    <span class="k">if</span> n == 0: <span class="k">return</span> 0
+    <span class="k">if</span> n == 1: <span class="k">return</span> 1
+    <span class="k">return</span> <span class="ok">fibonacci(n - 1)</span> + <span class="ok">fibonacci(n - 2)</span></pre>
+    <p>fibonacci(3) = fibonacci(2) + fibonacci(1) = 1 + 1 = <strong>2</strong>.</p>
+  </div>
+</div>
+</div>
+
+<section class="col">
+  <p data-level="intermediate expert">A useful habit: before you write the recursive line, ask what the call on the smaller input <em>returns</em>. Then build your answer only from those returned values.</p>
+
+  <h2>Why two starting numbers?</h2>
+  <p>Each new number needs two earlier ones. So the rule can't produce the first two numbers by itself, and they have to be given.</p>
+  <p data-level="intermediate expert">In code, those are the base cases: <code>n == 0</code> and <code>n == 1</code>. Any other n eventually reaches one of them, because each call moves down by 1 or 2. A third base case for n = 2 isn't needed. F(2) = F(1) + F(0) already works.</p>
+
+  <h2>Numbers as squares</h2>
+  <p>Draw each Fibonacci number as a square with that side length. Put a 1 next to a 1, a 2 along their shared edge, a 3 beside those, then a 5, then an 8. Every new square fits the long side of the rectangle exactly. That's because the long side is the previous two sides added together, which is the Fibonacci rule again. Quarter-circle arcs through each square give the familiar spiral.</p>
+</section>
+
+<figure class="wide" id="fig-squares">
+  <div class="slider">
+    <label for="sq-n">Squares</label>
+    <input id="sq-n" type="range" min="1" max="12" step="1" value="8">
+    <span id="sq-out" style="min-width:9ch;text-align:right;color:var(--ink)">F(1)…F(8)</span>
+  </div>
+  <div id="sq"></div>
+  <figcaption><b>Fig. 2</b>The newest square is green. The two it rests on are purple, and its side is their sum.</figcaption>
+</figure>
+
+<section class="col">
+  <h2>How fast it grows</h2>
+  <p>Divide each number by the one before it. The early ratios swing about: 1, 2, 1.5, 1.667, 1.6. Then they close in on one value, about 1.618. That is the golden ratio, written φ (phi).</p>
+</section>
+
+<figure class="wide" id="fig-ratio">
+  <div id="ratio"></div>
+  <div class="stats">
+    <div class="stat"><div>F(16) ÷ F(15)</div><div id="r-last">1.618</div></div>
+    <div class="stat"><div>φ = (1 + √5) ÷ 2</div><div>1.6180…</div></div>
+    <div class="stat"><div>F(30)</div><div>832,040</div></div>
+  </div>
+  <figcaption><b>Fig. 3</b>The ratio F(n) ÷ F(n−1) for n = 2 to 16. It lands above and below φ in turn, getting closer each step.</figcaption>
+</figure>
+
+<section class="col">
+  <p>A steady ratio means steady multiplication. Once the sequence gets going, each number is about 1.6 times the one before it, so the values grow <em>exponentially</em>. It takes only 30 steps to pass 800,000.</p>
+
+  <h2>Where it comes from</h2>
+  <p>Leonardo of Pisa, later called Fibonacci, published the sequence in Europe in his 1202 book <em>Liber Abaci</em>. He used it to answer an idealised puzzle about breeding rabbits. Each month, every adult pair produces a new pair, and a newborn pair takes a month to mature. This month's pairs equal last month's pairs, plus one newborn pair for every pair that was alive two months ago. Indian scholars studying the rhythms of Sanskrit poetry had counted the same numbers centuries earlier, including Virahanka and later Hemachandra.</p>
+  <p>The numbers also show up in plants. The spirals in a sunflower head or on a pinecone often come in two sets whose counts are neighbouring Fibonacci numbers, such as 34 and 55.</p>
+
+  <h2 data-level="intermediate expert">Why programmers meet it early</h2>
+  <p data-level="intermediate">The definition is already recursive: a number defined in terms of smaller cases of itself. That makes it the standard first exercise in recursion. It also makes a good next question. The code above is correct, but how many calls does <code>fibonacci(5)</code> make? Draw the calls as a tree and count them. That count leads straight to the next topic: the gap between code that is correct and code that is fast.</p>
+  <div class="todo" data-level="expert"><b>Draft · expert version</b>Why the naive recursion is slow: the call tree, its time and space cost, and faster alternatives. Write this after working through the call-tree questions.</div>
+</section>
+</main>
+
+<footer class="col">Written while working through recursion practice. Every figure on this page is interactive.</footer>
+
+<script>
+(function(){
+  var F=[0,1];for(var i=2;i<=30;i++)F.push(F[i-1]+F[i-2]);
+  var NS='http://www.w3.org/2000/svg';
+
+  var n=2,MAX=10;
+  function cx(i){return 40+i*60}
+  function row(){
+    var s='<svg viewBox="0 0 680 140" role="img" aria-label="Positions 0 to 10 with their Fibonacci values"><defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>';
+    for(var i=0;i<=MAX;i++){
+      var x=16+i*60,fill='var(--bg)',st='var(--rule)',tc='var(--ink)',dash='',txt=F[i],w=1;
+      if(i>n){fill='none';tc='var(--muted)';dash=' stroke-dasharray="3 3"';txt='?'}
+      else if(i===n){fill='var(--cur-bg)';st='var(--cur)';tc='var(--cur-ink)';w=2}
+      else if(n>=2&&(i===n-1||i===n-2)){fill='var(--src-bg)';st='var(--src)';tc='var(--src-ink)';w=1.5}
+      s+='<text x="'+cx(i)+'" y="24" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">'+i+'</text>';
+      s+='<rect x="'+x+'" y="34" width="48" height="46" rx="6" fill="'+fill+'" stroke="'+st+'" stroke-width="'+w+'"'+dash+'/>';
+      s+='<text x="'+cx(i)+'" y="57" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="16" font-weight="500" fill="'+tc+'">'+txt+'</text>';
+    }
+    if(n>=2){
+      [[n-1,24],[n-2,44]].forEach(function(p){
+        var x1=cx(p[0]),x2=cx(n)-4;
+        s+='<path d="M'+x1+' 82 Q'+((x1+x2)/2)+' '+(82+p[1]*2)+' '+x2+' 83" fill="none" stroke="var(--src)" stroke-width="1.5" marker-end="url(#ar)"/>';
+      });
+    }
+    return s+'</svg>';
+  }
+  function drawRow(){
+    document.getElementById('row').innerHTML=row();
+    var f1=document.getElementById('f1'),f2=document.getElementById('f2'),f3=document.getElementById('f3');
+    if(n<2){f1.textContent='F('+n+') = '+F[n];f2.textContent='';f3.textContent='A starting value. It is given, not calculated.'}
+    else{
+      f1.textContent='F('+n+') = F('+(n-1)+') + F('+(n-2)+')';
+      f2.textContent='     = '+F[n-1]+' + '+F[n-2]+' = '+F[n];
+      f3.textContent='Positions '+(n-1)+' and '+(n-2)+' say where to look. The values there, '+F[n-1]+' and '+F[n-2]+', are what get added.';
+    }
+  }
+  document.getElementById('b-next').addEventListener('click',function(){if(n<MAX){n++;drawRow()}});
+  document.getElementById('b-prev').addEventListener('click',function(){if(n>0){n--;drawRow()}});
+  document.getElementById('b-reset').addEventListener('click',function(){n=0;drawRow()});
+  drawRow();
+
+  function squares(m){
+    var W=600,H=300,sq=[{x:0,y:0,s:1,k:1,c:'BL'}],b={x:0,y:0,w:1,h:1};
+    var corner=['TL','BL','BR','TR'];
+    for(var k=2;k<=m;k++){
+      var z=F[k],d=(k-2)%4,p;
+      if(d===0){p={x:b.x+b.w,y:b.y};b.w+=z}
+      else if(d===1){p={x:b.x,y:b.y-z};b.y-=z;b.h+=z}
+      else if(d===2){p={x:b.x-z,y:b.y};b.x-=z;b.w+=z}
+      else{p={x:b.x,y:b.y+b.h};b.h+=z}
+      sq.push({x:p.x,y:p.y,s:z,k:k,c:corner[d]});
+    }
+    var sc=Math.min(W/b.w,H/b.h),ox=40+(W-b.w*sc)/2-b.x*sc,oy=20+(H-b.h*sc)/2-b.y*sc;
+    var s='<svg viewBox="0 0 680 340" role="img" aria-label="Fibonacci squares from F(1) to F('+m+') tiled into a rectangle with a spiral">';
+    var arcs='';
+    sq.forEach(function(q){
+      var cur=q.k===m,src=m>=3&&(q.k===m-1||q.k===m-2);
+      var f=cur?'var(--cur-bg)':src?'var(--src-bg)':'var(--bg)',st=cur?'var(--cur)':src?'var(--src)':'var(--rule)',tc=cur?'var(--cur-ink)':src?'var(--src-ink)':'var(--muted)';
+      var X=ox+q.x*sc,Y=oy+q.y*sc,S=q.s*sc;
+      s+='<rect x="'+X.toFixed(1)+'" y="'+Y.toFixed(1)+'" width="'+S.toFixed(1)+'" height="'+S.toFixed(1)+'" fill="'+f+'" stroke="'+st+'" stroke-width="'+(cur?2:1)+'"/>';
+      if(S>=24)s+='<text x="'+(X+S/2).toFixed(1)+'" y="'+(Y+S/2).toFixed(1)+'" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="'+(S>=70?16:12)+'" font-weight="500" fill="'+tc+'">'+q.s+'</text>';
+      var ccx,ccy,sx,sy;
+      if(q.c==='TL'){ccx=X;ccy=Y;sx=1;sy=1}
+      else if(q.c==='BL'){ccx=X;ccy=Y+S;sx=1;sy=-1}
+      else if(q.c==='BR'){ccx=X+S;ccy=Y+S;sx=-1;sy=-1}
+      else{ccx=X+S;ccy=Y;sx=-1;sy=1}
+      var p1x=ccx+sx*S,p1y=ccy,p2x=ccx,p2y=ccy+sy*S;
+      var cross=(p2x-p1x)*(ccy-p1y)-(p2y-p1y)*(ccx-p1x);
+      arcs+='<path d="M'+p1x.toFixed(1)+' '+p1y.toFixed(1)+' A'+S.toFixed(1)+' '+S.toFixed(1)+' 0 0 '+(cross>0?1:0)+' '+p2x.toFixed(1)+' '+p2y.toFixed(1)+'" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>';
+    });
+    return s+arcs+'</svg>';
+  }
+  var sl=document.getElementById('sq-n'),so=document.getElementById('sq-out');
+  function drawSq(){var m=+sl.value;document.getElementById('sq').innerHTML=squares(m);so.textContent=m===1?'F(1)':'F(1)…F('+m+')'}
+  sl.addEventListener('input',drawSq);drawSq();
+
+  function ratio(){
+    var L=60,R=650,T=24,B=236,y0=0.9,y1=2.1,nMin=2,nMax=16,phi=(1+Math.sqrt(5))/2;
+    function X(k){return L+(k-nMin)*(R-L)/(nMax-nMin)}
+    function Y(v){return B-(v-y0)*(B-T)/(y1-y0)}
+    var s='<svg viewBox="0 0 680 272" role="img" aria-label="Ratio of consecutive Fibonacci numbers converging to 1.618">';
+    [1,1.5,2].forEach(function(v){
+      s+='<line x1="'+L+'" x2="'+R+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="var(--rule)" stroke-width="1"/>';
+      s+='<text x="'+(L-10)+'" y="'+Y(v)+'" text-anchor="end" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">'+v.toFixed(1)+'</text>';
+    });
+    s+='<line x1="'+L+'" x2="'+R+'" y1="'+Y(phi).toFixed(1)+'" y2="'+Y(phi).toFixed(1)+'" stroke="var(--src)" stroke-width="1.5" stroke-dasharray="5 4"/>';
+    s+='<text x="'+R+'" y="'+(Y(phi)-10).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--src)">φ ≈ 1.618</text>';
+    var pts=[];
+    for(var k=nMin;k<=nMax;k++){pts.push([X(k),Y(F[k]/F[k-1])]);
+      s+='<text x="'+X(k).toFixed(1)+'" y="'+(B+22)+'" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">'+k+'</text>';}
+    s+='<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')+'" fill="none" stroke="var(--cur)" stroke-width="2" stroke-linejoin="round"/>';
+    pts.forEach(function(p,i){s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(i===pts.length-1?5:3.5)+'" fill="var(--surface)" stroke="var(--cur)" stroke-width="2"/>'});
+    var first=[[2,'1.000'],[3,'2.000']];
+    first.forEach(function(a){var v=F[a[0]]/F[a[0]-1];s+='<text x="'+(X(a[0])+9).toFixed(1)+'" y="'+(Y(v)+(a[0]===3?-2:14)).toFixed(1)+'" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink)">'+a[1]+'</text>'});
+    s+='<text x="'+((L+R)/2)+'" y="'+(B+36)+'" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="var(--muted)">position n</text>';
+    return s+'</svg>';
+  }
+  document.getElementById('ratio').innerHTML=ratio();
+  document.getElementById('r-last').textContent=(F[16]/F[15]).toFixed(4);
+})();
+</script>
+{% endraw %}
+</body>
+</html>

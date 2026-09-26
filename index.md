@@ -1,6 +1,6 @@
 ---
 layout: home
-title: "What's new on My Blog"
+title: "Field Notes"
 ---
 
-Welcome to my blog, powered by GitHub Issues.
+Notes on things I'm learning, from algorithms and maths to cooking. Many posts let you pick a reading level: beginner, intermediate or expert.

@@ -1,6 +1,6 @@
-title: My Blog
-description: Blog powered by GitHub Issues
-url: "https://and.github.io" # Change 'username' to your GitHub username
+title: Field Notes
+description: "Interactive notes on things I am learning, from algorithms and maths to cooking. Many posts can be read at three levels: beginner, intermediate or expert."
+url: "https://and.github.io"
 
 # Theme
 theme: minima
