@@ -17,16 +17,16 @@ excerpt: "An interactive walkthrough of the Fibonacci sequence: how each number 
 <link type="application/atom+xml" rel="alternate" href="{{ "/feed.xml" | relative_url }}" title="{{ site.title | escape }}">
 {% raw %}<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <style>
 :root{
-  --bg:#fffef9;--surface:#FFFFFF;--ink:#0a0a0a;--muted:#5a5a5a;--rule:#e5e5e5;--code-bg:#f5f5f4;
-  --cur:#c2410c;--cur-bg:#fdeee4;--cur-ink:#7c2d12;
-  --src:#1e40af;--src-bg:#e8eefb;--src-ink:#1e3a8a;
-  --bad:#991b1b;--bad-bg:#fdecec;
-  --display:"Fraunces",Georgia,serif;
-  --body:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
-  --mono:"IBM Plex Mono",Menlo,monospace;
+  --bg:#ffffff;--surface:#ffffff;--ink:#111111;--muted:#6b6b6b;--rule:#e8e8e8;--code-bg:#f6f6f6;
+  --cur:#111111;--cur-bg:#ffe14d;--cur-ink:#111111;
+  --src:#111111;--src-bg:#efefef;--src-ink:#111111;
+  --bad:#6b6b6b;--bad-bg:#efefef;
+  --display:"IBM Plex Sans",-apple-system,"Helvetica Neue",sans-serif;
+  --body:"IBM Plex Sans",-apple-system,"Helvetica Neue",sans-serif;
+  --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
 }
 
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;font-weight:300;line-height:1.75;letter-spacing:-.011em;-webkit-font-smoothing:antialiased;padding-inline:20px;padding-block:0 4rem}
@@ -92,6 +92,49 @@ footer.col{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--rule
 .topbar a.nav{font-family:var(--body);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .topbar a:hover{color:var(--cur)}
 body{margin:0}
+
+body{font-weight:400;font-size:17px;line-height:1.7;letter-spacing:0}
+header.col{padding-block:3rem 1.25rem}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(32px,6vw,44px);line-height:1.12;letter-spacing:-.025em}
+h2{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.01em;margin:2.75rem 0 .6rem}
+.dek{font-family:var(--body);font-style:normal;font-weight:400;font-size:19px;color:var(--muted)}
+.eyebrow{color:var(--muted);letter-spacing:0;text-transform:none;font-size:12px}
+p code{border-radius:0}
+.rule-card{background:none;border:0;border-left:2px solid var(--ink);border-radius:0;padding:.15rem 0 .15rem 1rem;font-size:15px}
+figure{background:none;border:0;border-top:1px solid var(--ink);border-radius:0;padding:1rem 0 0;margin:2.25rem auto 2.5rem}
+figcaption{font-size:14px}
+figcaption b{font-weight:400;color:var(--muted);letter-spacing:0;text-transform:none;font-size:12px}
+button{border:0;border-bottom:1px solid var(--ink);border-radius:0;padding:.1rem 0;margin-right:.9rem;font-size:13px;background:none}
+button:hover{color:var(--muted);border-color:var(--muted)}
+.legend{font-size:13px}
+.sw{border-radius:0;border-width:1px}
+.formula{font-size:15px}
+.stats{gap:24px}
+.stat{background:none;border-radius:0;padding:.5rem 0 0;border-top:1px solid var(--rule)}
+.stat div:last-child{font-size:20px;font-weight:400}
+.pane{background:none;border:0;border-top:1px solid var(--rule);border-radius:0;padding:.9rem 0 0}
+.pane h3{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink)}
+.pane.bad h3,.pane.good h3{color:var(--ink)}
+pre{border-radius:0}
+.hl{background:none;color:var(--ink);text-decoration:line-through;text-decoration-thickness:1.5px;border-radius:0}
+.ok{background:var(--cur-bg);border-radius:0}
+.k{color:var(--ink);font-weight:500}.fn{color:var(--ink)}
+.reader{border-bottom:1px solid var(--rule);background:var(--bg)}
+.seg{border:0;border-radius:0;padding:0;gap:16px;background:none}
+.seg button{border:0;margin:0;padding:0;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:none;color:var(--ink);font-weight:500;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.todo{border:1px dashed var(--muted);border-radius:0;font-size:15px}
+.todo b{color:var(--muted);letter-spacing:0;text-transform:none}
+.topbar{max-width:640px;border-bottom:1px solid var(--ink);padding-block:1.75rem .9rem}
+.topbar a{font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:0}
+.topbar a.nav{font-family:var(--mono);font-size:13px;letter-spacing:0;text-transform:none;font-weight:400}
+.topbar a:hover{color:var(--muted)}
+.col{max-width:640px}
+footer.col{font-family:var(--mono);font-size:12px}
+input[type=range]{accent-color:#111}
+.wide{max-width:640px}
+.reader{border-bottom:0;padding-block:.5rem 0}
+.reader .col{border-bottom:1px solid var(--rule);padding-bottom:.5rem}
 </style>
 {% endraw %}
 </head>
@@ -138,7 +181,7 @@ body{margin:0}
     <div>F(1) = 1 <span>given</span></div>
     <div>F(n) = F(n−1) + F(n−2) <span>for every n ≥ 2</span></div>
   </div>
-  <p>That gives 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 and onward. Step through it below. The green box is the number being calculated. The two purple boxes are the numbers it is built from.</p>
+  <p>That gives 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 and onward. Step through it below. The yellow box is the number being calculated. The two grey boxes are the numbers it is built from.</p>
 </section>
 
 <figure class="wide" id="fig-build">
@@ -172,7 +215,7 @@ body{margin:0}
 <div class="wide" data-level="intermediate expert">
 <div class="compare">
   <div class="pane bad">
-    <h3>Adds a position</h3>
+    <h3>Wrong: adds a position</h3>
 <pre><span class="k">def</span> <span class="fn">fibonacci</span>(n):
     <span class="k">if</span> n == 0: <span class="k">return</span> 0
     <span class="k">if</span> n == 1: <span class="k">return</span> 1
@@ -180,7 +223,7 @@ body{margin:0}
     <p>fibonacci(3) = (3 − 1) + fibonacci(1) = 2 + 1 = <strong>3</strong>. The right answer is 2.</p>
   </div>
   <div class="pane good">
-    <h3>Adds two values</h3>
+    <h3>Right: adds two values</h3>
 <pre><span class="k">def</span> <span class="fn">fibonacci</span>(n):
     <span class="k">if</span> n == 0: <span class="k">return</span> 0
     <span class="k">if</span> n == 1: <span class="k">return</span> 1
@@ -208,7 +251,7 @@ body{margin:0}
     <span id="sq-out" style="min-width:9ch;text-align:right;color:var(--ink)">F(1)…F(8)</span>
   </div>
   <div id="sq"></div>
-  <figcaption><b>Fig. 2</b>The newest square is green. The two it rests on are purple, and its side is their sum.</figcaption>
+  <figcaption><b>Fig. 2</b>The newest square is yellow. The two it rests on are grey, and its side is their sum.</figcaption>
 </figure>
 
 <section class="col">
@@ -256,7 +299,7 @@ body{margin:0}
       else if(i===n){fill='var(--cur-bg)';st='var(--cur)';tc='var(--cur-ink)';w=2}
       else if(n>=2&&(i===n-1||i===n-2)){fill='var(--src-bg)';st='var(--src)';tc='var(--src-ink)';w=1.5}
       s+='<text x="'+cx(i)+'" y="24" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">'+i+'</text>';
-      s+='<rect x="'+x+'" y="34" width="48" height="46" rx="6" fill="'+fill+'" stroke="'+st+'" stroke-width="'+w+'"'+dash+'/>';
+      s+='<rect x="'+x+'" y="34" width="48" height="46" rx="0" fill="'+fill+'" stroke="'+st+'" stroke-width="'+w+'"'+dash+'/>';
       s+='<text x="'+cx(i)+'" y="57" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="16" font-weight="500" fill="'+tc+'">'+txt+'</text>';
     }
     if(n>=2){
@@ -326,16 +369,16 @@ body{margin:0}
       s+='<line x1="'+L+'" x2="'+R+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="var(--rule)" stroke-width="1"/>';
       s+='<text x="'+(L-10)+'" y="'+Y(v)+'" text-anchor="end" dominant-baseline="central" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">'+v.toFixed(1)+'</text>';
     });
-    s+='<line x1="'+L+'" x2="'+R+'" y1="'+Y(phi).toFixed(1)+'" y2="'+Y(phi).toFixed(1)+'" stroke="var(--src)" stroke-width="1.5" stroke-dasharray="5 4"/>';
-    s+='<text x="'+R+'" y="'+(Y(phi)-10).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--src)">φ ≈ 1.618</text>';
+    s+='<line x1="'+L+'" x2="'+R+'" y1="'+Y(phi).toFixed(1)+'" y2="'+Y(phi).toFixed(1)+'" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/>';
+    s+='<text x="'+R+'" y="'+(Y(phi)-10).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">φ ≈ 1.618</text>';
     var pts=[];
     for(var k=nMin;k<=nMax;k++){pts.push([X(k),Y(F[k]/F[k-1])]);
       s+='<text x="'+X(k).toFixed(1)+'" y="'+(B+22)+'" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">'+k+'</text>';}
-    s+='<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')+'" fill="none" stroke="var(--cur)" stroke-width="2" stroke-linejoin="round"/>';
-    pts.forEach(function(p,i){s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(i===pts.length-1?5:3.5)+'" fill="var(--surface)" stroke="var(--cur)" stroke-width="2"/>'});
+    s+='<polyline points="'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join(' ')+'" fill="none" stroke="var(--cur)" stroke-width="1.5" stroke-linejoin="round"/>';
+    pts.forEach(function(p,i){s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(i===pts.length-1?5:3)+'" fill="'+(i===pts.length-1?'var(--cur-bg)':'var(--surface)')+'" stroke="var(--cur)" stroke-width="1.5"/>'});
     var first=[[2,'1.000'],[3,'2.000']];
     first.forEach(function(a){var v=F[a[0]]/F[a[0]-1];s+='<text x="'+(X(a[0])+9).toFixed(1)+'" y="'+(Y(v)+(a[0]===3?-2:14)).toFixed(1)+'" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--ink)">'+a[1]+'</text>'});
-    s+='<text x="'+((L+R)/2)+'" y="'+(B+36)+'" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="var(--muted)">position n</text>';
+    s+='<text x="'+((L+R)/2)+'" y="'+(B+36)+'" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="var(--muted)">position n</text>';
     return s+'</svg>';
   }
   document.getElementById('ratio').innerHTML=ratio();
