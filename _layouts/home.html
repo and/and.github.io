@@ -3,7 +3,7 @@ layout: default
 ---
 
 <section class="hero">
-  <h1 class="page-heading">{{ page.title | escape }}</h1>
+  <h1 class="visually-hidden">{{ page.title | escape }}</h1>
   <p class="page-description">{{ content | strip_html | strip }}</p>
 </section>
 
@@ -52,7 +52,5 @@ layout: default
     </div>
     {%- endif -%}
     {%- endif -%}
-
-    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
   </section>
 {%- endif -%}
