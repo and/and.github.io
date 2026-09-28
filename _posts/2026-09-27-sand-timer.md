@@ -85,7 +85,7 @@ one hides it from the menu but keeps its time in Statistics.
 
 Right-click → **Statistics…**
 
-![The Statistics window in its Daily view: today at 1h 27m with 3 timers finished and a breakdown of DSA 50m and AI 37m, a bar for each of the last fourteen days split into purple DSA, blue AI and pink Job search, a legend under the chart, an All Projects menu, and a line along the bottom giving the total since the first day beside an Export button]({{ "/assets/images/sand-timer-statistics.png" | relative_url }})
+![The Statistics window in its Daily view: today at 1h 27m with 3 timers finished and a breakdown of DSA 50m and AI 37m, a bar for each of the last fourteen days split into purple DSA, blue AI and pink Reading, a legend under the chart, an All Projects menu, and a line along the bottom giving the total since the first day beside an Export button]({{ "/assets/images/sand-timer-statistics.png" | relative_url }})
 
 - Pick **Hourly**, **Daily**, **Weekly**, **Monthly** or **Yearly** at the top.
 - Hover a bar to read that hour, day or week.
