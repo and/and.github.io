@@ -179,7 +179,8 @@ summary .pill{margin-left:auto}
 
 /* Your numbers */
 .mine{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.mine label{display:grid;gap:6px;font-size:15px}
+.mine{align-items:start}
+.mine label{display:grid;gap:6px;font-size:15px;align-content:start}
 .mine input{font:500 20px var(--f-mono);padding:10px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);width:100%}
 .nstat{display:flex;flex-direction:column;align-items:flex-start;gap:6px;font-size:14px;line-height:1.45;color:var(--muted)}
 .nstat:empty{display:none}
@@ -715,9 +716,11 @@ function checkMatch(a,b){
 }
 function checkNumbers(){
   const i=num('n-idle'),a=num('n-60'),b=num('n-100');
-  $('#s-idle').innerHTML=i?checkIdle(i):'';
-  $('#s-60').innerHTML=a?check60(a):'';
-  $('#s-100').innerHTML=b?check100(b):'';
+  const bad='<span>Enter the RPM as a number above 0, for example 1,800.</span>';
+  const typed=id=>document.getElementById(id).value.trim()!=='';
+  $('#s-idle').innerHTML=i?checkIdle(i):typed('n-idle')?bad:'';
+  $('#s-60').innerHTML=a?check60(a):typed('n-60')?bad:'';
+  $('#s-100').innerHTML=b?check100(b):typed('n-100')?bad:'';
   $('#s-match').innerHTML=a&&b&&a<=8000&&b<=8000?checkMatch(a,b):'';
 }
 ['n-idle','n-60','n-100'].forEach(id=>{
