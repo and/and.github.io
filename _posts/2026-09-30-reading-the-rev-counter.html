@@ -1,0 +1,636 @@
+---
+layout: null
+title: "Reading the Rev Counter"
+date: 2026-09-30
+categories: [cars]
+permalink: /cars/rev-counter/
+excerpt: "What RPM means, how it connects to speed, and how to read the rev counter in a manual or an automatic (AT, CVT, DCT, AMT). With a gear finder, an RPM simulator and a symptom checker."
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }} | {{ site.title }}</title>
+<meta name="description" content="{{ page.excerpt | strip_html | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link type="application/atom+xml" rel="alternate" href="{{ "/feed.xml" | relative_url }}" title="{{ site.title | escape }}">
+{% raw %}<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: one reading column (~66ch) that widens to 960px for the instrument panels */
+:root{
+  --bg:#EDF0F3; --surface:#FFFFFF; --surface-2:#E1E6EC; --fg:#131B23; --muted:#56626F; --line:#C8D0D9;
+  --accent:#E0730F; --accent-ink:#A34E00;
+  --good:#1F7F55; --warn:#A87400; --bad:#C8352A;
+  --dial:#111920; --dial-fg:#E8EDF2; --dial-dim:#7C8896;
+  --f-display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  --f-body:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E141A; --surface:#161F28; --surface-2:#1E2833; --fg:#E5EAEF; --muted:#94A1AE; --line:#2B3744;
+    --accent:#F28C2B; --accent-ink:#F7A452; --good:#4DB883; --warn:#E0AE3A; --bad:#EF5D50;
+    --dial:#090D12; --dial-fg:#E8EDF2; --dial-dim:#7C8896; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E141A; --surface:#161F28; --surface-2:#1E2833; --fg:#E5EAEF; --muted:#94A1AE; --line:#2B3744;
+  --accent:#F28C2B; --accent-ink:#F7A452; --good:#4DB883; --warn:#E0AE3A; --bad:#EF5D50;
+  --dial:#090D12; --dial-fg:#E8EDF2; --dial-dim:#7C8896; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:18px;line-height:1.65;padding-inline:20px;padding-block:0 64px}
+.wrap{max-width:960px;margin:0 auto}
+.col{max-width:680px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.05;margin:0}
+h1{font-size:clamp(46px,9vw,84px);font-weight:700;letter-spacing:-.01em;text-transform:uppercase}
+h2{font-size:clamp(30px,5vw,40px);font-weight:700;text-transform:uppercase;letter-spacing:.01em;margin-top:64px;margin-bottom:12px}
+h3{font-size:22px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+p{margin:0 0 1em}
+a{color:var(--accent-ink)}
+.eyebrow,.label{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:14px;color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+strong{font-weight:600}
+
+/* Masthead */
+.masthead{padding-block:56px 8px;display:grid;gap:16px}
+.masthead .eyebrow{color:var(--accent-ink)}
+.dek{font-size:21px;color:var(--muted);max-width:620px;margin:0}
+.meta{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.revstrip{display:grid;grid-template-columns:repeat(7,1fr);margin-top:20px;border-top:3px solid var(--fg)}
+.revstrip span{font-family:var(--f-display);font-weight:600;font-size:15px;padding-top:4px;border-left:1px solid var(--line);padding-left:6px;color:var(--muted)}
+.revstrip span:last-child{border-top:6px solid var(--bad);margin-top:-6px;color:var(--bad)}
+
+/* Prose */
+article > .col:first-child > p:first-of-type::first-letter{font-family:var(--f-display);font-weight:700;float:left;font-size:4.2em;line-height:.85;padding:6px 10px 0 0;color:var(--accent-ink)}
+.formula{font-family:var(--f-mono);font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin:0 0 1em;overflow-x:auto;line-height:1.7}
+.gtable-wrap{overflow-x:auto;margin:0 0 1em;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.gtable{border-collapse:collapse;width:100%;min-width:520px;font-size:15px;line-height:1.45}
+.gtable th,.gtable td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.gtable tr:last-child th,.gtable tr:last-child td{border-bottom:0}
+.gtable thead th{font:600 13px var(--f-display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);background:var(--surface-2)}
+.gtable tbody th{font:600 15px var(--f-display);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.gtable td.mono{font-size:14px}
+ul.rules{padding-left:1.1em;margin:0 0 1em;display:grid;gap:8px}
+ul.rules li::marker{color:var(--accent)}
+
+/* Panels */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:24px;margin-block:28px;display:grid;gap:20px}
+.panel-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 16px}
+.panel-head h3{font-size:24px}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{font:600 15px/1 var(--f-display);text-transform:uppercase;letter-spacing:.08em;padding:10px 14px;background:transparent;color:var(--muted);border:0;border-right:1px solid var(--line);cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"],.seg button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Manual simulator */
+.sim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:28px;align-items:center}
+.controls{display:grid;gap:22px;min-width:0}
+.ctl{display:grid;gap:8px}
+.ctl-row{display:flex;justify-content:space-between;align-items:baseline}
+.bigval{font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1}
+.bigval small{font-size:16px;color:var(--muted);font-weight:500;margin-left:4px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.gears{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.gears button{font:700 24px/1 var(--f-display);padding:12px 0;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);cursor:pointer}
+.gears button[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:#1A0E02}
+.gauge{width:100%;max-width:300px;justify-self:center}
+.g-face{fill:var(--dial)}
+.g-rim{fill:none;stroke:var(--line);stroke-width:2}
+.g-tick{stroke:var(--dial-fg)} .g-tick.red{stroke:var(--bad)}
+.g-num{fill:var(--dial-fg);font:600 17px var(--f-display)} .g-num.red{fill:var(--bad)}
+.g-red{stroke:var(--bad);fill:none}
+.g-unit{fill:var(--dial-dim);font:500 10px var(--f-mono)}
+.g-digital{fill:var(--dial-fg);font:500 22px var(--f-mono)}
+.g-hub{fill:var(--dial-fg)}
+.needle{transform-box:view-box;transform-origin:120px 120px;transition:transform .45s cubic-bezier(.3,1.4,.5,1)}
+.needle line{stroke:var(--accent);stroke-linecap:round}
+@media (prefers-reduced-motion:reduce){.needle{transition:none}}
+
+.status{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:8px;background:var(--surface-2)}
+.status p{margin:0;font-size:16px;line-height:1.5}
+.pill{flex:none;font:600 13px/1 var(--f-display);text-transform:uppercase;letter-spacing:.1em;padding:6px 9px;border-radius:999px;white-space:nowrap}
+.t-good{color:var(--good);background:color-mix(in srgb,var(--good) 16%,transparent)}
+.t-warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 18%,transparent)}
+.t-bad{color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,transparent)}
+.t-acc{color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 16%,transparent)}
+
+.strip{display:grid;gap:8px}
+.strip-row{display:grid;grid-template-columns:44px minmax(0,1fr) 150px;gap:12px;align-items:center;font-size:15px}
+.strip-row .gname{font:700 20px var(--f-display)}
+.bar{height:14px;background:var(--surface-2);border-radius:3px;position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:3px;transition:width .3s}
+.bar i.good{background:var(--good)} .bar i.warn{background:var(--warn)} .bar i.bad{background:var(--bad)} .bar i.acc{background:var(--accent)}
+.strip-row .val{font-family:var(--f-mono);font-size:14px;display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.chip{font:600 11px/1 var(--f-display);text-transform:uppercase;letter-spacing:.1em;padding:4px 6px;border-radius:4px;border:1px solid currentColor}
+.calc{font-family:var(--f-mono);font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:14px;line-height:1.7;overflow-wrap:anywhere}
+
+/* Automatic */
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tabs button{flex:1 1 150px;text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--fg);cursor:pointer;display:grid;gap:2px}
+.tabs button b{font:700 22px/1 var(--f-display);letter-spacing:.03em}
+.tabs button span{font-size:13px;color:var(--muted);font-family:var(--f-mono)}
+.tabs button[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--surface)}
+.chart-wrap{position:relative}
+canvas{display:block;width:100%;height:300px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;font-family:var(--f-mono);color:var(--muted)}
+.legend i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:6px;background:var(--accent)}
+.legend i.spd{background:none;border-top:2px dashed var(--muted);height:0}
+.legend i.red{background:color-mix(in srgb,var(--bad) 30%,transparent);height:10px}
+.runbar{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center}
+.play{font:700 16px/1 var(--f-display);text-transform:uppercase;letter-spacing:.1em;padding:12px 18px;border-radius:6px;border:0;background:var(--accent);color:#1A0E02;cursor:pointer}
+.readout{display:flex;flex-wrap:wrap;gap:8px 24px}
+.readout div{display:grid}
+.readout .label{font-size:12px}
+.readout .mono{font-size:20px}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;border-top:1px solid var(--line);padding-top:18px}
+.notes p{font-size:16px;line-height:1.55;margin:6px 0 0}
+.notes .label.watch{color:var(--bad)}
+
+/* Symptoms */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-block:8px 18px}
+.filters button{font:600 14px/1 var(--f-display);text-transform:uppercase;letter-spacing:.08em;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.symptoms{display:grid;gap:8px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;font-weight:600;font-size:17px;line-height:1.35}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:500 22px var(--f-mono);color:var(--muted);flex:none}
+details[open] summary::after{content:"−"}
+summary .pill{margin-left:auto}
+.sym-body{padding:0 16px 16px;font-size:16px;line-height:1.55}
+.sym-body p{margin:0 0 .6em}
+.tags{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+
+/* Your numbers */
+.mine{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.mine label{display:grid;gap:6px;font-size:15px}
+.mine input{font:500 20px var(--f-mono);padding:10px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);width:100%}
+.fine{font-size:14px;color:var(--muted);line-height:1.55}
+footer.col{margin-top:56px;border-top:1px solid var(--line);padding-top:18px}
+
+@media (max-width:720px){
+  body{font-size:17px}
+  .sim{grid-template-columns:1fr}
+  .gauge{max-width:260px;order:-1}
+  .notes,.mine{grid-template-columns:1fr}
+  .strip-row{grid-template-columns:36px minmax(0,1fr) 112px}
+  .panel{padding:18px}
+  canvas{height:250px}
+}
+.topbar{max-width:960px;margin-inline:auto;display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-block:1.5rem .9rem;border-bottom:1px solid var(--line)}
+.topbar a{font-family:var(--f-mono);font-size:15px;font-weight:500;color:var(--fg);text-decoration:none}
+.topbar .navs{display:flex;gap:18px}
+.topbar a.nav{font-size:13px;font-weight:400;color:var(--muted)}
+.topbar a:hover{color:var(--accent-ink)}
+</style>
+{% endraw %}
+</head>
+<body>
+<nav class="topbar" aria-label="Site"><a href="{{ "/" | relative_url }}">{{ site.title | escape }}</a><span class="navs"><a class="nav" href="{{ "/topics/" | relative_url }}">Topics</a><a class="nav" href="{{ "/archive/" | relative_url }}">All posts</a></span></nav>
+{% raw %}
+<main class="wrap">
+  <header class="masthead col">
+    <div class="eyebrow">Car basics · Plain English</div>
+    <h1>Reading the Rev Counter</h1>
+    <p class="dek">What RPM means, how it connects to speed, and how to use that needle whether you change gears yourself or let the car do it.</p>
+    <div class="meta">30 September 2026 · 8 min read</div>
+    <div class="revstrip" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+  </header>
+
+  <article>
+    <div class="col">
+      <p>Most dashboards have two big dials. One tells you how fast you're going. The other, the rev counter or tachometer, tells you how fast the engine is spinning. That second number is RPM: revolutions per minute. At 3,000 RPM, the engine's crankshaft is turning 3,000 times every minute, or 50 times a second.</p>
+      <p>Speed and RPM are linked, but not directly. Between the engine and the wheels sits the gearbox, and the gear you're in decides how much road speed you get from each turn of the engine.</p>
+
+      <h2>Gears are the translator</h2>
+      <p>Think of a bicycle. In a low gear you pedal quickly but move slowly, with lots of pushing power for hills. In a high gear you pedal slowly and move fast. A car works the same way. The engine is your legs; RPM is how fast you pedal.</p>
+      <p>"Low" and "high" describe the speed a gear gives you, not the number on the lever. On a car or a bike with 6 gears, it breaks down like this:</p>
+      <div class="gtable-wrap">
+        <table class="gtable">
+          <thead><tr><th></th><th>Low gears</th><th>Middle gears</th><th>High gears</th></tr></thead>
+          <tbody>
+            <tr><th>Car (6-speed)</th><td class="mono">1st, 2nd</td><td class="mono">3rd, 4th</td><td class="mono">5th, 6th</td></tr>
+            <tr><th>Bicycle (6-speed)</th><td>Gear 1: biggest rear sprocket</td><td>Gears 3–4</td><td>Gear 6: smallest rear sprocket</td></tr>
+            <tr><th>How it feels</th><td>Easy to push, engine or legs spin fast, slow road speed</td><td>Everyday town speeds</td><td>Hard to push from a standstill, engine or legs spin slowly, fast road speed</td></tr>
+            <tr><th>Use it for</th><td>Pulling away, steep hills, crawling in traffic</td><td>Accelerating through town</td><td>Cruising on open roads and highways</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>So <strong>1st is the lowest gear and 6th is the highest</strong>. On a bike, the low gears are the big sprockets at the back, the ones that make pedalling uphill easy. Some bike shifters number the gears the other way round, so go by feel: if pedalling gets easier, you've shifted to a lower gear.</p>
+      <div class="formula">speed = RPM ÷ (gear ratio × final drive) × tyre circumference</div>
+      <p>You don't need to memorise this. The key idea is simple: <strong>in any one gear, RPM and speed rise and fall together</strong>. Change gear and the relationship changes. That's why the same 60 km/h can mean 4,000 RPM in 2nd gear and under 2,000 RPM in 5th.</p>
+
+      <h2>If you drive a manual</h2>
+      <p>In a manual, you pick the gear, so the rev counter is your main guide for when to change. Choose a speed and a gear below and see where the needle lands. The chart underneath shows what every other gear would give you at the same speed.</p>
+    </div>
+
+    <section class="panel" aria-labelledby="man-h">
+      <div class="panel-head">
+        <h3 id="man-h">Gear finder</h3>
+        <div class="seg" role="group" aria-label="Engine type">
+          <button type="button" id="eng-petrol" data-engine="petrol" aria-pressed="true">Petrol</button>
+          <button type="button" id="eng-diesel" data-engine="diesel" aria-pressed="false">Diesel</button>
+        </div>
+      </div>
+      <div class="sim">
+        <div class="controls">
+          <div class="ctl">
+            <div class="ctl-row"><label class="label" for="m-speed">Road speed</label><span class="bigval"><span id="m-speed-v">50</span><small>km/h</small></span></div>
+            <input type="range" id="m-speed" min="0" max="140" step="1" value="50">
+          </div>
+          <div class="ctl">
+            <span class="label" id="gear-l">Gear</span>
+            <div class="gears" role="radiogroup" aria-labelledby="gear-l" id="gears"></div>
+          </div>
+        </div>
+        <svg class="gauge" id="gauge" viewBox="0 0 240 240" role="img" aria-label="Rev counter"></svg>
+      </div>
+      <div class="status" id="m-status" aria-live="polite"></div>
+      <div>
+        <div class="label" style="margin-bottom:10px">Every gear at this speed</div>
+        <div class="strip" id="strip"></div>
+      </div>
+      <div class="calc" id="calc"></div>
+    </section>
+
+    <div class="col">
+      <h3 style="margin-bottom:10px">Rules of thumb for manual drivers</h3>
+      <ul class="rules">
+        <li><strong>Relaxed driving:</strong> change up at about 2,000 to 2,500 RPM in a petrol car, or 1,700 to 2,000 in a diesel. You'll save fuel and the engine stays quiet.</li>
+        <li><strong>Before you overtake or climb:</strong> change down first, so the needle sits in the pulling range. That's roughly 3,000 to 5,000 RPM for petrol and 2,000 to 3,500 for diesel.</li>
+        <li><strong>Shudder when you press the accelerator?</strong> The revs are too low for that gear. The engine is "lugging". Change down.</li>
+        <li><strong>Smoother downshifts:</strong> the gear finder shows the RPM the lower gear needs at your speed. Give the accelerator a quick blip as you change down so the engine is already there. The clutch then engages without a jolt.</li>
+        <li><strong>Clutch health check:</strong> if you press the accelerator in a higher gear and the revs climb but the car barely speeds up, the clutch is slipping. Get it looked at.</li>
+      </ul>
+
+      <h2>If you drive an automatic</h2>
+      <p>An automatic changes gear for you. But "automatic" covers four quite different gearboxes, and each one moves the needle in its own way. Knowing which one you have tells you what's normal and what isn't.</p>
+      <p>Pick your gearbox and a driving style, then press play to watch a run from standstill to 80 km/h.</p>
+    </div>
+
+    <section class="panel" aria-labelledby="auto-h">
+      <h3 id="auto-h" class="label" style="font-size:14px">Choose your gearbox</h3>
+      <div class="tabs" role="tablist" aria-label="Automatic gearbox type" id="tabs"></div>
+      <div class="panel-head">
+        <div class="legend">
+          <span><i></i>Engine RPM (left scale)</span>
+          <span><i class="spd"></i>Speed, km/h (right scale)</span>
+          <span><i class="red"></i>Redline</span>
+        </div>
+        <div class="seg" role="group" aria-label="Driving style" id="thr">
+          <button type="button" id="thr-gentle" data-thr="gentle" aria-pressed="false">Gentle</button>
+          <button type="button" id="thr-normal" data-thr="normal" aria-pressed="true">Normal</button>
+          <button type="button" id="thr-floored" data-thr="floored" aria-pressed="false">Floored</button>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="chart" aria-label="RPM and speed over time"></canvas></div>
+      <div class="runbar">
+        <button type="button" class="play" id="play">Play run</button>
+        <div class="readout" aria-live="off">
+          <div><span class="label">Time</span><span class="mono" id="r-t">–</span></div>
+          <div><span class="label">Speed</span><span class="mono" id="r-v">–</span></div>
+          <div><span class="label">RPM</span><span class="mono" id="r-r">–</span></div>
+          <div><span class="label">Gear</span><span class="mono" id="r-g">–</span></div>
+        </div>
+      </div>
+      <div class="notes" id="notes"></div>
+    </section>
+
+    <div class="col">
+      <h3 style="margin-bottom:10px">What to use the rev counter for in an automatic</h3>
+      <ul class="rules">
+        <li><strong>Check the idle.</strong> Once warm, most petrol engines idle at 600 to 900 RPM. A little higher with the AC on is normal. A needle that sits well above 1,000, or bobs up and down, is worth a check.</li>
+        <li><strong>Spot slipping early.</strong> If the revs jump and the car doesn't pick up speed to match, the gearbox may be slipping. In a CVT, high steady revs are normal; revs that surge with no extra pull are not.</li>
+        <li><strong>Drive lighter, save fuel.</strong> With a gentle foot, a stepped automatic changes up by about 2,000 to 2,500 RPM. If yours keeps reaching 3,500 in town, ease off.</li>
+        <li><strong>Use manual or L mode on long descents.</strong> Select a lower gear (or L, 2, or the minus paddle) and let the engine hold the car back. Higher revs here are fine and they save your brakes. Keep clear of the red zone.</li>
+        <li><strong>Read the load.</strong> Higher RPM than usual at a familiar speed means the car is working harder: a hill, a full car, towing, or the AC running flat out.</li>
+      </ul>
+
+      <h2>Is this normal?</h2>
+      <p>Tap a symptom to see what it usually means. The filter follows the gearbox you picked above, and you can switch to any other.</p>
+      <div class="filters" id="filters" role="group" aria-label="Filter symptoms by gearbox"></div>
+      <div class="symptoms" id="symptoms"></div>
+
+      <h2>Learn your car's numbers</h2>
+      <p>Every engine is a little different. Next time you drive, note three numbers. Once you know them, anything unusual stands out straight away.</p>
+      <div class="mine">
+        <label for="n-idle">Warm idle<input id="n-idle" inputmode="numeric" placeholder="e.g. 750"></label>
+        <label for="n-60">At 60 km/h, top gear<input id="n-60" inputmode="numeric" placeholder="e.g. 1,800"></label>
+        <label for="n-100">At 100 km/h, top gear<input id="n-100" inputmode="numeric" placeholder="e.g. 2,700"></label>
+      </div>
+      <p class="fine" style="margin-top:8px">These stay in this browser only.</p>
+    </div>
+
+    <footer class="col fine">
+      <p><strong>About the numbers.</strong> The gear finder uses a typical 1.2-litre hatchback with a 5-speed manual (ratios 3.55, 1.95, 1.28, 0.97, 0.78; final drive 4.07) on 185/65 R15 tyres, which cover about 1.95 m per turn. The diesel setting changes the rev ranges but keeps the same gearing so you can compare. The automatic runs are simplified models to show the shape of each gearbox's behaviour. Your own car's figures will differ, so treat these as a guide, and see a mechanic for anything that worries you.</p>
+    </footer>
+  </article>
+</main>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const fmt=n=>Math.round(n).toLocaleString('en-IN');
+const CIRC=1.9525;
+
+/* ---------- Manual gear finder ---------- */
+const CAR={ratios:[3.55,1.95,1.28,0.97,0.78],fd:4.07};
+const ENGINES={
+  petrol:{idle:800,lug:1300,eco:3000,power:5000,redline:6000,max:7000},
+  diesel:{idle:800,lug:1200,eco:2200,power:3500,redline:4500,max:5000}
+};
+const ZONES={
+  stall:{label:'Stall risk',tone:'bad',bar:'bad',text:'The engine would be turning slower than idle. Press the clutch or change down, or it will stall.'},
+  lug:{label:'Lugging',tone:'warn',bar:'warn',text:'Too low to pull cleanly, and you may feel a shudder. Fine for coasting on the flat, but change down before you accelerate or climb.'},
+  eco:{label:'Cruising range',tone:'good',bar:'good',text:'Smooth, quiet and fuel-efficient. The right place for steady driving.'},
+  power:{label:'Pulling range',tone:'acc',bar:'acc',text:'Strong response for overtaking, merging or climbing. Uses more fuel, so change up once you are done.'},
+  high:{label:'High revs',tone:'warn',bar:'warn',text:'Loud and thirsty. Change up unless you really need every bit of power.'},
+  red:{label:'Redline',tone:'bad',bar:'bad',text:'Past the safe limit. Change up now. Many engines cut fuel here to protect themselves.'}
+};
+const ORD=['1st','2nd','3rd','4th','5th'];
+const st={engine:'petrol',speed:50,gear:2};
+
+const rpmFor=(kmh,g)=>(kmh*1000/60)/CIRC*CAR.ratios[g]*CAR.fd;
+function zone(r,e){
+  if(r<e.idle)return'stall'; if(r<e.lug)return'lug'; if(r<=e.eco)return'eco';
+  if(r<=e.power)return'power'; if(r<e.redline)return'high'; return'red';
+}
+
+const gearsEl=$('#gears');
+CAR.ratios.forEach((_,i)=>{
+  const b=document.createElement('button');
+  b.type='button';b.id='gear-'+(i+1);b.setAttribute('role','radio');b.textContent=i+1;
+  b.setAttribute('aria-label',ORD[i]+' gear');
+  b.addEventListener('click',()=>{st.gear=i;updateManual();});
+  gearsEl.appendChild(b);
+});
+
+function buildGauge(){
+  const e=ENGINES[st.engine],cx=120,cy=120,R=100;
+  const ang=r=>135+270*Math.min(r,e.max)/e.max;
+  const pt=(a,rad)=>[(cx+rad*Math.cos(a*Math.PI/180)).toFixed(2),(cy+rad*Math.sin(a*Math.PI/180)).toFixed(2)];
+  let s='<circle class="g-rim" cx="120" cy="120" r="117"/><circle class="g-face" cx="120" cy="120" r="114"/>';
+  const a1=ang(e.redline),a2=ang(e.max),[x1,y1]=pt(a1,R-4),[x2,y2]=pt(a2,R-4);
+  s+=`<path class="g-red" stroke-width="8" d="M${x1} ${y1} A${R-4} ${R-4} 0 ${a2-a1>180?1:0} 1 ${x2} ${y2}"/>`;
+  for(let r=0;r<=e.max;r+=500){
+    const major=r%1000===0,a=ang(r),[ax,ay]=pt(a,R),[bx,by]=pt(a,major?R-14:R-8),red=r>=e.redline?' red':'';
+    s+=`<line class="g-tick${red}" x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke-width="${major?2.5:1.2}"/>`;
+    if(major){const[tx,ty]=pt(a,R-27);s+=`<text class="g-num${red}" x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central">${r/1000}</text>`;}
+  }
+  s+='<text class="g-unit" x="120" y="158" text-anchor="middle">×1000 r/min</text>';
+  s+='<text class="g-digital" id="g-digital" x="120" y="190" text-anchor="middle">0</text>';
+  s+='<g class="needle" id="needle"><line x1="120" y1="120" x2="210" y2="120" stroke-width="3.5"/><line x1="120" y1="120" x2="102" y2="120" stroke-width="6"/></g>';
+  s+='<circle class="g-hub" cx="120" cy="120" r="8"/>';
+  $('#gauge').innerHTML=s;
+  st.ang=ang;
+}
+
+function updateManual(){
+  const e=ENGINES[st.engine],r=st.speed===0?0:rpmFor(st.speed,st.gear);
+  $('#m-speed-v').textContent=st.speed;
+  [...gearsEl.children].forEach((b,i)=>b.setAttribute('aria-checked',i===st.gear));
+  document.querySelectorAll('[data-engine]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.engine===st.engine));
+  const n=$('#needle');
+  n.style.transform=`rotate(${st.ang(Math.min(r,e.max*1.04)).toFixed(1)}deg)`;
+  $('#g-digital').textContent=fmt(Math.round(r/10)*10);
+  $('#gauge').setAttribute('aria-label',`Rev counter reading ${fmt(r)} RPM`);
+
+  let z=ZONES[zone(r,e)];
+  if(st.speed===0) z={label:'Stopped',tone:'bad',text:'Stopped in gear with the clutch up means a stall. Press the clutch, or select neutral while you wait.'};
+  $('#m-status').innerHTML=`<span class="pill t-${z.tone}">${z.label}</span><p><strong class="mono">${fmt(r)} RPM</strong> in ${ORD[st.gear]} at ${st.speed} km/h. ${z.text}</p>`;
+
+  // strip
+  const rows=CAR.ratios.map((_,g)=>{const rr=st.speed===0?0:rpmFor(st.speed,g);return{g,rr,z:zone(rr,e)}});
+  const ecoG=rows.filter(x=>x.z==='eco').map(x=>x.g);
+  const powG=rows.filter(x=>x.z==='power').map(x=>x.g);
+  const cruise=ecoG.length?Math.max(...ecoG):-1;
+  const pull=powG.length?Math.max(...powG):-1;
+  $('#strip').innerHTML=rows.map(x=>{
+    const w=Math.min(100,x.rr/e.max*100),Z=ZONES[x.z];
+    let chips='';
+    if(st.speed>0&&x.g===cruise)chips+='<span class="chip" style="color:var(--good)">Cruise</span>';
+    if(st.speed>0&&x.g===pull)chips+='<span class="chip" style="color:var(--accent-ink)">Overtake</span>';
+    const v=x.rr>e.max?'&gt;'+fmt(e.max):fmt(x.rr);
+    return `<div class="strip-row"><span class="gname" style="${x.g===st.gear?'color:var(--accent-ink)':''}">${x.g+1}</span><div class="bar" aria-hidden="true"><i class="${Z.bar}" style="width:${w.toFixed(1)}%"></i></div><span class="val">${chips}<span>${v}</span></span></div>`;
+  }).join('');
+
+  const wr=(st.speed*1000/60)/CIRC;
+  $('#calc').innerHTML=`How it's worked out: ${st.speed} km/h ÷ 1.95 m per tyre turn = ${fmt(wr)} wheel turns a minute. × ${CAR.ratios[st.gear]} (${ORD[st.gear]} gear) × ${CAR.fd} (final drive) = <strong style="color:var(--fg)">${fmt(r)} RPM</strong>.`;
+}
+
+$('#m-speed').addEventListener('input',ev=>{st.speed=+ev.target.value;updateManual();});
+document.querySelectorAll('[data-engine]').forEach(b=>b.addEventListener('click',()=>{st.engine=b.dataset.engine;buildGauge();updateManual();}));
+buildGauge();updateManual();
+
+/* ---------- Automatic run simulator ---------- */
+const AUTO={
+  at:{name:'Automatic',tag:'AT · torque converter',kind:'at',ratios:[4.2,2.5,1.6,1.2,0.95,0.75],fd:3.7,dur:0.35,launch:1,
+    how:'A fluid coupling called a torque converter links the engine to a gearbox with 4 to 10 fixed gears that change on their own.',
+    needle:'A saw-tooth: revs climb, drop at each upshift, climb again. At pull-away the revs rise a little before the car moves, because the converter slips by design.',
+    watch:'Revs that flare up between gears, or climb without the car speeding up. That points to slipping or low fluid. Harsh, clunky shifts are worth a check too.'},
+  cvt:{name:'CVT',tag:'Continuously variable',kind:'cvt',low:13.5,high:2.2,
+    how:'Instead of fixed gears, a steel belt runs between two cone-shaped pulleys that change size, giving endless ratios.',
+    needle:'Revs jump to one level and stay there while the speed climbs, then drop once you settle into a cruise. That "rubber band" feeling is normal.',
+    watch:'Whining, a shudder when pulling away, or revs that surge with no extra pull. Some CVTs fake gear steps when you floor it; that is by design.'},
+  dct:{name:'DCT',tag:'Dual-clutch',kind:'dct',ratios:[3.8,2.4,1.6,1.15,0.9,0.74,0.62],fd:3.9,dur:0.12,launch:0.85,
+    how:'Two computer-controlled clutches, one for odd gears and one for even. The next gear is already lined up, so changes are very fast.',
+    needle:'Quick, crisp drops at each change, like a manual driven perfectly. Revs rise and fall in a tight saw-tooth.',
+    watch:'Judder or hunting revs when creeping in traffic. Hold the car on slopes with the brake, not the accelerator, to spare the clutches.'},
+  amt:{name:'AMT',tag:'Automated manual',kind:'amt',ratios:CAR.ratios,fd:CAR.fd,dur:0.9,launch:0.85,
+    how:'A regular manual gearbox where a motor works the clutch and moves the gear lever for you. Common and affordable in small cars.',
+    needle:'Slower changes. The revs drop, pause, then pick up, and the car can nod forward. Lifting off the accelerator slightly during a change smooths it out.',
+    watch:'Very slow or failed changes, or a flashing gear indicator. A worn clutch shows up just like in a manual: revs rise, speed doesn\'t.'}
+};
+const THR={
+  gentle:{acc:1.5,shift:2200,cvt:1900,flare:1500},
+  normal:{acc:2.4,shift:3200,cvt:2700,flare:2000},
+  floored:{acc:3.6,shift:6000,cvt:5400,flare:2800}
+};
+const au={type:'at',thr:'normal',data:null,cursor:-1,playing:false};
+
+function simulate(key,thrKey){
+  const T=AUTO[key],P=THR[thrKey],dt=0.02,target=80/3.6,idle=750;
+  let t=0,v=0,g=0,shifting=0,from=0,rpm=idle,cruiseT=0,shifts=0,peak=0,t80=null;
+  const out=[];
+  while(t<45){
+    const cruise=v>=target-1e-6;
+    let a=cruise?0:P.acc*(1-0.35*v/target);
+    if(shifting>0) a=T.kind==='amt'?-0.4:a*0.6;
+    v=Math.min(target,Math.max(0,v+a*dt));
+    if(v>=target&&t80===null)t80=t;
+    const wr=v/CIRC*60;
+    if(T.kind==='cvt'){
+      const want=cruise?1500:idle+(P.cvt-idle)*Math.min(1,t/0.7);
+      const tgt=Math.min(Math.max(want,wr*T.high),Math.max(wr*T.low,want));
+      rpm+=(tgt-rpm)*Math.min(1,dt*(cruise?2.5:6));
+    }else{
+      const R=T.ratios,lk=gi=>wr*R[gi]*T.fd;
+      if(shifting>0){
+        shifting-=dt;
+        const k=1-Math.max(0,shifting)/T.dur;
+        rpm=from+(lk(g)-from)*k;
+        if(T.kind==='amt')rpm-=Math.sin(Math.PI*k)*450;
+      }else{
+        const up=g<R.length-1&&((!cruise&&lk(g)>P.shift)||(cruise&&lk(g+1)>=1350));
+        if(up){from=rpm;g++;shifts++;shifting=T.dur;}
+        else if(g===0){rpm=Math.max(lk(0),idle+(P.flare*T.launch-idle)*Math.min(1,t/0.5));}
+        else rpm=lk(g);
+      }
+    }
+    rpm=Math.max(idle,rpm);peak=Math.max(peak,rpm);
+    out.push({t,v:v*3.6,rpm,g});
+    if(cruise){cruiseT+=dt;if(cruiseT>2.5)break;}
+    t+=dt;
+  }
+  return{pts:out,shifts,peak,t80,tMax:Math.ceil(out[out.length-1].t/2)*2};
+}
+
+const tabsEl=$('#tabs');
+Object.entries(AUTO).forEach(([k,T])=>{
+  const b=document.createElement('button');
+  b.type='button';b.id='tab-'+k;b.setAttribute('role','tab');b.dataset.k=k;
+  b.innerHTML=`<b>${T.name}</b><span>${T.tag}</span>`;
+  b.addEventListener('click',()=>{au.type=k;runSim();flt=k;renderSym();});
+  tabsEl.appendChild(b);
+});
+document.querySelectorAll('[data-thr]').forEach(b=>b.addEventListener('click',()=>{au.thr=b.dataset.thr;runSim();}));
+
+const cv=$('#chart'),ctx=cv.getContext('2d');
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const RMAX=8000,VMAX=100,REDLINE=6500;
+
+function draw(){
+  const d=au.data;if(!d)return;
+  const dpr=window.devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;
+  cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+  const pad={l:44,r:40,t:12,b:30},pw=w-pad.l-pad.r,ph=h-pad.t-pad.b;
+  const X=t=>pad.l+t/d.tMax*pw,YR=r=>pad.t+(1-r/RMAX)*ph,YV=v=>pad.t+(1-v/VMAX)*ph;
+  const muted=css('--muted'),line=css('--line'),acc=css('--accent'),bad=css('--bad'),fg=css('--fg');
+  // redline band
+  ctx.fillStyle=bad;ctx.globalAlpha=.14;ctx.fillRect(pad.l,YR(RMAX),pw,YR(REDLINE)-YR(RMAX));ctx.globalAlpha=1;
+  // grid
+  ctx.font='12px "IBM Plex Mono", monospace';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+ph*i/4;ctx.strokeStyle=line;ctx.beginPath();ctx.moveTo(pad.l,y+.5);ctx.lineTo(pad.l+pw,y+.5);ctx.stroke();
+    ctx.fillStyle=muted;ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText(((RMAX*(4-i)/4)/1000)+'k',pad.l-8,y);
+    ctx.textAlign='left';ctx.fillText(String(VMAX*(4-i)/4),pad.l+pw+8,y);
+  }
+  ctx.textAlign='center';ctx.textBaseline='top';
+  for(let t=0;t<=d.tMax;t+=2){ctx.fillStyle=muted;ctx.fillText(t+'s',X(t),pad.t+ph+8);}
+  // speed
+  ctx.strokeStyle=muted;ctx.setLineDash([5,4]);ctx.lineWidth=1.5;ctx.beginPath();
+  d.pts.forEach((p,i)=>{const x=X(p.t),y=YV(p.v);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();ctx.setLineDash([]);
+  // rpm
+  ctx.strokeStyle=acc;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.beginPath();
+  d.pts.forEach((p,i)=>{const x=X(p.t),y=YR(p.rpm);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();
+  // cursor
+  if(au.cursor>=0){
+    const p=d.pts[au.cursor],x=X(p.t);
+    ctx.strokeStyle=fg;ctx.globalAlpha=.35;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ph);ctx.stroke();ctx.globalAlpha=1;
+    ctx.fillStyle=acc;ctx.beginPath();ctx.arc(x,YR(p.rpm),5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=muted;ctx.beginPath();ctx.arc(x,YV(p.v),4,0,Math.PI*2);ctx.fill();
+  }
+}
+
+function setReadout(i){
+  const d=au.data,T=AUTO[au.type];
+  if(i<0){
+    $('#r-t').textContent=d.t80!=null?d.t80.toFixed(1)+' s to 80':'–';
+    $('#r-v').textContent='0–80 km/h';
+    $('#r-r').textContent='peak '+fmt(d.peak);
+    $('#r-g').textContent=T.kind==='cvt'?'stepless':d.shifts+' changes';
+    return;
+  }
+  const p=d.pts[i];
+  $('#r-t').textContent=p.t.toFixed(1)+' s';
+  $('#r-v').textContent=Math.round(p.v)+' km/h';
+  $('#r-r').textContent=fmt(Math.round(p.rpm/10)*10);
+  $('#r-g').textContent=T.kind==='cvt'?'stepless':String(p.g+1);
+}
+
+let raf=0;
+function stop(){cancelAnimationFrame(raf);au.playing=false;$('#play').textContent='Play run';}
+function play(){
+  if(au.playing){stop();return;}
+  au.playing=true;$('#play').textContent='Pause';
+  const d=au.data,speed=1.5;
+  const startIdx=au.cursor>=0&&au.cursor<d.pts.length-1?au.cursor:0;
+  const t0=performance.now()-d.pts[startIdx].t*1000/speed;
+  const step=now=>{
+    const t=(now-t0)/1000*speed;
+    let i=Math.min(d.pts.length-1,Math.round(t/0.02));
+    au.cursor=i;setReadout(i);draw();
+    if(i>=d.pts.length-1){stop();return;}
+    raf=requestAnimationFrame(step);
+  };
+  raf=requestAnimationFrame(step);
+}
+$('#play').addEventListener('click',play);
+
+function runSim(){
+  stop();
+  au.data=simulate(au.type,au.thr);au.cursor=-1;
+  [...tabsEl.children].forEach(b=>b.setAttribute('aria-selected',b.dataset.k===au.type));
+  document.querySelectorAll('[data-thr]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.thr===au.thr));
+  const T=AUTO[au.type];
+  $('#notes').innerHTML=`<div><div class="label">How it works</div><p>${T.how}</p></div><div><div class="label">What the needle does</div><p>${T.needle}</p></div><div><div class="label watch">Watch for</div><p>${T.watch}</p></div>`;
+  setReadout(-1);draw();
+}
+runSim();
+
+if('ResizeObserver' in window)new ResizeObserver(()=>draw()).observe(cv);else window.addEventListener('resize',draw);
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);}catch(e){}
+new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+/* ---------- Symptom checker ---------- */
+const VERD={ok:['Normal','t-good'],watch:['Keep an eye on it','t-warn'],check:['Get it checked','t-bad']};
+const SYM=[
+  {q:'Revs rise but the car barely speeds up',tags:['manual','amt'],v:'check',a:'The clutch is slipping, usually from wear. It gets worse over time and is cheaper to fix before it fails completely.'},
+  {q:'Revs flare up between gear changes',tags:['at'],v:'check',a:'The gearbox is slow to grip the next gear. Low or old transmission fluid is a common cause. Have the fluid level and condition checked first.'},
+  {q:'Revs stay high and flat while I accelerate',tags:['cvt'],v:'ok',a:'This is exactly how a CVT is meant to work. It holds the engine at its most useful speed and changes the ratio instead. Only worry if the revs surge without extra pull, or you hear a whine.'},
+  {q:'Revs dip and the car nods during each change',tags:['amt'],v:'ok',a:'Normal for an AMT: the motor has to open the clutch, move the lever and close it again. Easing off the accelerator slightly as it changes makes it smoother.'},
+  {q:'Juddering and hunting revs in stop-go traffic',tags:['dct'],v:'watch',a:'Dry-clutch DCTs dislike creeping. Leave a gap and move in short, clean bursts, and use the brake to hold on slopes. If it judders even in normal driving, have the clutches checked.'},
+  {q:'Revs sit at 1,000 to 1,500 right after a cold start',tags:['all'],v:'ok',a:'The engine idles faster while cold to warm up quickly. It should settle to its normal idle within a minute or two.'},
+  {q:'Idle stays above 1,000 RPM once warm',tags:['all'],v:'check',a:'Common causes are a vacuum leak, a dirty throttle body or a faulty idle-control sensor. It wastes fuel and can make automatics creep harder than usual.'},
+  {q:'The needle bobs up and down at idle',tags:['all'],v:'check',a:'Often a misfire: worn spark plugs, a coil or dirty injectors. You may also feel a vibration through the seat or steering wheel.'},
+  {q:'Idle rises a little when the AC switches on',tags:['all'],v:'ok',a:'The compressor adds load, so the engine idles slightly faster to cope. A rise of 100 to 200 RPM is typical.'},
+  {q:'Revs drop almost to a stall when I stop',tags:['all','at'],v:'check',a:'The idle control may be struggling. In an automatic, the torque converter may not be unlocking properly as you slow down. Worth a diagnostic scan.'},
+  {q:'The car shudders when I accelerate in a high gear',tags:['manual'],v:'ok',a:'The revs are too low for that gear, so the engine is lugging. Change down one or two gears and it will pull smoothly. Not a fault, but lugging often is hard on the engine over time.'},
+  {q:'Revs climb higher than usual at my normal speed',tags:['all'],v:'watch',a:'Check the obvious first: are you in a lower gear, or in sport or L mode? If not, and the car feels slow, it could be slipping. Compare with the numbers you noted for your car.'}
+];
+const FILTERS=[['all','All'],['manual','Manual'],['at','AT'],['cvt','CVT'],['dct','DCT'],['amt','AMT']];
+let flt=au.type;
+const fEl=$('#filters');
+FILTERS.forEach(([k,l])=>{
+  const b=document.createElement('button');b.type='button';b.id='f-'+k;b.dataset.f=k;b.textContent=l;
+  b.addEventListener('click',()=>{flt=k;renderSym();});fEl.appendChild(b);
+});
+const tagName={all:'Any car',manual:'Manual',at:'AT',cvt:'CVT',dct:'DCT',amt:'AMT'};
+function renderSym(){
+  [...fEl.children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===flt));
+  const list=SYM.filter(s=>flt==='all'||s.tags.includes(flt)||s.tags.includes('all'));
+  $('#symptoms').innerHTML=list.map(s=>{
+    const[vl,vc]=VERD[s.v];
+    return `<details><summary><span>${s.q}</span><span class="pill ${vc}">${vl}</span></summary><div class="sym-body"><p>${s.a}</p><div class="tags">Applies to: ${s.tags.map(t=>tagName[t]).join(', ')}</div></div></details>`;
+  }).join('');
+}
+renderSym();
+
+/* ---------- Your numbers (this browser only) ---------- */
+['n-idle','n-60','n-100'].forEach(id=>{
+  const el=document.getElementById(id);
+  try{const v=localStorage.getItem('rev-'+id);if(v)el.value=v;}catch(e){}
+  el.addEventListener('input',()=>{try{localStorage.setItem('rev-'+id,el.value);}catch(e){}});
+});
+})();
+</script>
+
+{% endraw %}
+</body>
+</html>
