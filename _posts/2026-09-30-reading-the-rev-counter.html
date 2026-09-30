@@ -60,9 +60,14 @@ strong{font-weight:600}
 .masthead .eyebrow{color:var(--accent-ink)}
 .dek{font-size:21px;color:var(--muted);max-width:620px;margin:0}
 .meta{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
-.revstrip{display:grid;grid-template-columns:repeat(7,1fr);margin-top:20px;border-top:3px solid var(--fg)}
-.revstrip span{font-family:var(--f-display);font-weight:600;font-size:15px;padding-top:4px;border-left:1px solid var(--line);padding-left:6px;color:var(--muted)}
-.revstrip span:last-child{border-top:6px solid var(--bad);margin-top:-6px;color:var(--bad)}
+.masthead{grid-template-columns:minmax(0,1fr) 210px;align-items:center;gap:16px 32px}
+.mh-text{display:grid;gap:16px;min-width:0}
+.hero-dial{margin:0;display:grid;gap:8px;justify-items:center}
+.hero-dial svg{width:100%;max-width:210px}
+.hero-dial figcaption{font-family:var(--f-mono);font-size:12px;line-height:1.5;color:var(--muted);text-align:center;max-width:200px}
+.hero-dial .red{color:var(--bad);font-weight:500}
+#hero-needle{transition:transform .9s cubic-bezier(.45,0,.2,1)}
+@media (max-width:720px){.masthead{grid-template-columns:1fr}.hero-dial{justify-items:start}.hero-dial svg{max-width:170px}.hero-dial figcaption{text-align:left}}
 
 /* Prose */
 article > .col:first-child > p:first-of-type::first-letter{font-family:var(--f-display);font-weight:700;float:left;font-size:4.2em;line-height:.85;padding:6px 10px 0 0;color:var(--accent-ink)}
@@ -199,11 +204,16 @@ footer.col{margin-top:56px;border-top:1px solid var(--line);padding-top:18px}
 {% raw %}
 <main class="wrap">
   <header class="masthead col">
-    <div class="eyebrow">Car basics · Plain English</div>
-    <h1>Reading the Rev Counter</h1>
-    <p class="dek">What RPM means, how it connects to speed, and how to use that needle whether you change gears yourself or let the car do it.</p>
-    <div class="meta">30 September 2026 · 8 min read</div>
-    <div class="revstrip" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+    <div class="mh-text">
+      <div class="eyebrow">Car basics · Plain English</div>
+      <h1>Reading the Rev Counter</h1>
+      <p class="dek">What RPM means, how it connects to speed, and how to use that needle whether you change gears yourself or let the car do it.</p>
+      <div class="meta">30 September 2026 · 8 min read</div>
+    </div>
+    <figure class="hero-dial">
+      <svg id="hero-gauge" viewBox="0 0 240 240" role="img" aria-label="A rev counter reading 0 to 7 thousand RPM, with the needle at idle and the redline from 6 to 7"></svg>
+      <figcaption>Numbers are thousands of RPM. <span class="red">Red</span> is the redline.</figcaption>
+    </figure>
   </header>
 
   <article>
@@ -375,8 +385,8 @@ CAR.ratios.forEach((_,i)=>{
   gearsEl.appendChild(b);
 });
 
-function buildGauge(){
-  const e=ENGINES[st.engine],cx=120,cy=120,R=100;
+function dial(e,pre,digital){
+  const cx=120,cy=120,R=100;
   const ang=r=>135+270*Math.min(r,e.max)/e.max;
   const pt=(a,rad)=>[(cx+rad*Math.cos(a*Math.PI/180)).toFixed(2),(cy+rad*Math.sin(a*Math.PI/180)).toFixed(2)];
   let s='<circle class="g-rim" cx="120" cy="120" r="117"/><circle class="g-face" cx="120" cy="120" r="114"/>';
@@ -388,11 +398,15 @@ function buildGauge(){
     if(major){const[tx,ty]=pt(a,R-27);s+=`<text class="g-num${red}" x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central">${r/1000}</text>`;}
   }
   s+='<text class="g-unit" x="120" y="158" text-anchor="middle">×1000 r/min</text>';
-  s+='<text class="g-digital" id="g-digital" x="120" y="190" text-anchor="middle">0</text>';
-  s+='<g class="needle" id="needle"><line x1="120" y1="120" x2="210" y2="120" stroke-width="3.5"/><line x1="120" y1="120" x2="102" y2="120" stroke-width="6"/></g>';
+  if(digital)s+=`<text class="g-digital" id="${pre}-digital" x="120" y="190" text-anchor="middle">0</text>`;
+  s+=`<g class="needle" id="${pre}-needle"><line x1="120" y1="120" x2="210" y2="120" stroke-width="3.5"/><line x1="120" y1="120" x2="102" y2="120" stroke-width="6"/></g>`;
   s+='<circle class="g-hub" cx="120" cy="120" r="8"/>';
-  $('#gauge').innerHTML=s;
-  st.ang=ang;
+  return{s,ang};
+}
+function buildGauge(){
+  const d=dial(ENGINES[st.engine],'g',true);
+  $('#gauge').innerHTML=d.s;
+  st.ang=d.ang;
 }
 
 function updateManual(){
@@ -400,7 +414,7 @@ function updateManual(){
   $('#m-speed-v').textContent=st.speed;
   [...gearsEl.children].forEach((b,i)=>b.setAttribute('aria-checked',i===st.gear));
   document.querySelectorAll('[data-engine]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.engine===st.engine));
-  const n=$('#needle');
+  const n=$('#g-needle');
   n.style.transform=`rotate(${st.ang(Math.min(r,e.max*1.04)).toFixed(1)}deg)`;
   $('#g-digital').textContent=fmt(Math.round(r/10)*10);
   $('#gauge').setAttribute('aria-label',`Rev counter reading ${fmt(r)} RPM`);
@@ -431,6 +445,17 @@ function updateManual(){
 $('#m-speed').addEventListener('input',ev=>{st.speed=+ev.target.value;updateManual();});
 document.querySelectorAll('[data-engine]').forEach(b=>b.addEventListener('click',()=>{st.engine=b.dataset.engine;buildGauge();updateManual();}));
 buildGauge();updateManual();
+
+/* Hero dial: rests at idle; sweeps to the redline and back once on load, like a car's start-up check */
+(function(){
+  const d=dial(ENGINES.petrol,'hero',false);
+  $('#hero-gauge').innerHTML=d.s;
+  const n=$('#hero-needle'),set=r=>{n.style.transform=`rotate(${d.ang(r).toFixed(1)}deg)`;};
+  set(800);
+  let still=false;try{still=matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+  if(still)return;
+  setTimeout(()=>{set(7000);setTimeout(()=>set(800),1000);},500);
+})();
 
 /* ---------- Automatic run simulator ---------- */
 const AUTO={
