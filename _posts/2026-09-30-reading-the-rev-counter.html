@@ -170,6 +170,10 @@ summary .pill{margin-left:auto}
 .mine{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .mine label{display:grid;gap:6px;font-size:15px}
 .mine input{font:500 20px var(--f-mono);padding:10px 12px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);width:100%}
+.nstat{display:flex;flex-direction:column;align-items:flex-start;gap:6px;font-size:14px;line-height:1.45;color:var(--muted)}
+.nstat:empty{display:none}
+.nstat.match{flex-direction:row;gap:12px;margin-top:14px;padding:12px 14px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:15px;color:var(--fg)}
+.nstat.match p{margin:0}
 .fine{font-size:14px;color:var(--muted);line-height:1.55}
 footer.col{margin-top:56px;border-top:1px solid var(--line);padding-top:18px}
 
@@ -319,11 +323,12 @@ footer.col{margin-top:56px;border-top:1px solid var(--line);padding-top:18px}
       <h2>Learn your car's numbers</h2>
       <p>Every engine is a little different. Next time you drive, note three numbers. Once you know them, anything unusual stands out straight away.</p>
       <div class="mine">
-        <label for="n-idle">Warm idle<input id="n-idle" inputmode="numeric" placeholder="e.g. 750"></label>
-        <label for="n-60">At 60 km/h, top gear<input id="n-60" inputmode="numeric" placeholder="e.g. 1,800"></label>
-        <label for="n-100">At 100 km/h, top gear<input id="n-100" inputmode="numeric" placeholder="e.g. 2,700"></label>
+        <label for="n-idle">Warm idle<input id="n-idle" inputmode="numeric" placeholder="e.g. 750" aria-describedby="s-idle"><span class="nstat" id="s-idle"></span></label>
+        <label for="n-60">At 60 km/h, top gear<input id="n-60" inputmode="numeric" placeholder="e.g. 1,800" aria-describedby="s-60"><span class="nstat" id="s-60"></span></label>
+        <label for="n-100">At 100 km/h, top gear<input id="n-100" inputmode="numeric" placeholder="e.g. 2,700" aria-describedby="s-100"><span class="nstat" id="s-100"></span></label>
       </div>
-      <p class="fine" style="margin-top:8px">These stay in this browser only.</p>
+      <div class="nstat match" id="s-match" aria-live="polite"></div>
+      <p class="fine" style="margin-top:8px">The checks update as you type. Your numbers stay in this browser only.</p>
     </div>
 
     <footer class="col fine">
@@ -623,11 +628,49 @@ function renderSym(){
 renderSym();
 
 /* ---------- Your numbers (this browser only) ---------- */
+const num=id=>{const n=parseInt(document.getElementById(id).value.replace(/[^\d]/g,''),10);return n>0?n:null;};
+const pill=(v,text)=>{const[l,c]=VERD[v];return `<span class="pill ${c}">${l}</span>${text?`<span>${text}</span>`:''}`;};
+const r100=n=>fmt(Math.round(n/100)*100);
+function checkIdle(n){
+  if(n>8000)return pill('watch','That is above most redlines. Check the number.');
+  if(n<500)return pill('check','Very low for a warm idle. The engine may stall. Worth a check.');
+  if(n<600)return pill('watch','On the low side. Fine if it runs smoothly, but watch for stalling or shaking.');
+  if(n<=900)return pill('ok','');
+  if(n<=1300)return pill('watch','A little high. Most warm engines idle at 600–900. Check again with the AC off and the engine fully warm.');
+  return pill('check','High for a warm engine. A vacuum leak or idle-control fault are common causes. Worth a check.');
+}
+function check60(n){
+  if(n>8000)return pill('watch','That is above most redlines. Check the number.');
+  if(n<1000)return pill('watch','Unusually low for 60 km/h. Double-check the reading.');
+  if(n<=2500)return pill('ok','');
+  return pill('watch','High for top gear at 60 km/h. Was the car in top gear yet? Automatics often hold a lower gear at town speeds.');
+}
+function check100(n){
+  if(n>8000)return pill('watch','That is above most redlines. Check the number.');
+  if(n<1500)return pill('watch','Low for 100 km/h. Common in some diesels and CVTs; otherwise double-check the reading.');
+  if(n<=3200)return pill('ok','');
+  if(n<=4500)return pill('watch','High for cruising at 100 km/h. Check you were in top gear, and whether the car was climbing or loaded.');
+  return pill('check','Very high for cruising. If the car was in top gear on a flat road, have the gearbox checked.');
+}
+function checkMatch(a,b){
+  const exp=a*100/60,k=b/exp;
+  if(k>=0.88&&k<=1.12)return pill('ok','Your two speed readings match one gear, as they should.');
+  if(k<0.88)return pill('watch',`These don't match one gear. At ${fmt(a)} RPM for 60 km/h, 100 km/h would need about ${r100(exp)} in the same gear. Your car was probably in a lower gear at 60, which is common in automatics and CVTs.`);
+  return pill('watch',`RPM rose faster than speed. At ${fmt(a)} RPM for 60 km/h, 100 km/h should be about ${r100(exp)} in the same gear. You may have been in a lower gear at 100, or the gearbox may be slipping. Recheck on a flat road.`);
+}
+function checkNumbers(){
+  const i=num('n-idle'),a=num('n-60'),b=num('n-100');
+  $('#s-idle').innerHTML=i?checkIdle(i):'';
+  $('#s-60').innerHTML=a?check60(a):'';
+  $('#s-100').innerHTML=b?check100(b):'';
+  $('#s-match').innerHTML=a&&b&&a<=8000&&b<=8000?checkMatch(a,b):'';
+}
 ['n-idle','n-60','n-100'].forEach(id=>{
   const el=document.getElementById(id);
   try{const v=localStorage.getItem('rev-'+id);if(v)el.value=v;}catch(e){}
-  el.addEventListener('input',()=>{try{localStorage.setItem('rev-'+id,el.value);}catch(e){}});
+  el.addEventListener('input',()=>{try{localStorage.setItem('rev-'+id,el.value);}catch(e){}checkNumbers();});
 });
+checkNumbers();
 })();
 </script>
 
