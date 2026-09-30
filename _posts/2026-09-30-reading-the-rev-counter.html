@@ -105,6 +105,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .gears{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .gears button{font:700 24px/1 var(--f-display);padding:12px 0;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);cursor:pointer}
 .gears button[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:#1A0E02}
+.gears button.suggest{border-color:var(--accent);animation:gear-blink 1s ease-in-out infinite}
+@keyframes gear-blink{0%,100%{box-shadow:0 0 0 0 transparent;background:var(--surface-2)}50%{box-shadow:0 0 0 3px var(--accent);background:color-mix(in srgb,var(--accent) 35%,var(--surface-2))}}
+@media (prefers-reduced-motion:reduce){.gears button.suggest{animation:none;box-shadow:0 0 0 3px var(--accent)}}
+.status .tip{color:var(--accent-ink)}
 .gauge{width:100%;max-width:300px;justify-self:center}
 .g-face{fill:var(--dial)}
 .g-rim{fill:none;stroke:var(--line);stroke-width:2}
@@ -431,9 +435,23 @@ function updateManual(){
   $('#speedo').setAttribute('aria-label',`Speedometer reading ${st.speed} km/h`);
   $('#gauge').setAttribute('aria-label',`Rev counter reading ${fmt(r)} RPM`);
 
-  let z=ZONES[zone(r,e)];
+  const zk=zone(r,e);
+  let z=ZONES[zk];
   if(st.speed===0) z={label:'Stopped',tone:'bad',text:'Stopped in gear with the clutch up means a stall. Press the clutch, or select neutral while you wait.'};
-  $('#m-status').innerHTML=`<span class="pill t-${z.tone}">${z.label}</span><p><strong class="mono">${fmt(r)} RPM</strong> in ${ORD[st.gear]} at ${st.speed} km/h. ${z.text}</p>`;
+  // Suggest a gear change when the revs leave the useful range
+  const last=CAR.ratios.length-1,ok=g=>{const x=rpmFor(st.speed,g);return x>=e.lug&&x<=e.power;};
+  let tg=-1,tip='';
+  if(st.speed>0&&(zk==='high'||zk==='red')&&st.gear<last){
+    for(let g=st.gear+1;g<=last;g++){if(ok(g)){tg=g;break;}}
+    if(tg<0)tg=st.gear+1;
+    tip=`Change up to ${ORD[tg]}.`;
+  }else if(st.speed>0&&(zk==='lug'||zk==='stall')&&st.gear>0){
+    for(let g=st.gear-1;g>=0;g--){if(ok(g)){tg=g;break;}}
+    if(tg<0)tg=st.gear-1;
+    tip=`Change down to ${ORD[tg]}.`;
+  }
+  [...gearsEl.children].forEach((b,i)=>b.classList.toggle('suggest',i===tg));
+  $('#m-status').innerHTML=`<span class="pill t-${z.tone}">${z.label}</span><p>${tip?`<strong class="tip">${tip}</strong> `:''}<strong class="mono">${fmt(r)} RPM</strong> in ${ORD[st.gear]} at ${st.speed} km/h. ${z.text}</p>`;
 
   // strip
   const rows=CAR.ratios.map((_,g)=>{const rr=st.speed===0?0:rpmFor(st.speed,g);return{g,rr,z:zone(rr,e)}});
