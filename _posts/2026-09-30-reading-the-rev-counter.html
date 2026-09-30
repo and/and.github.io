@@ -93,8 +93,10 @@ ul.rules li::marker{color:var(--accent)}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* Manual simulator */
-.sim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:28px;align-items:center}
-.controls{display:grid;gap:22px;min-width:0}
+.cluster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 28px;padding:20px;border-radius:14px;background:var(--dial);}
+.cluster figure{margin:0;display:grid;gap:6px;justify-items:center;min-width:0}
+.cluster .label{color:var(--dial-dim)}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 32px;align-items:end;min-width:0}
 .ctl{display:grid;gap:8px}
 .ctl-row{display:flex;justify-content:space-between;align-items:baseline}
 .bigval{font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1}
@@ -107,7 +109,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .g-face{fill:var(--dial)}
 .g-rim{fill:none;stroke:var(--line);stroke-width:2}
 .g-tick{stroke:var(--dial-fg)} .g-tick.red{stroke:var(--bad)}
-.g-num{fill:var(--dial-fg);font:600 17px var(--f-display)} .g-num.red{fill:var(--bad)}
+.g-num{fill:var(--dial-fg);font:600 17px var(--f-display)} .g-num.sm{font-size:15px} .g-num.red{fill:var(--bad)}
 .g-red{stroke:var(--bad);fill:none}
 .g-unit{fill:var(--dial-dim);font:500 10px var(--f-mono)}
 .g-digital{fill:var(--dial-fg);font:500 22px var(--f-mono)}
@@ -184,8 +186,9 @@ footer.col{margin-top:56px;border-top:1px solid var(--line);padding-top:18px}
 
 @media (max-width:720px){
   body{font-size:17px}
-  .sim{grid-template-columns:1fr}
-  .gauge{max-width:260px;order:-1}
+  .controls{grid-template-columns:1fr}
+  .status{flex-direction:column;gap:10px}
+  .cluster{padding:12px;gap:8px 12px}
   .notes,.mine{grid-template-columns:1fr}
   .strip-row{grid-template-columns:36px minmax(0,1fr) 112px}
   .panel{padding:18px}
@@ -251,18 +254,19 @@ footer.col{margin-top:56px;border-top:1px solid var(--line);padding-top:18px}
           <button type="button" id="eng-diesel" data-engine="diesel" aria-pressed="false">Diesel</button>
         </div>
       </div>
-      <div class="sim">
-        <div class="controls">
-          <div class="ctl">
-            <div class="ctl-row"><label class="label" for="m-speed">Road speed</label><span class="bigval"><span id="m-speed-v">50</span><small>km/h</small></span></div>
-            <input type="range" id="m-speed" min="0" max="140" step="1" value="50">
-          </div>
-          <div class="ctl">
-            <span class="label" id="gear-l">Gear</span>
-            <div class="gears" role="radiogroup" aria-labelledby="gear-l" id="gears"></div>
-          </div>
+      <div class="cluster">
+        <figure><svg class="gauge" id="gauge" viewBox="0 0 240 240" role="img" aria-label="Rev counter"></svg><figcaption class="label">Rev counter</figcaption></figure>
+        <figure><svg class="gauge" id="speedo" viewBox="0 0 240 240" role="img" aria-label="Speedometer"></svg><figcaption class="label">Speedometer</figcaption></figure>
+      </div>
+      <div class="controls">
+        <div class="ctl">
+          <div class="ctl-row"><label class="label" for="m-speed">Road speed</label><span class="bigval"><span id="m-speed-v">50</span><small>km/h</small></span></div>
+          <input type="range" id="m-speed" min="0" max="140" step="1" value="50">
         </div>
-        <svg class="gauge" id="gauge" viewBox="0 0 240 240" role="img" aria-label="Rev counter"></svg>
+        <div class="ctl">
+          <span class="label" id="gear-l">Gear</span>
+          <div class="gears" role="radiogroup" aria-labelledby="gear-l" id="gears"></div>
+        </div>
       </div>
       <div class="status" id="m-status" aria-live="polite"></div>
       <div>
@@ -385,28 +389,33 @@ CAR.ratios.forEach((_,i)=>{
   gearsEl.appendChild(b);
 });
 
-function dial(e,pre,digital){
+const tachCfg=e=>({max:e.max,minor:500,major:1000,redline:e.redline,label:v=>v/1000,unit:'×1000 r/min'});
+const SPEEDO={max:160,minor:10,major:20,redline:null,label:v=>v,unit:'km/h',numR:33,sm:true};
+function dial(c,pre,digital){
   const cx=120,cy=120,R=100;
-  const ang=r=>135+270*Math.min(r,e.max)/e.max;
+  const ang=v=>135+270*Math.min(Math.max(v,0),c.max)/c.max;
   const pt=(a,rad)=>[(cx+rad*Math.cos(a*Math.PI/180)).toFixed(2),(cy+rad*Math.sin(a*Math.PI/180)).toFixed(2)];
   let s='<circle class="g-rim" cx="120" cy="120" r="117"/><circle class="g-face" cx="120" cy="120" r="114"/>';
-  const a1=ang(e.redline),a2=ang(e.max),[x1,y1]=pt(a1,R-4),[x2,y2]=pt(a2,R-4);
-  s+=`<path class="g-red" stroke-width="8" d="M${x1} ${y1} A${R-4} ${R-4} 0 ${a2-a1>180?1:0} 1 ${x2} ${y2}"/>`;
-  for(let r=0;r<=e.max;r+=500){
-    const major=r%1000===0,a=ang(r),[ax,ay]=pt(a,R),[bx,by]=pt(a,major?R-14:R-8),red=r>=e.redline?' red':'';
-    s+=`<line class="g-tick${red}" x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke-width="${major?2.5:1.2}"/>`;
-    if(major){const[tx,ty]=pt(a,R-27);s+=`<text class="g-num${red}" x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central">${r/1000}</text>`;}
+  if(c.redline!=null){
+    const a1=ang(c.redline),a2=ang(c.max),[x1,y1]=pt(a1,R-4),[x2,y2]=pt(a2,R-4);
+    s+=`<path class="g-red" stroke-width="8" d="M${x1} ${y1} A${R-4} ${R-4} 0 ${a2-a1>180?1:0} 1 ${x2} ${y2}"/>`;
   }
-  s+='<text class="g-unit" x="120" y="158" text-anchor="middle">×1000 r/min</text>';
+  for(let v=0;v<=c.max;v+=c.minor){
+    const major=v%c.major===0,a=ang(v),[ax,ay]=pt(a,R),[bx,by]=pt(a,major?R-14:R-8),red=c.redline!=null&&v>=c.redline?' red':'';
+    s+=`<line class="g-tick${red}" x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke-width="${major?2.5:1.2}"/>`;
+    if(major){const[tx,ty]=pt(a,R-(c.numR||27));s+=`<text class="g-num${red}${c.sm?' sm':''}" x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central">${c.label(v)}</text>`;}
+  }
+  s+=`<text class="g-unit" x="120" y="158" text-anchor="middle">${c.unit}</text>`;
   if(digital)s+=`<text class="g-digital" id="${pre}-digital" x="120" y="190" text-anchor="middle">0</text>`;
   s+=`<g class="needle" id="${pre}-needle"><line x1="120" y1="120" x2="210" y2="120" stroke-width="3.5"/><line x1="120" y1="120" x2="102" y2="120" stroke-width="6"/></g>`;
   s+='<circle class="g-hub" cx="120" cy="120" r="8"/>';
   return{s,ang};
 }
 function buildGauge(){
-  const d=dial(ENGINES[st.engine],'g',true);
+  const d=dial(tachCfg(ENGINES[st.engine]),'g',true);
   $('#gauge').innerHTML=d.s;
   st.ang=d.ang;
+  if(!st.sang){const sp=dial(SPEEDO,'sp',true);$('#speedo').innerHTML=sp.s;st.sang=sp.ang;}
 }
 
 function updateManual(){
@@ -416,7 +425,10 @@ function updateManual(){
   document.querySelectorAll('[data-engine]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.engine===st.engine));
   const n=$('#g-needle');
   n.style.transform=`rotate(${st.ang(Math.min(r,e.max*1.04)).toFixed(1)}deg)`;
-  $('#g-digital').textContent=fmt(Math.round(r/10)*10);
+  $('#g-digital').textContent=fmt(r);
+  $('#sp-needle').style.transform=`rotate(${st.sang(st.speed).toFixed(1)}deg)`;
+  $('#sp-digital').textContent=st.speed;
+  $('#speedo').setAttribute('aria-label',`Speedometer reading ${st.speed} km/h`);
   $('#gauge').setAttribute('aria-label',`Rev counter reading ${fmt(r)} RPM`);
 
   let z=ZONES[zone(r,e)];
@@ -448,7 +460,7 @@ buildGauge();updateManual();
 
 /* Hero dial: rests at idle; sweeps to the redline and back once on load, like a car's start-up check */
 (function(){
-  const d=dial(ENGINES.petrol,'hero',false);
+  const d=dial(tachCfg(ENGINES.petrol),'hero',false);
   $('#hero-gauge').innerHTML=d.s;
   const n=$('#hero-needle'),set=r=>{n.style.transform=`rotate(${d.ang(r).toFixed(1)}deg)`;};
   set(800);
