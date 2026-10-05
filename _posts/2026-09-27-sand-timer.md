@@ -20,8 +20,13 @@ is a short manual for using it.
 3. Open it from Applications.
 
 It needs macOS 13 or later, on Apple Silicon or Intel. It's signed and notarized, so it
-opens without a warning. There's no account and no setup. The timer has no Dock icon; it
-just appears on your desktop.
+opens without a warning, and there's no account. The timer has no Dock icon; it just
+appears on your desktop.
+
+The first time, a short welcome shows how it works and offers a few optional choices:
+the projects you're working on, what to hear while the sand runs, and whether it opens
+when you log in. Click **Start a Timer** and your first timer begins, or **Skip** to set
+things up later. You can open it again any time from right-click → **Getting Started…**.
 
 ![A Mac screen with a document open in Chrome and the Sand Timer standing in the bottom-right corner, with 9:48 left on its base]({{ "/assets/images/sand-timer-on-a-mac.png" | relative_url }})
 
