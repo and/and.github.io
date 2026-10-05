@@ -11,12 +11,25 @@ Sand Timer is an hourglass that sits on your Mac's desktop, above your other win
 see how much time is left without reading a number: about a third gone, plenty left. This
 is a short manual for using it.
 
+<style>
+  .toc-and-timer { display: flex; gap: 2rem; align-items: center; }
+  .toc-and-timer > div { flex: 1; min-width: 0; }
+  .toc-and-timer .timer { text-align: center; }
+  .toc-and-timer img { max-width: 100%; height: auto; }
+  @media (max-width: 600px) { .toc-and-timer { flex-direction: column; align-items: stretch; } }
+</style>
+
+<div class="toc-and-timer" markdown="1">
+<div markdown="1">
 **Contents**
 
 * Contents
 {:toc}
-
+</div>
+<div class="timer" markdown="1">
 ![The timer running: sand falls in a stream from the top chamber, hollowing a crater as it drains and building a pile below, while the display in the base counts down]({{ "/assets/images/sand-timer-running.gif" | relative_url }})
+</div>
+</div>
 
 ## Install
 
