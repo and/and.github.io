@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" role="img" aria-label="Raw peanuts on the left, golden roasted peanuts on the right">
+<defs>
+  <g id="p">
+    <path fill="currentColor" d="M -27 0 C -27 -14 -15 -19 -7 -15 C -3 -13 3 -13 7 -15 C 15 -19 27 -14 27 0 C 27 14 15 19 7 15 C 3 13 -3 13 -7 15 C -15 19 -27 14 -27 0 Z"/>
+    <ellipse cx="-14" cy="-6" rx="8" ry="3.2" fill="#fff" opacity=".28" transform="rotate(-12 -14 -4)"/>
+    <ellipse cx="14" cy="-6" rx="8" ry="3.2" fill="#fff" opacity=".28" transform="rotate(12 14 -4)"/>
+    <path d="M -4 -9 Q 0 -6 4 -9" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="1.4" stroke-linecap="round"/>
+  </g>
+</defs>
+<rect width="1000" height="420" fill="#fbf3e4"/>
+<circle cx="270" cy="190" r="150" fill="#f1e2c4"/><circle cx="730" cy="190" r="150" fill="#f1e2c4"/>
+<use href="#p" color="#dfc093" transform="translate(200.0 140.0) rotate(-25) scale(1.9)"/>
+<use href="#p" color="#d8b88a" transform="translate(300.0 120.0) rotate(15) scale(1.9)"/>
+<use href="#p" color="#ecd7b4" transform="translate(250.0 195.0) rotate(70) scale(1.9)"/>
+<use href="#p" color="#dfc093" transform="translate(345.0 185.0) rotate(-40) scale(1.9)"/>
+<use href="#p" color="#dfc093" transform="translate(185.0 240.0) rotate(10) scale(1.9)"/>
+<use href="#p" color="#e8cfa6" transform="translate(290.0 255.0) rotate(-65) scale(1.9)"/>
+<use href="#p" color="#e8cfa6" transform="translate(365.0 250.0) rotate(30) scale(1.9)"/>
+<use href="#p" color="#c98a3b" transform="translate(660.0 140.0) rotate(-25) scale(1.9)"/>
+<use href="#p" color="#c18033" transform="translate(760.0 120.0) rotate(15) scale(1.9)"/>
+<use href="#p" color="#b9792e" transform="translate(710.0 195.0) rotate(70) scale(1.9)"/>
+<use href="#p" color="#a9692a" transform="translate(805.0 185.0) rotate(-40) scale(1.9)"/>
+<use href="#p" color="#b9792e" transform="translate(645.0 240.0) rotate(10) scale(1.9)"/>
+<use href="#p" color="#b9792e" transform="translate(750.0 255.0) rotate(-65) scale(1.9)"/>
+<use href="#p" color="#c98a3b" transform="translate(825.0 250.0) rotate(30) scale(1.9)"/>
+<g font-family="Georgia, serif" font-size="30" fill="#5b4326" text-anchor="middle"><text x="270" y="385">Raw</text><text x="730" y="385">Roasted</text></g>
+</svg>

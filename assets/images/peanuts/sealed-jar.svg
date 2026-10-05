@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 520" role="img" aria-label="Roasted peanuts stored in a jar with a closed lid">
+<defs>
+  <g id="p">
+    <path fill="currentColor" d="M -27 0 C -27 -14 -15 -19 -7 -15 C -3 -13 3 -13 7 -15 C 15 -19 27 -14 27 0 C 27 14 15 19 7 15 C 3 13 -3 13 -7 15 C -15 19 -27 14 -27 0 Z"/>
+    <ellipse cx="-14" cy="-6" rx="8" ry="3.2" fill="#fff" opacity=".28" transform="rotate(-12 -14 -4)"/>
+    <ellipse cx="14" cy="-6" rx="8" ry="3.2" fill="#fff" opacity=".28" transform="rotate(12 14 -4)"/>
+    <path d="M -4 -9 Q 0 -6 4 -9" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="1.4" stroke-linecap="round"/>
+  </g>
+</defs>
+<rect width="600" height="520" fill="#fbf3e4"/>
+<defs><clipPath id="jar"><rect x="150" y="130" width="300" height="340" rx="40"/></clipPath></defs>
+<ellipse cx="300" cy="480" rx="170" ry="16" fill="#000" opacity=".1"/>
+<rect x="150" y="130" width="300" height="340" rx="40" fill="#eaf2f5"/>
+<g clip-path="url(#jar)">
+<use href="#p" color="#c18033" transform="translate(172.0 447.9) rotate(-36) scale(0.95)"/>
+<use href="#p" color="#c98a3b" transform="translate(222.9 450.4) rotate(47) scale(0.95)"/>
+<use href="#p" color="#c18033" transform="translate(279.9 448.5) rotate(-6) scale(0.95)"/>
+<use href="#p" color="#c18033" transform="translate(328.8 450.2) rotate(46) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(370.6 446.5) rotate(1) scale(0.95)"/>
+<use href="#p" color="#b9792e" transform="translate(428.3 451.1) rotate(39) scale(0.95)"/>
+<use href="#p" color="#c18033" transform="translate(196.1 415.7) rotate(32) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(244.7 417.8) rotate(4) scale(0.95)"/>
+<use href="#p" color="#b9792e" transform="translate(303.4 412.1) rotate(8) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(346.3 411.4) rotate(-56) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(400.7 418.6) rotate(58) scale(0.95)"/>
+<use href="#p" color="#b9792e" transform="translate(447.9 420.7) rotate(15) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(177.3 381.5) rotate(5) scale(0.95)"/>
+<use href="#p" color="#d49a4a" transform="translate(225.1 379.5) rotate(3) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(280.1 385.9) rotate(-42) scale(0.95)"/>
+<use href="#p" color="#c98a3b" transform="translate(320.6 378.2) rotate(-8) scale(0.95)"/>
+<use href="#p" color="#d49a4a" transform="translate(377.1 381.3) rotate(-40) scale(0.95)"/>
+<use href="#p" color="#d49a4a" transform="translate(428.4 386.0) rotate(-48) scale(0.95)"/>
+<use href="#p" color="#b9792e" transform="translate(195.7 351.8) rotate(65) scale(0.95)"/>
+<use href="#p" color="#b9792e" transform="translate(253.0 343.9) rotate(54) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(305.9 351.3) rotate(-47) scale(0.95)"/>
+<use href="#p" color="#d49a4a" transform="translate(355.9 347.0) rotate(-11) scale(0.95)"/>
+<use href="#p" color="#c18033" transform="translate(397.8 350.2) rotate(-67) scale(0.95)"/>
+<use href="#p" color="#c18033" transform="translate(449.5 350.0) rotate(-16) scale(0.95)"/>
+<use href="#p" color="#b9792e" transform="translate(176.5 314.1) rotate(-61) scale(0.95)"/>
+<use href="#p" color="#c98a3b" transform="translate(230.7 310.0) rotate(-33) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(279.9 310.8) rotate(36) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(329.2 315.8) rotate(62) scale(0.95)"/>
+<use href="#p" color="#d49a4a" transform="translate(370.8 318.2) rotate(10) scale(0.95)"/>
+<use href="#p" color="#a9692a" transform="translate(420.1 309.6) rotate(26) scale(0.95)"/>
+<use href="#p" color="#c98a3b" transform="translate(204.7 277.7) rotate(-68) scale(0.95)"/>
+<use href="#p" color="#c98a3b" transform="translate(253.6 275.8) rotate(50) scale(0.95)"/>
+<use href="#p" color="#c18033" transform="translate(297.2 276.2) rotate(-68) scale(0.95)"/>
+<use href="#p" color="#c98a3b" transform="translate(349.0 284.2) rotate(17) scale(0.95)"/>
+<use href="#p" color="#b9792e" transform="translate(400.3 277.4) rotate(-55) scale(0.95)"/>
+<use href="#p" color="#d49a4a" transform="translate(447.1 276.8) rotate(61) scale(0.95)"/>
+</g>
+<rect x="150" y="130" width="300" height="340" rx="40" fill="none" stroke="#9fb7c0" stroke-width="5"/><rect x="178" y="150" width="14" height="290" rx="7" fill="#fff" opacity=".45"/><rect x="165" y="82" width="270" height="58" rx="14" fill="#b5532f"/><rect x="165" y="82" width="270" height="18" rx="9" fill="#fff" opacity=".18"/>
+</svg>
