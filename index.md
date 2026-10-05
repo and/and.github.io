@@ -3,4 +3,4 @@ layout: home
 title: "and.log"
 ---
 
-Notes on things I'm learning, from algorithms and maths to cooking. Many posts let you pick a reading level: beginner, intermediate or expert.
+Notes on what I'm learning, from algorithms to cooking, often at three reading levels.
