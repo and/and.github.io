@@ -11,6 +11,11 @@ Sand Timer is an hourglass that sits on your Mac's desktop, above your other win
 see how much time is left without reading a number: about a third gone, plenty left. This
 is a short manual for using it.
 
+**Contents**
+
+* Contents
+{:toc}
+
 ![The timer running: sand falls in a stream from the top chamber, hollowing a crater as it drains and building a pile below, while the display in the base counts down]({{ "/assets/images/sand-timer-running.gif" | relative_url }})
 
 ## Install
