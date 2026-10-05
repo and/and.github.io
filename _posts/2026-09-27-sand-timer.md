@@ -15,7 +15,7 @@ is a short manual for using it.
   .toc-and-timer { display: flex; gap: 2rem; align-items: center; }
   .toc-and-timer > div { flex: 1; min-width: 0; }
   .toc-and-timer .timer { text-align: center; }
-  .toc-and-timer img { max-width: 100%; height: auto; }
+  .toc-and-timer img { max-width: 60%; height: auto; }
   @media (max-width: 600px) { .toc-and-timer { flex-direction: column; align-items: stretch; } }
 </style>
 
