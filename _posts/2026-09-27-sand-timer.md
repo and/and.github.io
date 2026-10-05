@@ -104,8 +104,13 @@ restart, end the session, switch project and bring the timer back.
 
 ## Sounds
 
-Right-click to turn the flip, fall and finish sounds on or off, set how loud the falling
-sand is (it starts silent), and add a gentle chime each minute.
+Right-click → **Sound**.
+
+- **While the sand runs**, choose one: **Silence** (the default), **Falling Sand**, or a
+  steady noise to work to: **White** (a hiss), **Pink** (like rain) or **Brown** (a low
+  rumble). It fades in when the sand starts and out when you pause or stop.
+- **Flip, Fall & Finish** and **Minute Chimes** switch the short sounds on or off.
+- **Sound Settings…** has the volume, and a softness slider that muffles the noises.
 
 ## Settings at a glance
 
