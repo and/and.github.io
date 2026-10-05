@@ -5,6 +5,14 @@ layout: default
 <section class="hero">
   <h1 class="visually-hidden">{{ page.title | escape }}</h1>
   <p class="page-description">{{ content | strip_html | strip }}</p>
+  {%- assign topics = site.categories | sort %}
+  {%- if topics.size > 0 %}
+  <nav class="topic-index hero-topics" aria-label="Topics">
+    {%- for t in topics %}
+    <a href="{{ '/topics/' | relative_url }}#{{ t[0] | slugify }}">{{ t[0] }} <span>{{ t[1].size }}</span></a>
+    {%- endfor %}
+  </nav>
+  {%- endif %}
 </section>
 
 {%- if site.posts.size > 0 -%}
