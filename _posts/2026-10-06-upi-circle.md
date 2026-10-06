@@ -39,7 +39,19 @@ Rules that apply to both:
 3. Choose full or partial delegation. For full delegation, set the monthly limit and how long it lasts.
 4. The secondary user gets a request in their UPI app and accepts it.
 
-You and the secondary user don't need to use the same app, but both apps must support UPI Circle. BHIM had it first; Google Pay, PhonePe, Paytm and others have been adding it, so check your own app.
+You and the secondary user don't need to use the same app, but both apps must support UPI Circle.
+
+## Which apps and banks have it
+
+*Checked on 6 October 2026. Apps and banks keep adding UPI Circle, so this list may be out of date when you read it. For the latest list, see [NPCI's UPI Circle page](https://www.npci.org.in/product/upi-circle) or look for UPI Circle in your own app.*
+
+**Apps reported to support UPI Circle:** Amazon Pay, BHIM, CRED, Google Pay, iMobile Pay (ICICI Bank), Paytm, PayZapp (HDFC Bank), PhonePe, Samsung Pay and WhatsApp.
+
+Partial delegation is the more widely available of the two types. BHIM went live with full delegation on 25 November 2025. Reports differ on which other apps have full delegation yet, so check inside your app before you count on it.
+
+**Banks reported to support UPI Circle:** State Bank of India, HDFC Bank, ICICI Bank, Axis Bank, Punjab National Bank, Bank of Maharashtra, Union Bank of India, YES Bank, Bank of India, Indian Overseas Bank, UCO Bank and Central Bank of India.
+
+Support depends on both your app and the bank behind your account. If your bank isn't listed here, it may still work.
 
 ## Staying in control
 
