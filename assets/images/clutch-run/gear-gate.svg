@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 140" width="200" height="212" role="img" aria-label="H-pattern gear gate: 1, 3 and 5 on top, 2, 4 and R below, neutral across the middle">
+  <rect x="0" y="0" width="132" height="140" rx="10" fill="#1d2420"/>
+  <g stroke="#56645c" stroke-width="7" stroke-linecap="round" fill="none">
+    <path d="M26 24V116M66 24V116M106 24V116M26 70H106"/>
+  </g>
+  <g font-family="Menlo, monospace" font-size="13" font-weight="700" fill="#e3e8e4" text-anchor="middle">
+    <text x="26" y="17">1</text><text x="66" y="17">3</text><text x="106" y="17">5</text>
+    <text x="26" y="133">2</text><text x="66" y="133">4</text><text x="106" y="133">R</text>
+  </g>
+  <circle cx="66" cy="70" r="11" fill="#4cc184"/>
+  <text x="66" y="74.5" font-family="Menlo, monospace" font-size="12" font-weight="700" fill="#1d2420" text-anchor="middle">N</text>
+</svg>
