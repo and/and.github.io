@@ -8,7 +8,7 @@ permalink: /til/upi-circle/
 excerpt: UPI Circle lets up to five people make UPI payments from your bank account, from their own phones, without your UPI PIN. They don't need a bank account of their own.
 ---
 
-Today I learned about **UPI Circle**, a UPI feature from NPCI. It lets you (the *primary user*) give someone else (a *secondary user*) permission to make UPI payments from your bank account, from their own phone. You never share your UPI PIN, and they don't need a bank account of their own.
+Today I learned about **[UPI Circle](https://www.npci.org.in/product/upi-circle)**, a UPI feature from NPCI. It lets you (the *primary user*) give someone else (a *secondary user*) permission to make UPI payments from your bank account, from their own phone. You never share your UPI PIN, and they don't need a bank account of their own.
 
 ## Who it's for
 
