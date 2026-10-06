@@ -10,6 +10,8 @@ excerpt: UPI Circle lets up to five people make UPI payments from your bank acco
 
 Today I learned about **[UPI Circle](https://www.npci.org.in/product/upi-circle)**, a UPI feature from NPCI. It lets you (the *primary user*) give someone else (a *secondary user*) permission to make UPI payments from your bank account, from their own phone. You never share your UPI PIN, and they don't need a bank account of their own.
 
+![Your bank account connects to your phone, which connects to up to five other phones]({{ "/assets/images/upi-circle/hero-one-account-many-phones.svg" | relative_url }})
+
 ## Who it's for
 
 - **People without a bank account.** A child, a parent, or someone who works in your house can pay a shopkeeper by scanning a QR code. The money comes from your account.
@@ -32,6 +34,8 @@ Rules that apply to both:
 - For the first **24 hours** after linking, the secondary user can spend at most **₹5,000** in total.
 - The secondary user confirms payments with their phone's biometrics or an app password, not your UPI PIN.
 
+![Full delegation: the secondary user pays the shop directly. Partial delegation: they ask, you approve with your UPI PIN, then the shop is paid]({{ "/assets/images/upi-circle/full-vs-partial.svg" | relative_url }})
+
 ## How to set it up
 
 1. In your UPI app, open **UPI Circle** (some apps call it something like "Family and Friends").
@@ -52,6 +56,9 @@ You and the secondary user don't need to use the same app, but both apps must su
 NPCI's page doesn't say which apps offer full delegation. BHIM went live with it on 25 November 2025; for other apps, check inside the app before you count on it.
 
 ## Staying in control
+
+![An example UPI Circle screen showing three people, their delegation type and how much of their monthly limit they have used]({{ "/assets/images/upi-circle/circle-settings-screen.svg" | relative_url }})
+*An example of what you might see. Every app lays this out differently.*
 
 - Every payment the secondary user makes shows up in your app.
 - You can change the limits or remove someone at any time from your UPI Circle settings, and the change takes effect immediately.

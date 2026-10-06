@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" role="img" aria-label="Full delegation: the secondary user pays the shop directly. Partial delegation: the secondary user sends a request, you approve it with your UPI PIN, then the shop is paid." font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<defs>
+  <g id="ph">
+    <rect x="-22" y="-38" width="44" height="76" rx="8" fill="#2b2f36"/>
+    <rect x="-18" y="-31" width="36" height="58" rx="3" fill="#e8f0fa"/>
+    <circle cx="0" cy="32.5" r="2" fill="#5b6270"/>
+  </g>
+  <g id="shop">
+    <path d="M-34 -14 h68 l-6 -20 h-56 z" fill="#c98a3b"/>
+    <path d="M-34 -14 h68 v4 h-68 z" fill="#a86f2b"/>
+    <rect x="-30" y="-10" width="60" height="48" fill="#fff" stroke="#c98a3b" stroke-width="2"/>
+    <g fill="#2b2f36">
+      <rect x="-12" y="-2" width="24" height="24" fill="#fff" stroke="#2b2f36" stroke-width="2"/>
+      <rect x="-8" y="2" width="6" height="6"/><rect x="2" y="2" width="6" height="6"/><rect x="-8" y="12" width="6" height="6"/><rect x="3" y="13" width="3" height="3"/><rect x="6" y="16" width="3" height="3"/>
+    </g>
+    <text x="0" y="34" text-anchor="middle" font-size="8" fill="#5b6270">SCAN TO PAY</text>
+  </g>
+  <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5b6270"/></marker>
+</defs>
+<rect width="720" height="380" fill="#f4f1ea"/>
+
+<!-- Full panel -->
+<rect x="16" y="16" width="334" height="348" rx="16" fill="#fff" stroke="#d9d3c7"/>
+<text x="183" y="54" text-anchor="middle" font-size="20" font-weight="700" fill="#3a8f4f">Full delegation</text>
+<text x="183" y="78" text-anchor="middle" font-size="13" fill="#5b6270">They pay on their own</text>
+<use href="#ph" transform="translate(90 180)"/>
+<text x="90" y="240" text-anchor="middle" font-size="13" fill="#2b2f36">Secondary user</text>
+<line x1="124" y1="180" x2="232" y2="180" stroke="#5b6270" stroke-width="3" marker-end="url(#ar)"/>
+<text x="178" y="168" text-anchor="middle" font-size="12" fill="#5b6270">pays</text>
+<use href="#shop" transform="translate(276 180)"/>
+<text x="276" y="240" text-anchor="middle" font-size="13" fill="#2b2f36">Shop</text>
+<circle cx="276" cy="134" r="12" fill="#3a8f4f"/><path d="M270 134 l4 4 l8 -8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="183" y="296" text-anchor="middle" font-size="14" fill="#2b2f36">Up to <tspan font-weight="700">₹5,000</tspan> a payment</text>
+<text x="183" y="318" text-anchor="middle" font-size="14" fill="#2b2f36">and <tspan font-weight="700">₹15,000</tspan> a month</text>
+
+<!-- Partial panel -->
+<rect x="370" y="16" width="334" height="348" rx="16" fill="#fff" stroke="#d9d3c7"/>
+<text x="537" y="54" text-anchor="middle" font-size="20" font-weight="700" fill="#2f6db5">Partial delegation</text>
+<text x="537" y="78" text-anchor="middle" font-size="13" fill="#5b6270">You approve every payment</text>
+<use href="#ph" transform="translate(420 180)"/>
+<text x="420" y="240" text-anchor="middle" font-size="13" fill="#2b2f36">Secondary</text>
+<text x="420" y="256" text-anchor="middle" font-size="13" fill="#2b2f36">user</text>
+<line x1="446" y1="180" x2="500" y2="180" stroke="#5b6270" stroke-width="3" marker-end="url(#ar)"/>
+<text x="472" y="166" text-anchor="middle" font-size="12" fill="#5b6270">asks</text>
+<g transform="translate(535 180)">
+  <use href="#ph"/>
+  <text x="0" y="-4" text-anchor="middle" font-size="9" font-weight="700" fill="#2f6db5">PIN</text>
+  <text x="0" y="8" text-anchor="middle" font-size="9" fill="#2b2f36">• • • •</text>
+</g>
+<text x="535" y="240" text-anchor="middle" font-size="13" fill="#2b2f36">You</text>
+<text x="535" y="256" text-anchor="middle" font-size="13" fill="#2b2f36">approve</text>
+<line x1="561" y1="180" x2="612" y2="180" stroke="#5b6270" stroke-width="3" marker-end="url(#ar)"/>
+<text x="586" y="166" text-anchor="middle" font-size="12" fill="#5b6270">pays</text>
+<use href="#shop" transform="translate(652 180) scale(.8)"/>
+<text x="652" y="240" text-anchor="middle" font-size="13" fill="#2b2f36">Shop</text>
+<text x="537" y="296" text-anchor="middle" font-size="14" fill="#2b2f36">Your normal UPI limits</text>
+<text x="537" y="318" text-anchor="middle" font-size="14" fill="#2b2f36">apply</text>
+</svg>
