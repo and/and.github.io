@@ -43,15 +43,13 @@ You and the secondary user don't need to use the same app, but both apps must su
 
 ## Which apps and banks have it
 
-*Checked on 6 October 2026. Apps and banks keep adding UPI Circle, so this list may be out of date when you read it. For the latest list, see [NPCI's UPI Circle page](https://www.npci.org.in/product/upi-circle) or look for UPI Circle in your own app.*
+*These lists are from [NPCI's UPI Circle page](https://www.npci.org.in/product/upi-circle), checked on 6 October 2026. Apps and banks keep adding UPI Circle, so the lists may be different when you read this. Check NPCI's page for the latest.*
 
-**Apps reported to support UPI Circle:** Amazon Pay, BHIM, CRED, Google Pay, iMobile Pay (ICICI Bank), Paytm, PayZapp (HDFC Bank), PhonePe, Samsung Pay and WhatsApp.
+**Live apps (9):** Amazon Pay, Bajaj, BHIM, City Union Bank App, FamApp, Google Pay, ICICI Bank iMobile, PhonePe and SalarySe.
 
-Partial delegation is the more widely available of the two types. BHIM went live with full delegation on 25 November 2025. Reports differ on which other apps have full delegation yet, so check inside your app before you count on it.
+**Live banks (38):** Airtel Payments Bank, AU Small Finance Bank, Axis Bank, Bank of Baroda, Bharat Co-operative Bank, Canara Bank, Central Bank of India, City Union Bank, Cosmos Bank, DCB Bank, Dhanlaxmi Bank, Federal Bank, Fino Payments Bank, HDFC Bank, ICICI Bank, IDBI Bank, IDFC FIRST Bank, Indian Bank, Indian Overseas Bank, IndusInd Bank, Jammu and Kashmir Bank, Janata Bank, Karnataka Bank, Karnataka Grameena Bank, Kerala Gramin Bank, Punjab and Sind Bank, Punjab National Bank, RBL Bank, Saraswat Bank, South Indian Bank, State Bank of India, Suryoday Small Finance Bank, SVC Co-operative Bank, Tamilnad Mercantile Bank, TJSB Sahakari Bank, UCO Bank, Union Bank of India and YES Bank.
 
-**Banks reported to support UPI Circle:** State Bank of India, HDFC Bank, ICICI Bank, Axis Bank, Punjab National Bank, Bank of Maharashtra, Union Bank of India, YES Bank, Bank of India, Indian Overseas Bank, UCO Bank and Central Bank of India.
-
-Support depends on both your app and the bank behind your account. If your bank isn't listed here, it may still work.
+NPCI's page doesn't say which apps offer full delegation. BHIM went live with it on 25 November 2025; for other apps, check inside the app before you count on it.
 
 ## Staying in control
 
