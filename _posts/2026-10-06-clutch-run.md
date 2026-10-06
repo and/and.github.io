@@ -4,14 +4,21 @@ title: "Clutch Run: A Driving Game About Changing Gear"
 date: 2026-10-06
 categories: [cars]
 permalink: /cars/clutch-run/
-excerpt: "A small 3D driving game in the browser about the hardest part of learning to drive a manual car: the clutch, the gears, and keeping the revs in the green. With an automatic mode where the phone's tilt is the accelerator."
+excerpt: "A small 3D driving game in the browser for practising manual gear changes on different terrain: climbs, descents, gravel and village streets. Plus a fun automatic mode for phones, where tilting the phone is the accelerator."
 ---
 
 Most driving games either hide the gearbox or turn it into a button. In a real hatchback the gearbox is the whole lesson. You stall at the lights, you lug the engine in fourth up a hill, and you wonder why the car shudders.
 
-**[Clutch Run](https://and.github.io/clutch-run/)** puts that lesson in a browser tab. You drive a small petrol hatchback round a hill loop with village streets, a steep climb, a gravel stretch and a long descent. You change gear yourself, keep left, and stay off the other traffic. It works on a laptop with the keyboard and on a phone held upright or sideways. There is nothing to install.
+**[Clutch Run](https://and.github.io/clutch-run/)** puts that lesson in a browser tab. The idea is to practise changing gear by hand on different terrain. You drive a small petrol hatchback round a hill loop with village streets, a steep climb, a gravel stretch and a long descent. Each one asks for a different gear: pull away in first, drop to second for the climb, hold third down the hill and let the engine brake. You change gear yourself, keep left, and stay off the other traffic.
+
+For phones there is also a fun mode: an automatic car where you tilt the phone to accelerate and brake. It works on a laptop with the keyboard and on a phone held upright or sideways. There is nothing to install.
 
 **[Play Clutch Run →](https://and.github.io/clutch-run/)**
+
+<figure>
+  <img src="{{ "/assets/images/clutch-run/desktop-start.jpg" | relative_url }}" alt="The Clutch Run start screen on a laptop: clutch mode, key layout, road, time and weather" loading="lazy">
+  <figcaption>The start screen on a laptop. Pick the clutch mode, the keys, the road, the time and the weather.</figcaption>
+</figure>
 
 * Contents
 {:toc}
@@ -40,13 +47,18 @@ The latest version makes the car feel heavier on the road. Lifting off the accel
 
 On a phone, the gears are an H-pattern gate that you drag through. It is laid out like most Indian hatchbacks: 1, 3 and 5 on top, 2, 4 and R below. The knob only moves along the slots. If a gear is refused (first gear at 80 km/h, or reverse while moving), the knob springs back to neutral with a grinding buzz.
 
+<figure>
+  <img src="{{ "/assets/images/clutch-run/phone-manual.jpg" | relative_url }}" alt="Clutch Run on a phone held sideways: the gear gate top left with the knob in 3rd, the rev counter and speedometer, and brake and accelerator pedals on the right" loading="lazy">
+  <figcaption>A phone held sideways in manual mode. Third gear, revs in the green, a car coming the other way.</figcaption>
+</figure>
+
 Sideways, the gate sits in a top corner of the road view, so your eyes stay on the road while you change gear. Upright, it sits at the foot of the view.
 
 You steer by turning the phone like a wheel. The accelerator and brake are analog: press higher up a pedal to press harder. The start screen asks whether you sit on the right (gears on the left, as in India and the UK) or on the left, and mirrors the controls.
 
 ## Automatic mode: the phone is the pedal
 
-Not everyone wants to start with the gearbox. **Automatic** mode swaps the lever for a P R N D selector that you drag like a real one, and changes gear by itself. The drive starts in D, so you can go at once.
+Manual is the lesson; automatic is the fun mode for phones. **Automatic** mode swaps the lever for a P R N D selector that you drag like a real one, and changes gear by itself. The drive starts in D, so you can go at once.
 
 Here the phone's angle does the pedal work. Whatever angle you hold the phone at when the drive starts becomes *rest*, about 35° for most people. Tilt the top edge back to accelerate and tip it forward to brake:
 
@@ -60,11 +72,21 @@ Here the phone's angle does the pedal work. Whatever angle you hold the phone at
 
 P and R need the car stopped, as in a real automatic. Drag the knob to R while rolling and it springs back to D.
 
+<figure>
+  <img src="{{ "/assets/images/clutch-run/phone-auto.jpg" | relative_url }}" alt="Clutch Run on a phone held upright at night in automatic mode: a starry sky over the village, D1 on the dashboard and the P R N D selector set to D" loading="lazy" style="max-width:360px;width:100%">
+  <figcaption>Automatic mode on a phone held upright, at night. Tilt back to go; the selector is in D.</figcaption>
+</figure>
+
 ## Endless roads, weather and the clock
 
 Besides the hill loop with lap times, there is an **endless road**. The game builds it ahead of you as you drive, with hills, bends, gravel, villages and traffic, and clears it away behind you.
 
 The sky follows your own clock by default: dark at night, orange at dusk. Rain makes the road slippery and fog closes the view. Headlights are a key or a button away.
+
+<figure>
+  <img src="{{ "/assets/images/clutch-run/desktop-rain.jpg" | relative_url }}" alt="Clutch Run on a laptop in the rain at dusk: the hatchback in third gear at 28 km/h on a wet village road" loading="lazy">
+  <figcaption>Evening rain on the hill loop, third gear on the keyboard.</figcaption>
+</figure>
 
 ## How it is built
 
