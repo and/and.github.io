@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Battery Alert for Android"
-date: 2026-10-09
+date: 2026-10-09 00:30:00 +0530
 categories: [utilities]
 permalink: /utilities/battery-alert/
 excerpt: "A free Android app that sounds an alarm when your battery runs low, and again when it's full and still on the charger. How to install it and set it up."
