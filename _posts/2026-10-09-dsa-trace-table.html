@@ -1,0 +1,749 @@
+---
+layout: null
+title: "DSA Trace Table"
+date: 2026-10-09 09:00:00 +0530
+categories: [dsa, utilities]
+permalink: /dsa/trace-table/
+excerpt: "A dry-run trace table in the browser. Paste a snippet, every variable becomes a column, and you fill in what each one holds after every iteration. Saves as you go."
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ page.title }} | {{ site.title }}</title>
+<meta name="description" content="{{ page.excerpt | strip_html | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link type="application/atom+xml" rel="alternate" href="{{ "/feed.xml" | relative_url }}" title="{{ site.title | escape }}">
+{% raw %}<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: two panes, code listing on the left, dry-run trace grid on the right; stacks on phones. */
+:root {
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --line: #d5dbe4;
+  --fg: #18202c;
+  --muted: #5d6a7c;
+  --accent: #2550b8;
+  --accent-soft: #e3eafa;
+  --marker: #fff0a3;
+  --marker-ink: #5a4500;
+  --danger: #b4232f;
+  --danger-soft: #fbe6e8;
+  --shadow: rgba(24, 32, 44, 0.18);
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+.tool {
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px;
+  font-weight: 400; line-height: normal; letter-spacing: normal;
+  padding-inline: 16px; padding-block: 0; border: 1px solid var(--line); border-radius: 10px;
+  display: flex; flex-direction: column; height: min(820px, 90vh);
+}
+.scratch { font-family: var(--sans); font-size: 14px; font-weight: 400; line-height: normal; letter-spacing: normal; color: var(--fg); }
+* { box-sizing: border-box; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.tool-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  padding-block: 14px 12px;
+}
+.tool-name { font-family: var(--mono); font-size: 17px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+.status { color: var(--muted); font-size: 12px; margin-right: auto; }
+.btn {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 6px;
+  padding: 6px 12px; font-size: 13px; font-weight: 500;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.btn.danger { color: var(--danger); }
+.btn.danger.armed { background: var(--danger); border-color: var(--danger); color: var(--surface); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn:disabled:hover { border-color: var(--line); }
+.btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+.scratch { display: flex; flex-direction: column; background: var(--surface); }
+#codePane .scratch { flex: 0 0 auto; border-top: 1px solid var(--line); }
+#codePane .scratch textarea { height: 120px; max-height: 50vh; resize: vertical; }
+.scratch.floating {
+  position: fixed; z-index: 20; overflow: hidden; resize: both;
+  min-width: 220px; min-height: 140px; max-width: calc(100vw - 16px); max-height: calc(100vh - 16px);
+  border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 12px 32px var(--shadow);
+}
+.scratch.floating textarea { flex: 1; min-height: 0; resize: none; }
+.scratch-head { display: flex; align-items: center; gap: 6px; padding: 6px 8px 6px 12px; border-bottom: 1px solid var(--line); }
+.scratch-head .label { margin-right: auto; }
+.scratch.floating .scratch-head { cursor: move; touch-action: none; background: var(--accent-soft); }
+.mini {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 4px;
+  padding: 2px 8px; font-size: 12px; color: var(--muted);
+}
+.mini:hover { color: var(--fg); border-color: var(--accent); }
+#scratchText {
+  width: 100%; border: 0; background: transparent; padding: 10px 12px;
+  font-family: var(--mono); font-size: 13px; line-height: 1.55;
+}
+#scratchText:focus-visible { outline: none; }
+
+.seg {
+  display: flex; align-items: center; gap: 2px; padding: 2px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+}
+.seg-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0 6px; }
+.seg button { border: 0; background: none; border-radius: 4px; padding: 4px 9px; font-size: 12px; color: var(--muted); }
+.seg button:hover { color: var(--fg); }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+.tool-main {
+  --split: 0.38;
+  flex: 1; min-height: 0; display: flex; padding-bottom: 16px;
+}
+.tool-main.pos-right { flex-direction: row; }
+.tool-main.pos-left { flex-direction: row-reverse; }
+.tool-main.pos-bottom { flex-direction: column; }
+.tool-main.pos-top { flex-direction: column-reverse; }
+.pane {
+  min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+}
+#codePane { flex: 0 0 calc(var(--split) * (100% - 12px)); }
+#tablePane { flex: 1 1 0; }
+.tool-main.pos-left .pane, .tool-main.pos-right .pane { min-width: 180px; }
+.tool-main.pos-top .pane, .tool-main.pos-bottom .pane { min-height: 120px; }
+.splitter { flex: 0 0 12px; display: flex; align-items: center; justify-content: center; touch-action: none; border-radius: 4px; }
+.tool-main.pos-left .splitter, .tool-main.pos-right .splitter { cursor: col-resize; }
+.tool-main.pos-top .splitter, .tool-main.pos-bottom .splitter { cursor: row-resize; }
+.splitter::after { content: ""; background: var(--line); border-radius: 2px; }
+.tool-main.pos-left .splitter::after, .tool-main.pos-right .splitter::after { width: 3px; height: 40px; }
+.tool-main.pos-top .splitter::after, .tool-main.pos-bottom .splitter::after { width: 40px; height: 3px; }
+.splitter:hover::after, .splitter.active::after, .splitter:focus-visible::after { background: var(--accent); }
+.splitter:focus-visible { outline: none; }
+body.resizing { user-select: none; }
+.pane-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  padding: 10px 12px; border-bottom: 1px solid var(--line);
+}
+.label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.meta { font-size: 12px; color: var(--muted); }
+textarea#code {
+  flex: 1; min-height: 0; resize: none; border: 0; background: transparent;
+  padding: 12px; font-family: var(--mono); font-size: 13px; line-height: 1.6; tab-size: 2;
+  white-space: pre; overflow: auto;
+}
+textarea#code:focus-visible { outline: none; }
+.note {
+  margin: 0; padding: 8px 12px; font-size: 12px; color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+.sample-note { background: var(--accent-soft); color: var(--fg); border-top: 0; border-bottom: 1px solid var(--line); }
+
+.table-wrap { flex: 1; min-height: 0; overflow: auto; }
+table { border-collapse: separate; border-spacing: 0; font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0; text-align: left; }
+th {
+  position: sticky; top: 0; z-index: 1; background: var(--surface);
+  padding: 6px 8px 4px; vertical-align: bottom; min-width: 96px;
+  border-bottom: 2px solid var(--line); cursor: grab;
+}
+th.iter-col { min-width: 84px; cursor: default; }
+th.dragging { opacity: 0.4; }
+th.drop-before { box-shadow: inset 3px 0 0 var(--accent); }
+th.drop-after { box-shadow: inset -3px 0 0 var(--accent); }
+.th-name { display: flex; align-items: center; gap: 6px; font-weight: 600; white-space: nowrap; }
+.grip { color: var(--muted); font-size: 11px; }
+.th-tools { display: flex; gap: 2px; margin-top: 4px; }
+.th-tools button {
+  border: 1px solid transparent; background: none; border-radius: 4px;
+  width: 22px; height: 20px; padding: 0; font-size: 13px; line-height: 1; color: var(--muted);
+}
+.th-tools button:hover { border-color: var(--line); color: var(--fg); }
+.th-tools button:disabled { opacity: 0.3; cursor: default; border-color: transparent; }
+
+td input {
+  width: 100%; min-width: 96px; border: 0; background: transparent;
+  padding: 7px 8px; font-family: var(--mono); font-size: 13px;
+}
+td input::placeholder { color: var(--muted); opacity: 0.45; }
+td input:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; background: var(--accent-soft); }
+td.iter-col input { color: var(--muted); font-weight: 500; }
+td.row-tools { border-right: 0; padding: 0 6px; }
+td.row-tools button { border: 0; background: none; color: var(--muted); font-size: 15px; padding: 4px 6px; border-radius: 4px; }
+td.row-tools button:hover { color: var(--danger); background: var(--danger-soft); }
+tbody tr:hover td { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+
+/* importance levels */
+.imp-hi { background: var(--marker) !important; }
+.imp-hi, .imp-hi input { color: var(--marker-ink); font-weight: 600; }
+.imp-lo, .imp-lo input { opacity: 0.4; }
+th.imp-lo { opacity: 0.55; }
+
+.table-foot {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  padding: 10px 12px; border-top: 1px solid var(--line);
+}
+#addColForm { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-left: auto; }
+.add-msg { font-size: 12px; color: var(--danger); }
+#addColName {
+  width: 140px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+  padding: 5px 8px; font-family: var(--mono); font-size: 13px;
+}
+.empty { padding: 24px 12px; color: var(--muted); }
+
+@media (max-width: 860px) {
+  .tool { height: auto; }
+  .tool-main.pos-right, .tool-main.pos-bottom { flex-direction: column; gap: 16px; }
+  .tool-main.pos-left, .tool-main.pos-top { flex-direction: column-reverse; gap: 16px; }
+  #codePane, #tablePane { flex: none; }
+  .tool-main .pane { min-width: 0; }
+  .splitter { display: none; }
+  textarea#code { min-height: 200px; }
+  .table-wrap { max-height: 70vh; }
+  #addColForm { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+.post {
+  --page: #ffffff; --ink: #111111; --soft: #6b6b6b; --rule: #e8e8e8; --code-bg: #f6f6f6;
+  --pfont: "IBM Plex Sans", -apple-system, "Helvetica Neue", sans-serif;
+  --pmono: "IBM Plex Mono", Menlo, Consolas, monospace;
+  margin: 0; background: var(--page); color: var(--ink); font-family: var(--pfont);
+  font-size: 18px; font-weight: 300; line-height: 1.75; letter-spacing: -.011em;
+  -webkit-font-smoothing: antialiased; padding-inline: 20px; padding-block: 0 4rem;
+}
+.col { max-width: 680px; margin-inline: auto; }
+.tool-wrap { max-width: 1240px; margin: 2rem auto 0; }
+header.col { padding-block: 4rem 1.5rem; }
+.eyebrow { font-family: var(--pmono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--soft); }
+.eyebrow a { color: inherit; text-decoration: none; }
+.eyebrow a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.post h1 { font-weight: 300; font-size: clamp(38px, 7vw, 56px); line-height: 1.08; letter-spacing: -.035em; margin: .6rem 0 1rem; text-wrap: balance; }
+.dek { font-size: 22px; line-height: 1.5; color: var(--soft); margin: 0; font-style: italic; font-weight: 400; }
+.prose h2 { font-weight: 400; font-size: 28px; line-height: 1.2; letter-spacing: -.01em; margin: 3rem 0 .75rem; text-wrap: balance; }
+.prose p, .prose ul { margin: 0 0 1.1rem; }
+.prose ul { padding-left: 1.2rem; }
+.prose li { margin-bottom: .4rem; }
+.prose strong { font-weight: 600; }
+.prose code { font-family: var(--pmono); font-size: .85em; background: var(--code-bg); padding: .1em .35em; border-radius: 3px; }
+footer.col { margin-top: 3.5rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); font-size: 15px; color: var(--soft); }
+.topbar { max-width: 880px; margin-inline: auto; display: flex; justify-content: space-between; align-items: baseline; padding-block: 1.1rem; border-bottom: 1px solid var(--rule); }
+.topbar a { font-size: 1.4rem; color: var(--ink); text-decoration: none; letter-spacing: -.02em; }
+.topbar .navs { display: flex; gap: 18px; }
+.topbar a.nav { font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--soft); }
+.topbar a:hover { color: var(--accent); }
+</style>
+{% endraw %}
+</head>
+<body class="post">
+<nav class="topbar" aria-label="Site"><a href="{{ "/" | relative_url }}">{{ site.title | escape }}</a><span class="navs"><a class="nav" href="{{ "/topics/" | relative_url }}">Topics</a><a class="nav" href="{{ "/archive/" | relative_url }}">All posts</a></span></nav>
+{% raw %}
+<header class="col">
+  {% endraw %}<div class="eyebrow">{% for c in page.categories %}<a href="{{ "/topics/" | relative_url }}#{{ c | slugify }}">{{ c }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}</div>{% raw %}
+  <h1>DSA Trace Table</h1>
+  <p class="dek">Paste a loop, get a column for every variable, and write down what each one holds after every pass. The pen-and-paper dry run, in the browser.</p>
+</header>
+
+<div class="col prose">
+  <p>A trace table is how you check a loop by hand. Each column is a variable, each row is one pass through the loop, and you write down what every variable holds at the end of that pass. It is slow on purpose: you catch the off-by-one before the computer does.</p>
+  <p>The tool below builds the table for you. It opens with a short example; replace it with your own code.</p>
+</div>
+
+<div class="tool-wrap"><div class="tool" id="tool">
+<div class="tool-bar">
+  <span class="tool-name">Trace table</span>
+  <span class="status" id="status" aria-live="polite">Saved in this browser</span>
+  <button class="btn" id="scratchToggle" type="button" aria-pressed="false">Scratch pad</button>
+  <div class="seg" role="group" aria-label="Table position">
+    <span class="seg-label">Table</span>
+    <button type="button" data-pos="left">Left</button>
+    <button type="button" data-pos="right">Right</button>
+    <button type="button" data-pos="top">Top</button>
+    <button type="button" data-pos="bottom">Bottom</button>
+  </div>
+  <button class="btn danger" id="clearBtn" type="button">Clear all</button>
+</div>
+
+<div class="tool-main pos-right" id="toolMain">
+  <section class="pane" id="codePane" aria-label="Code">
+    <div class="pane-head">
+      <span class="label">Code</span>
+      <span class="meta" id="varCount"></span>
+    </div>
+    <p class="note sample-note" id="sampleNote" hidden>Sample trace loaded. Paste your own code, or use Clear all to start fresh.</p>
+    <textarea id="code" spellcheck="false" placeholder="Paste a snippet here. Variables are picked up as you type."></textarea>
+    <section class="scratch" id="scratch" aria-label="Scratch pad" hidden>
+      <div class="scratch-head" id="scratchHead">
+        <span class="label">Scratch pad</span>
+        <button class="mini" id="scratchFloat" type="button">Float</button>
+        <button class="mini" id="scratchClose" type="button" aria-label="Close scratch pad" title="Close">×</button>
+      </div>
+      <textarea id="scratchText" spellcheck="false" placeholder="Notes, expected output, edge cases…"></textarea>
+    </section>
+    <p class="note" id="codeNote">Detects declarations, assignments, <code>++</code>/<code>--</code>, loop variables and function parameters.</p>
+  </section>
+
+  <div class="splitter" id="splitter" role="separator" tabindex="0" aria-label="Resize code panel" aria-valuemin="15" aria-valuemax="85" title="Drag to resize. Double-click to reset."></div>
+
+  <section class="pane" id="tablePane" aria-label="Trace table">
+    <div class="pane-head">
+      <span class="label">Trace</span>
+      <span class="meta">Drag headers to reorder · − / + sets importance</span>
+    </div>
+    <div class="table-wrap" id="tableWrap"></div>
+    <div class="table-foot">
+      <button class="btn primary" id="addRowBtn" type="button">Add iteration</button>
+      <button class="btn" id="showHiddenBtn" type="button" hidden></button>
+      <form id="addColForm">
+        <span class="add-msg" id="addColMsg" aria-live="polite"></span>
+        <input id="addColName" placeholder="missing variable" autocomplete="off" aria-label="Variable name">
+        <button class="btn" id="addColBtn" type="submit" disabled>Add column</button>
+      </form>
+    </div>
+  </section>
+</div>
+</div></div>
+
+<div class="col prose">
+  <h2>Using it</h2>
+  <ul>
+    <li><strong>Paste code</strong> on the left. Declarations, assignments, <code>++</code>/<code>--</code>, loop variables and function parameters become columns.</li>
+    <li><strong>Fill in one row per iteration.</strong> Iteration 0 is the state before the loop starts. <strong>Add iteration</strong>, or Enter in the last row, adds the next one. Empty cells show the previous row's value in grey.</li>
+    <li><strong>− and +</strong> on a column header fade a column out or highlight it, so the variables you care about stand out.</li>
+    <li><strong>Drag a header</strong>, or use ‹ and ›, to reorder columns. The iteration column always stays first.</li>
+    <li><strong>Add column</strong> covers anything the detector missed. <strong>×</strong> hides a column it got wrong, and <strong>Show hidden</strong> brings it back.</li>
+    <li><strong>Table: Left, Right, Top, Bottom</strong> moves the table. Drag the bar between the panels to resize them.</li>
+    <li><strong>Scratch pad</strong> opens a notes area under the code. <strong>Float</strong> turns it into a window you can drag over the table.</li>
+  </ul>
+
+  <h2>Where your work goes</h2>
+  <p>Everything saves in your browser as you type: the code, the table, the scratch pad and the layout. Nothing is sent anywhere. It stays until you press <strong>Clear all</strong>, which asks for a second click so it can't happen by accident. Clearing keeps your layout.</p>
+
+  <h2>Limits</h2>
+  <p>The variable detection is pattern matching, not a parser. It handles the common shapes in JavaScript, Python, C, C++ and Java, but it can miss a variable or pick up something that isn't one. That is what Add column and × are for.</p>
+</div>
+
+<footer class="col">Built for working through DSA problems by hand. Your table is saved in this browser only.</footer>
+
+<script>
+const KEY = 'and-log-dsa-trace-table-v1';
+const ITER = '#';
+const SAMPLE_CODE = `let total = 0;
+let i = 1;
+while (i <= 4) {
+  total = total + i;
+  i++;
+}`;
+
+function sampleState() {
+  return {
+    code: SAMPLE_CODE, order: [ITER, 'total', 'i'], hidden: [], extra: [], imp: { total: 1 },
+    rows: [
+      { [ITER]: '0', total: '0', i: '1' },
+      { [ITER]: '1', total: '1', i: '2' },
+      { [ITER]: '2', total: '3', i: '3' }
+    ],
+    sample: true
+  };
+}
+function emptyState() {
+  return { code: '', order: [ITER], hidden: [], extra: [], imp: {}, rows: [{ [ITER]: '0' }], sample: false };
+}
+
+let S = null;
+try { const raw = localStorage.getItem(KEY); if (raw) S = JSON.parse(raw); } catch (e) { S = null; }
+if (!S || !Array.isArray(S.rows) || !Array.isArray(S.order)) S = sampleState();
+for (const k of ['hidden', 'extra']) if (!Array.isArray(S[k])) S[k] = [];
+if (!S.imp) S.imp = {};
+if (!S.order.includes(ITER)) S.order.unshift(ITER);
+if (!S.layout || !['left', 'right', 'top', 'bottom'].includes(S.layout.pos)) S.layout = { pos: 'right', split: 0.38 };
+if (!S.scratch) S.scratch = { text: '', open: false, float: false, x: null, y: null, w: 340, h: 260 };
+
+const $ = id => document.getElementById(id);
+const statusEl = $('status');
+let statusTimer;
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(S));
+    statusEl.textContent = 'Saved in this browser';
+  } catch (e) {
+    statusEl.textContent = 'Could not save: browser storage is blocked';
+  }
+}
+
+/* ---------- variable detection ---------- */
+const KW = new Set(('if else elif for while do return function let const var int float double char long short bool boolean ' +
+  'auto string String byte unsigned signed void static final public private protected new this self in of def class import ' +
+  'from as true false null None True False undefined and or not is lambda pass break continue try catch except finally ' +
+  'throw raise with yield await async switch case default typeof instanceof delete print printf console Math len range').split(' '));
+const ID = '[A-Za-z_$][\\w$]*';
+
+function strip(c) {
+  return c
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/\/\/.*$/gm, ' ')
+    .replace(/(^|[^\w$])#.*$/gm, '$1')
+    .replace(/(["'`])(?:\\.|(?!\1)[^\\\n])*\1/g, '""');
+}
+function lastId(s) {
+  s = s.replace(/\s+(?:of|in)\s[\s\S]*$/, '').replace(/[:=][\s\S]*$/, '').trim();
+  const m = s.match(new RegExp('(' + ID + ')\\s*(?:\\[[^\\]]*\\]\\s*)*$'));
+  return m && m[1];
+}
+function detect(code) {
+  const src = strip(code || '');
+  const hits = [];
+  const push = (i, n) => { if (n) hits.push([i, n]); };
+  const each = (re, fn) => { for (const m of src.matchAll(re)) fn(m); };
+
+  each(/\b(?:let|const|var|int|float|double|char|long|short|bool|boolean|auto|string|String|byte|unsigned|size_t)\b\s+([^;\n)]*)/g,
+    m => m[1].split(',').forEach((p, k) => push(m.index + k, lastId(p))));
+  each(new RegExp('\\b(?:function\\s*[\\w$]*|def\\s+[\\w$]+)\\s*\\(([^)]*)\\)', 'g'),
+    m => m[1].split(',').forEach((p, k) => push(m.index + k, lastId(p.replace(/^\s*\*+/, '')))));
+  each(new RegExp('\\bfor\\s+(' + ID + '(?:\\s*,\\s*' + ID + ')*)\\s+in\\b', 'g'),
+    m => m[1].split(',').forEach((p, k) => push(m.index + k, p.trim())));
+  each(new RegExp('^\\s*(' + ID + '(?:\\s*,\\s*' + ID + ')+)\\s*=(?!=)', 'gm'),
+    m => m[1].split(',').forEach((p, k) => push(m.index + k, p.trim())));
+  each(new RegExp('(?<![\\w$.\\]])(' + ID + ')\\s*(?:\\*\\*|//|<<|>>|[+\\-*/%&|^])?=(?![=>])', 'g'),
+    m => push(m.index, m[1]));
+  each(new RegExp('(?<![\\w$.])(' + ID + ')\\s*(?:\\+\\+|--)|(?:\\+\\+|--)\\s*(' + ID + ')', 'g'),
+    m => push(m.index, m[1] || m[2]));
+
+  hits.sort((a, b) => a[0] - b[0]);
+  const out = [];
+  for (const [, n] of hits) if (new RegExp('^' + ID + '$').test(n) && !KW.has(n) && !out.includes(n)) out.push(n);
+  return out;
+}
+
+/* ---------- columns ---------- */
+let detected = [];
+function visibleCols() {
+  for (const n of [...detected, ...S.extra]) if (!S.order.includes(n)) S.order.push(n);
+  const live = new Set([ITER, ...detected, ...S.extra]);
+  return [ITER, ...S.order.filter(n => n !== ITER && live.has(n) && !S.hidden.includes(n))];
+}
+function impClass(n) {
+  const v = S.imp[n] || 0;
+  return v > 0 ? 'imp-hi' : v < 0 ? 'imp-lo' : '';
+}
+function moveCol(name, dir) {
+  const cols = visibleCols();
+  const i = cols.indexOf(name), j = i + dir;
+  if (j < 1 || j >= cols.length) return;
+  const a = S.order.indexOf(name), b = S.order.indexOf(cols[j]);
+  [S.order[a], S.order[b]] = [S.order[b], S.order[a]];
+  save(); renderTable();
+}
+function dropCol(name, target, after) {
+  if (name === target) return;
+  S.order.splice(S.order.indexOf(name), 1);
+  S.order.splice(S.order.indexOf(target) + (after ? 1 : 0), 0, name);
+  save(); renderTable();
+}
+
+/* ---------- table ---------- */
+function el(tag, props = {}, ...kids) {
+  const e = document.createElement(tag);
+  Object.assign(e, props);
+  for (const k of kids) e.append(k);
+  return e;
+}
+function toolBtn(label, title, fn, disabled) {
+  const b = el('button', { type: 'button', textContent: label, title, disabled: !!disabled });
+  b.setAttribute('aria-label', title);
+  b.addEventListener('click', e => { e.stopPropagation(); fn(); });
+  return b;
+}
+
+let dragName = null;
+function renderTable() {
+  const cols = visibleCols();
+  const wrap = $('tableWrap');
+  wrap.textContent = '';
+  $('varCount').textContent = detected.length === 1 ? '1 variable found' : detected.length + ' variables found';
+
+  const headRow = el('tr');
+  cols.forEach((n, ci) => {
+    const isIter = n === ITER;
+    const th = el('th', { className: [isIter ? 'iter-col' : '', impClass(n)].join(' ').trim(), draggable: !isIter });
+    th.dataset.col = n;
+    const lvl = S.imp[n] || 0;
+    const impBtns = [
+      toolBtn('−', 'Less important', () => { S.imp[n] = Math.max(-1, lvl - 1); save(); renderTable(); }, lvl <= -1),
+      toolBtn('+', 'More important', () => { S.imp[n] = Math.min(1, lvl + 1); save(); renderTable(); }, lvl >= 1)
+    ];
+    th.append(
+      el('div', { className: 'th-name' },
+        ...(isIter ? [] : [el('span', { className: 'grip', textContent: '⠿' })]),
+        el('span', { textContent: isIter ? 'iteration' : n })),
+      el('div', { className: 'th-tools' },
+        ...(isIter ? impBtns : [
+          toolBtn('‹', 'Move left', () => moveCol(n, -1), ci <= 1),
+          toolBtn('›', 'Move right', () => moveCol(n, 1), ci === cols.length - 1),
+          ...impBtns,
+          toolBtn('×', 'Hide column', () => { S.hidden.push(n); save(); renderTable(); })
+        ])
+      )
+    );
+    headRow.append(th);
+    if (isIter) return;
+    th.addEventListener('dragstart', e => { dragName = n; th.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', n); });
+    th.addEventListener('dragend', () => { dragName = null; renderTable(); });
+    th.addEventListener('dragover', e => {
+      if (!dragName) return;
+      e.preventDefault();
+      const after = e.offsetX > th.offsetWidth / 2;
+      th.classList.toggle('drop-after', after);
+      th.classList.toggle('drop-before', !after);
+    });
+    th.addEventListener('dragleave', () => th.classList.remove('drop-after', 'drop-before'));
+    th.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragName) dropCol(dragName, n, e.offsetX > th.offsetWidth / 2);
+    });
+  });
+  headRow.append(el('th', { className: 'row-tools', draggable: false }));
+
+  const body = el('tbody');
+  S.rows.forEach((row, ri) => {
+    const tr = el('tr');
+    const prev = S.rows[ri - 1];
+    for (const n of cols) {
+      const input = el('input', { id: 'c-' + ri + '-' + (n === ITER ? 'iter' : n), value: row[n] ?? '', autocomplete: 'off' });
+      input.setAttribute('aria-label', (n === ITER ? 'iteration' : n) + ', row ' + (ri + 1));
+      if (prev && prev[n]) input.placeholder = prev[n];
+      input.addEventListener('input', () => { row[n] = input.value; save(); });
+      input.addEventListener('keydown', e => { if (e.key === 'Enter' && ri === S.rows.length - 1) { e.preventDefault(); addRow(); } });
+      tr.append(el('td', { className: [n === ITER ? 'iter-col' : '', impClass(n)].join(' ').trim() }, input));
+    }
+    const del = el('button', { type: 'button', textContent: '×', title: 'Delete row' });
+    del.setAttribute('aria-label', 'Delete row ' + (ri + 1));
+    del.addEventListener('click', () => {
+      S.rows.splice(ri, 1);
+      if (!S.rows.length) S.rows.push({ [ITER]: '0' });
+      save(); renderTable();
+    });
+    tr.append(el('td', { className: 'row-tools' }, del));
+    body.append(tr);
+  });
+
+  wrap.append(el('table', {}, el('thead', {}, headRow), body));
+  if (!detected.length && !S.extra.length) {
+    wrap.append(el('p', { className: 'empty', textContent: 'No variables yet. Paste code on the left, or add a column below.' }));
+  }
+
+  const sh = $('showHiddenBtn');
+  sh.hidden = !S.hidden.length;
+  sh.textContent = 'Show hidden (' + S.hidden.length + ')';
+  $('sampleNote').hidden = !S.sample;
+}
+
+function addRow() {
+  const nums = S.rows.map(r => parseFloat(r[ITER])).filter(Number.isFinite);
+  const next = nums.length ? Math.max(...nums) + 1 : S.rows.length;
+  S.rows.push({ [ITER]: String(next) });
+  save(); renderTable();
+  const first = visibleCols().find(n => n !== ITER);
+  const target = $('c-' + (S.rows.length - 1) + '-' + (first || 'iter'));
+  if (target) { target.focus(); target.scrollIntoView({ block: 'nearest' }); }
+}
+
+/* ---------- wiring ---------- */
+const codeEl = $('code');
+codeEl.value = S.code || '';
+detected = detect(S.code);
+
+let codeTimer;
+codeEl.addEventListener('input', () => {
+  S.code = codeEl.value;
+  S.sample = false;
+  save();
+  clearTimeout(codeTimer);
+  codeTimer = setTimeout(() => { detected = detect(S.code); renderTable(); }, 250);
+});
+codeEl.addEventListener('keydown', e => {
+  if (e.key !== 'Tab' || e.shiftKey) return;
+  e.preventDefault();
+  const { selectionStart: a, selectionEnd: b } = codeEl;
+  codeEl.setRangeText('  ', a, b, 'end');
+  codeEl.dispatchEvent(new Event('input'));
+});
+
+$('addRowBtn').addEventListener('click', addRow);
+$('showHiddenBtn').addEventListener('click', () => { S.hidden = []; save(); renderTable(); });
+const addColName = $('addColName'), addColBtn = $('addColBtn'), addColMsg = $('addColMsg');
+let msgTimer;
+function syncAddBtn() { addColBtn.disabled = !addColName.value.trim(); }
+addColName.addEventListener('input', () => { syncAddBtn(); addColMsg.textContent = ''; });
+$('addColForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const n = addColName.value.trim().slice(0, 40);
+  if (!n || n === ITER) return;
+  if (visibleCols().includes(n)) {
+    addColMsg.textContent = '"' + n + '" is already a column';
+    clearTimeout(msgTimer);
+    msgTimer = setTimeout(() => { addColMsg.textContent = ''; }, 3000);
+    return;
+  }
+  S.hidden = S.hidden.filter(h => h !== n);
+  if (!S.extra.includes(n) && !detected.includes(n)) S.extra.push(n);
+  addColName.value = '';
+  syncAddBtn();
+  save(); renderTable();
+});
+
+/* ---------- layout: table position and resizable split ---------- */
+const mainEl = document.getElementById('toolMain');
+const splitter = $('splitter');
+const isRow = () => S.layout.pos === 'left' || S.layout.pos === 'right';
+function applyLayout() {
+  mainEl.className = 'tool-main pos-' + S.layout.pos;
+  mainEl.style.setProperty('--split', S.layout.split);
+  splitter.setAttribute('aria-orientation', isRow() ? 'vertical' : 'horizontal');
+  splitter.setAttribute('aria-valuenow', Math.round(S.layout.split * 100));
+  document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pos === S.layout.pos)));
+}
+function setSplit(f) { S.layout.split = Math.round(Math.min(0.85, Math.max(0.15, f)) * 1000) / 1000; applyLayout(); }
+function splitFromPointer(e) {
+  const r = mainEl.getBoundingClientRect();
+  const h = r.height - parseFloat(getComputedStyle(mainEl).paddingBottom);
+  switch (S.layout.pos) {
+    case 'right': return (e.clientX - r.left) / r.width;
+    case 'left': return (r.right - e.clientX) / r.width;
+    case 'bottom': return (e.clientY - r.top) / h;
+    default: return (r.top + h - e.clientY) / h;
+  }
+}
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  S.layout.pos = b.dataset.pos; save(); applyLayout();
+}));
+splitter.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  splitter.setPointerCapture(e.pointerId);
+  splitter.classList.add('active');
+  document.body.classList.add('resizing');
+  const move = ev => setSplit(splitFromPointer(ev));
+  const up = () => {
+    splitter.removeEventListener('pointermove', move);
+    splitter.removeEventListener('pointerup', up);
+    splitter.removeEventListener('pointercancel', up);
+    splitter.classList.remove('active');
+    document.body.classList.remove('resizing');
+    save();
+  };
+  splitter.addEventListener('pointermove', move);
+  splitter.addEventListener('pointerup', up);
+  splitter.addEventListener('pointercancel', up);
+});
+splitter.addEventListener('dblclick', () => { setSplit(0.38); save(); });
+splitter.addEventListener('keydown', e => {
+  const keys = isRow() ? { ArrowLeft: -1, ArrowRight: 1 } : { ArrowUp: -1, ArrowDown: 1 };
+  let d = keys[e.key];
+  if (!d) return;
+  if (S.layout.pos === 'left' || S.layout.pos === 'top') d = -d;
+  e.preventDefault();
+  setSplit(S.layout.split + d * 0.03);
+  save();
+});
+
+const clearBtn = $('clearBtn');
+let armTimer;
+clearBtn.addEventListener('click', () => {
+  if (!clearBtn.classList.contains('armed')) {
+    clearBtn.classList.add('armed');
+    clearBtn.textContent = 'Click again to clear';
+    armTimer = setTimeout(() => { clearBtn.classList.remove('armed'); clearBtn.textContent = 'Clear all'; }, 3000);
+    return;
+  }
+  clearTimeout(armTimer);
+  clearBtn.classList.remove('armed');
+  clearBtn.textContent = 'Clear all';
+  S = { ...emptyState(), layout: S.layout, scratch: { ...S.scratch, text: '' } };
+  save();
+  codeEl.value = '';
+  scratchText.value = '';
+  detected = [];
+  addColMsg.textContent = '';
+  renderTable();
+  statusEl.textContent = 'Cleared';
+  codeEl.focus();
+});
+
+/* ---------- scratch pad: docked under the code, or floating ---------- */
+const scratch = $('scratch'), scratchText = $('scratchText'), scratchHead = $('scratchHead');
+const codePane = $('codePane'), codeNote = $('codeNote');
+scratchText.value = S.scratch.text || '';
+
+function clampScratch() {
+  const sc = S.scratch;
+  sc.w = Math.min(sc.w, innerWidth - 16);
+  sc.h = Math.min(sc.h, innerHeight - 16);
+  if (sc.x == null || sc.y == null) { sc.x = innerWidth - sc.w - 24; sc.y = innerHeight - sc.h - 24; }
+  sc.x = Math.min(Math.max(8, sc.x), innerWidth - sc.w - 8);
+  sc.y = Math.min(Math.max(8, sc.y), innerHeight - sc.h - 8);
+}
+function applyScratch() {
+  const sc = S.scratch;
+  scratch.hidden = !sc.open;
+  $('scratchToggle').setAttribute('aria-pressed', String(sc.open));
+  const fb = $('scratchFloat');
+  fb.textContent = sc.float ? 'Dock' : 'Float';
+  fb.title = sc.float ? 'Put back under the code' : 'Pop out as a floating window';
+  scratch.classList.toggle('floating', sc.float);
+  if (sc.float) {
+    if (scratch.parentNode !== document.body) document.body.append(scratch);
+    clampScratch();
+    Object.assign(scratch.style, { left: sc.x + 'px', top: sc.y + 'px', width: sc.w + 'px', height: sc.h + 'px' });
+  } else {
+    if (scratch.parentNode !== codePane) codePane.insertBefore(scratch, codeNote);
+    scratch.removeAttribute('style');
+  }
+}
+let scratchSaveTimer;
+function saveSoon() { clearTimeout(scratchSaveTimer); scratchSaveTimer = setTimeout(save, 300); }
+
+scratchText.addEventListener('input', () => { S.scratch.text = scratchText.value; save(); });
+$('scratchToggle').addEventListener('click', () => {
+  S.scratch.open = !S.scratch.open;
+  save(); applyScratch();
+  if (S.scratch.open) scratchText.focus();
+});
+$('scratchClose').addEventListener('click', () => { S.scratch.open = false; save(); applyScratch(); });
+$('scratchFloat').addEventListener('click', () => { S.scratch.float = !S.scratch.float; save(); applyScratch(); scratchText.focus(); });
+scratchHead.addEventListener('pointerdown', e => {
+  if (!S.scratch.float || e.target.closest('button')) return;
+  e.preventDefault();
+  scratchHead.setPointerCapture(e.pointerId);
+  const dx = e.clientX - S.scratch.x, dy = e.clientY - S.scratch.y;
+  document.body.classList.add('resizing');
+  const move = ev => { S.scratch.x = ev.clientX - dx; S.scratch.y = ev.clientY - dy; applyScratch(); };
+  const up = () => {
+    scratchHead.removeEventListener('pointermove', move);
+    scratchHead.removeEventListener('pointerup', up);
+    scratchHead.removeEventListener('pointercancel', up);
+    document.body.classList.remove('resizing');
+    save();
+  };
+  scratchHead.addEventListener('pointermove', move);
+  scratchHead.addEventListener('pointerup', up);
+  scratchHead.addEventListener('pointercancel', up);
+});
+if (typeof ResizeObserver === 'function') {
+  new ResizeObserver(() => {
+    if (!S.scratch.float || scratch.hidden || !scratch.offsetWidth) return;
+    S.scratch.w = scratch.offsetWidth;
+    S.scratch.h = scratch.offsetHeight;
+    saveSoon();
+  }).observe(scratch);
+}
+addEventListener('resize', () => { if (S.scratch.float) applyScratch(); });
+
+applyLayout();
+applyScratch();
+renderTable();
+</script>
+{% endraw %}
+</body>
+</html>
