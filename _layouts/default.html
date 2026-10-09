@@ -59,6 +59,12 @@ header.site-header{padding:28px 0 0}
 .post-content a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 .post-content a:hover{background:var(--mark)}
 .post-content img{max-width:100%;height:auto}
+.about-me{display:flex;align-items:center;gap:20px;margin-bottom:28px}
+.about-me img{display:block;border-radius:50%;border:1px solid var(--rule)}
+.about-me a:hover{background:none}
+.about-me p{margin:0}
+.about-name{font-size:22px;font-weight:600;letter-spacing:-.01em}
+.about-link{font-family:var(--mono);font-size:13px}
 .post-content blockquote{border-left:2px solid var(--text);padding-left:16px;color:var(--muted);margin-bottom:18px}
 .post-content table{border-collapse:collapse;width:100%;margin:0 0 18px;font-size:.95em}
 .post-content th,.post-content td{border:1px solid var(--rule);padding:8px 12px;text-align:left;vertical-align:top}
@@ -126,7 +132,6 @@ pre code{padding:0;background:transparent;font-size:1em}
     <nav class="site-nav">
       <a href="{{ "/topics/" | relative_url }}">Topics</a>
       <a href="{{ "/about/" | relative_url }}">About</a>
-      <a href="{{ "/" | relative_url }}">What's new</a>
     </nav>
   </div>
 </header>
@@ -137,7 +142,7 @@ pre code{padding:0;background:transparent;font-size:1em}
 </main>
 <footer class="site-footer">
   <div class="footer-content">
-    <div>Blog powered by GitHub Issues</div>
+    <div>A log book by <a href="https://github.com/and">ānand</a></div>
     <a href="{{ "/feed.xml" | relative_url }}" class="rss-link">Subscribe via RSS</a>
   </div>
 </footer>
