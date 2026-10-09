@@ -16,31 +16,44 @@ This is my log book, where I write up what I'm learning.
 
 ## Play me at Dots and Boxes
 
-Take turns drawing a line between two dots. Close a box and it's yours, and you go again. I play blue.
+Take turns joining two dots. Close a box to win it and go again. I'm blue.
 
 <div class="dab">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap">
   <style>
-    .dab { --dab-ink:#222; --dab-you:#d9480f; --dab-cpu:#1c7ed6; --dab-faint:#e4e0d8;
+    /* pencil on graph paper: graphite ink, two coloured pencils, hand-drawn edges */
+    .dab { --dab-ink:#3a3a3a; --dab-soft:#9a958c; --dab-you:#c8551b; --dab-cpu:#1f68b5; --dab-paper:#fffdf7; --dab-grid:rgba(60,110,180,.09);
            display:flex; flex-direction:column; align-items:center; gap:10px;
-           margin:8px 0 24px; padding:20px 16px; border:1px solid var(--dab-faint); border-radius:12px; }
+           margin:8px 0 24px; padding:22px 16px 18px; color:var(--dab-ink);
+           font-family:"Caveat","Segoe Print","Comic Sans MS",cursive; font-size:23px; line-height:1.2;
+           background-color:var(--dab-paper);
+           background-image:linear-gradient(var(--dab-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dab-grid) 1px,transparent 1px);
+           background-size:20px 20px;
+           border:2px solid var(--dab-ink); border-radius:255px 18px 225px 18px/18px 225px 18px 255px; }
     .dab p { margin:0; }
-    .dab-bar { display:flex; gap:16px; align-items:center; flex-wrap:wrap; justify-content:center; }
-    .dab-name { display:flex; align-items:center; gap:8px; font-size:15px; }
-    .dab input, .dab select, .dab button { font:inherit; font-size:15px; padding:6px 12px; border-radius:8px;
-           border:1px solid var(--dab-faint); background:transparent; color:var(--dab-ink); }
-    .dab input { width:11em; }
-    .dab button { cursor:pointer; }
-    .dab-score b { font-size:1.3rem; }
+    .dab-bar { display:flex; gap:18px; align-items:center; flex-wrap:wrap; justify-content:center; }
+    .dab-name { display:flex; align-items:baseline; gap:8px; }
+    .dab input, .dab select, .dab button { font:inherit; color:var(--dab-ink); background:transparent; }
+    .dab input { width:8em; padding:0 4px; border:0; border-bottom:2px solid var(--dab-ink); border-radius:0 0 40px 6px/0 0 4px 3px; }
+    .dab input:focus { outline:none; border-bottom-color:var(--dab-you); }
+    .dab select, .dab button { padding:2px 14px; border:2px solid var(--dab-ink); border-radius:14px 4px 12px 5px/5px 12px 4px 14px; }
+    .dab button { cursor:pointer; transition:transform .15s; }
+    .dab button:hover { transform:rotate(-2deg); }
+    .dab select:focus-visible, .dab button:focus-visible { outline:2px dashed var(--dab-you); outline-offset:3px; }
+    .dab-score b { font-size:1.5em; font-weight:700; }
     .dab-you { color:var(--dab-you); } .dab-cpu { color:var(--dab-cpu); }
-    .dab-status { min-height:1.4em; font-weight:600; }
-    .dab svg { width:min(84vw,340px); height:auto; touch-action:manipulation; }
-    .dab .edge { stroke:var(--dab-faint); stroke-width:8; stroke-linecap:round; }
-    .dab .edge.free { cursor:pointer; }
-    .dab .edge.free:hover { stroke:var(--dab-ink); opacity:.45; }
-    .dab .edge.you { stroke:var(--dab-you); } .dab .edge.cpu { stroke:var(--dab-cpu); }
-    .dab .edge.last { stroke-width:11; }
-    .dab .box { opacity:.22; } .dab .box.you { fill:var(--dab-you); } .dab .box.cpu { fill:var(--dab-cpu); }
-    .dab .lbl { font:700 34px system-ui,sans-serif; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
+    .dab-status { min-height:1.3em; font-weight:700; }
+    .dab svg { width:min(84vw,340px); height:auto; touch-action:manipulation; overflow:visible; }
+    .dab .edge, .dab .edge2 { fill:none; stroke-linecap:round; }
+    .dab .edge.free { stroke:var(--dab-soft); stroke-width:2.2; stroke-dasharray:1 8; }
+    .dab .edge.free.hover { stroke:var(--dab-ink); stroke-width:3; stroke-dasharray:none; opacity:.45; }
+    .dab .edge.you { stroke:var(--dab-you); stroke-width:4.5; } .dab .edge.cpu { stroke:var(--dab-cpu); stroke-width:4.5; }
+    .dab .edge.last { stroke-width:6.5; }
+    .dab .edge2 { stroke-width:1.6; opacity:.55; } .dab .edge2.you { stroke:var(--dab-you); } .dab .edge2.cpu { stroke:var(--dab-cpu); }
+    .dab .box { opacity:.8; }
+    .dab .lbl { font:700 56px "Caveat","Segoe Print",cursive; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
     .dab .lbl.you { fill:var(--dab-you); } .dab .lbl.cpu { fill:var(--dab-cpu); }
     .dab .dot { fill:var(--dab-ink); }
   </style>
@@ -125,27 +138,54 @@ function edgeEnds(e) {
 }
 function mk(tag, attrs) { const el=document.createElementNS(NS,tag); for (const k in attrs) el.setAttribute(k,attrs[k]); return el; }
 
+// Pencil look: a wobble filter with paper grain, hatched boxes, and each line drawn twice.
+const DEFS = '<defs>' +
+  '<filter id="dab-pencil" x="-10%" y="-10%" width="120%" height="120%">' +
+    '<feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3" result="warp"/>' +
+    '<feDisplacementMap in="SourceGraphic" in2="warp" scale="3" xChannelSelector="R" yChannelSelector="G" result="wobbly"/>' +
+    '<feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="7" result="grain"/>' +
+    '<feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.4 0 0 0 1.35" result="grainAlpha"/>' +
+    '<feComposite in="wobbly" in2="grainAlpha" operator="in"/>' +
+  '</filter>' +
+  '<pattern id="dab-hatch-you" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="7" stroke="#c8551b" stroke-width="1.7"/></pattern>' +
+  '<pattern id="dab-hatch-cpu" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1f68b5" stroke-width="1.7"/></pattern>' +
+  '</defs>';
+
+// A slightly bent stroke. The bend is fixed per edge so lines don't jump between renders.
+function sketch(seed, x1, y1, x2, y2) {
+  const s = Math.sin(seed * 12.9898) * 43758.5453, j = s - Math.floor(s) - 0.5;
+  const mx = (x1+x2)/2, my = (y1+y2)/2, horiz = y1 === y2;
+  const cx = mx + j*(horiz ? 4 : 7), cy = my + j*(horiz ? 7 : 4);
+  return 'M'+(x1+j*3)+' '+(y1-j*2)+' Q'+cx+' '+cy+' '+(x2-j*2)+' '+(y2+j*3);
+}
+
 function render() {
-  svg.innerHTML = '';
+  svg.innerHTML = DEFS;
+  const ink = mk('g', {filter:'url(#dab-pencil)'});
+  svg.append(ink);
   BOX_MASKS.forEach((_,i) => {
     const r=Math.floor(i/2), c=i%2, [x,y]=dotXY(r,c);
     if (boxOwner[i]) {
-      svg.append(mk('rect',{x:x+4,y:y+4,width:92,height:92,rx:6,class:'box '+boxOwner[i]}));
-      const t=mk('text',{x:x+50,y:y+50,class:'lbl '+boxOwner[i]}); t.textContent = boxOwner[i]==='you' ? initial() : 'a'; svg.append(t);
+      ink.append(mk('rect',{x:x+10,y:y+10,width:80,height:80,fill:'url(#dab-hatch-'+boxOwner[i]+')',class:'box'}));
+      const t=mk('text',{x:x+50,y:y+48,class:'lbl '+boxOwner[i]}); t.textContent = boxOwner[i]==='you' ? initial() : 'a'; ink.append(t);
     }
   });
   for (let e=0;e<12;e++) {
     const [[x1,y1],[x2,y2]] = edgeEnds(e), taken = mask>>e & 1;
-    const l = mk('line',{x1,y1,x2,y2,class:'edge '+(taken?owner[e]:'free')+(e===lastEdge?' last':'')});
-    if (!taken) {
-      l.addEventListener('click', () => humanMove(e));
+    const l = mk('path',{d:sketch(e+1,x1,y1,x2,y2),class:'edge '+(taken?owner[e]:'free')+(e===lastEdge?' last':'')});
+    ink.append(l);
+    if (taken) {
+      ink.append(mk('path',{d:sketch(e+1.37,x1+1,y1+1,x2+1,y2+1),class:'edge2 '+owner[e]}));
+    } else {
       // wider invisible hit area for fingers
       const hit = mk('line',{x1,y1,x2,y2,stroke:'transparent','stroke-width':30,style:'cursor:pointer'});
       hit.addEventListener('click', () => humanMove(e));
-      svg.append(l, hit);
-    } else svg.append(l);
+      hit.addEventListener('pointerenter', () => l.classList.add('hover'));
+      hit.addEventListener('pointerleave', () => l.classList.remove('hover'));
+      svg.append(hit);
+    }
   }
-  for (let r=0;r<3;r++) for (let c=0;c<3;c++) { const [x,y]=dotXY(r,c); svg.append(mk('circle',{cx:x,cy:y,r:9,class:'dot'})); }
+  for (let r=0;r<3;r++) for (let c=0;c<3;c++) { const [x,y]=dotXY(r,c); ink.append(mk('circle',{cx:x+(r-c)*0.6,cy:y+(c-r)*0.5,r:5.5,class:'dot'})); }
   $('dab-sy').textContent = boxOwner.filter(b=>b==='you').length;
   $('dab-sc').textContent = boxOwner.filter(b=>b==='cpu').length;
 }
@@ -168,9 +208,9 @@ function finishIfOver() {
 function humanMove(e) {
   if (over || busy || turn!=='you' || (mask>>e & 1)) return;
   const g = play(e,'you'); render();
-  if (finishIfOver()) return;
-  if (g) { $('dab-status').textContent = 'Box! Go again.'; return; }
-  turn = 'cpu'; setTimeout(cpuTurn, 450);
+  if (finishIfOver()) { saveGame(); return; }
+  if (g) { $('dab-status').textContent = 'Box! Go again.'; saveGame(); return; }
+  turn = 'cpu'; saveGame(); setTimeout(cpuTurn, 450);
 }
 
 function cpuTurn() {
@@ -178,9 +218,9 @@ function cpuTurn() {
   const step = () => {
     const e = $('dab-level').value==='hard' ? hardMove(mask) : easyMove(mask);
     const g = play(e,'cpu'); render();
-    if (finishIfOver()) { busy=false; return; }
-    if (g) { setTimeout(step, 550); return; }      // closed a box -> moves again
-    turn='you'; busy=false; $('dab-status').textContent = 'Your turn.';
+    if (finishIfOver()) { busy=false; saveGame(); return; }
+    if (g) { saveGame(); setTimeout(step, 550); return; }      // closed a box -> moves again
+    turn='you'; busy=false; saveGame(); $('dab-status').textContent = 'Your turn.';
   };
   setTimeout(step, 400);
 }
@@ -188,8 +228,22 @@ function cpuTurn() {
 function newGame() {
   mask=0; owner=Array(12).fill(null); boxOwner=Array(4).fill(null);
   turn='you'; over=false; busy=false; lastEdge=-1;
-  $('dab-status').textContent='Your turn. Click a gap between two dots.'; render();
+  $('dab-status').textContent='Your turn. Click a gap between two dots.'; render(); saveGame();
 }
+
+/* ---------- the game in progress, kept in this browser ---------- */
+const GAME_KEY = 'and-log-dab-game';
+function saveGame() {
+  try { localStorage.setItem(GAME_KEY, JSON.stringify({ mask, owner, boxOwner, turn, over, lastEdge, level: $('dab-level').value })); } catch (err) {}
+}
+function loadGame() {
+  try {
+    const g = JSON.parse(localStorage.getItem(GAME_KEY));
+    if (g && Number.isInteger(g.mask) && Array.isArray(g.owner) && g.owner.length === 12 && Array.isArray(g.boxOwner) && g.boxOwner.length === 4) return g;
+  } catch (err) {}
+  return null;
+}
+$('dab-level').addEventListener('change', saveGame);
 $('dab-reset').addEventListener('click', newGame);
 
 /* ---------- player name, kept in this browser ---------- */
@@ -202,7 +256,17 @@ nameInput.addEventListener('input', () => {
   try { localStorage.setItem(NAME_KEY, nameInput.value.trim()); } catch (err) {}
   showName();
 });
-newGame();
+const saved = loadGame();
+if (saved) {
+  ({ mask, owner, boxOwner, turn, over, lastEdge } = saved);
+  busy = false;
+  if (saved.level) $('dab-level').value = saved.level;
+  render();
+  if (!finishIfOver()) {
+    if (turn === 'cpu') cpuTurn();
+    else $('dab-status').textContent = 'Your turn.';
+  }
+} else newGame();
 showName();
 })();
 </script>
