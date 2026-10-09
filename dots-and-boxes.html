@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dots and Boxes</title>
+<style>
+  :root { --bg:#faf8f4; --ink:#222; --dot:#222; --you:#d9480f; --cpu:#1c7ed6; --faint:#e4e0d8; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#17171a; --ink:#eee; --dot:#eee; --faint:#34343a; --you:#ff8a4c; --cpu:#74c0fc; } }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.4 system-ui,sans-serif;
+         display:flex; flex-direction:column; align-items:center; padding:24px 16px; }
+  h1 { margin:0 0 4px; font-size:1.5rem; }
+  .bar { display:flex; gap:20px; align-items:center; margin:12px 0; flex-wrap:wrap; justify-content:center; }
+  .score b { font-size:1.3rem; }
+  .you { color:var(--you); } .cpu { color:var(--cpu); }
+  #status { min-height:1.4em; font-weight:600; }
+  svg { width:min(92vw,380px); height:auto; touch-action:manipulation; }
+  .edge { stroke:var(--faint); stroke-width:8; stroke-linecap:round; }
+  .edge.free { cursor:pointer; }
+  .edge.free:hover { stroke:var(--ink); opacity:.45; }
+  .edge.you { stroke:var(--you); } .edge.cpu { stroke:var(--cpu); }
+  .edge.last { stroke-width:11; }
+  .box { opacity:.22; } .box.you { fill:var(--you); } .box.cpu { fill:var(--cpu); }
+  .lbl { font:700 34px system-ui; text-anchor:middle; dominant-baseline:central; pointer-events:none; }
+  .dot { fill:var(--dot); }
+  button,select { font:inherit; padding:6px 12px; border-radius:8px; border:1px solid var(--faint); background:transparent; color:var(--ink); }
+  button { cursor:pointer; }
+</style>
+</head>
+<body>
+<h1>Dots and Boxes</h1>
+<div>You (orange) vs. Computer (blue). Complete a box and you move again.</div>
+<div class="bar">
+  <span class="score you">You <b id="sy">0</b></span>
+  <span class="score cpu">Computer <b id="sc">0</b></span>
+  <select id="level" aria-label="Difficulty">
+    <option value="hard">Hard (perfect play)</option>
+    <option value="easy">Easy (greedy)</option>
+  </select>
+  <button id="reset">New game</button>
+</div>
+<div id="status"></div>
+<svg id="board" viewBox="0 0 280 280" role="img" aria-label="Dots and boxes board"></svg>
+
+<script>
+/* ---------- Board model ----------
+   3x3 dots -> 2x2 boxes -> 12 edges, stored as bits of a 12-bit mask.
+   Horizontal edge H(r,c): bit r*2+c      (r 0..2, c 0..1)  -> bits 0..5
+   Vertical   edge V(r,c): bit 6+r*3+c    (r 0..1, c 0..2)  -> bits 6..11   */
+const H = (r,c) => r*2+c, V = (r,c) => 6+r*3+c;
+const BOX_MASKS = [];                       // bitmask of the 4 sides of each box
+for (let r=0;r<2;r++) for (let c=0;c<2;c++)
+  BOX_MASKS.push([H(r,c),H(r+1,c),V(r,c),V(r,c+1)].reduce((m,e)=>m|1<<e,0));
+const FULL = (1<<12)-1;
+
+// How many boxes does drawing edge e close, given the current mask?
+function closed(mask, e) {
+  const after = mask | 1<<e; let n = 0;
+  for (const bm of BOX_MASKS) if ((bm>>e & 1) && (after & bm) === bm) n++;
+  return n;
+}
+
+/* ---------- Computer: perfect play via memoised negamax ----------
+   best(mask) = best (my boxes - opponent boxes) the player to move can still
+   achieve from this position. Only 2^12 = 4096 positions, so we solve it fully.
+   Closing a box keeps the turn (add gain, don't flip sign); otherwise the turn
+   passes (flip sign).                                                       */
+const memo = new Map();
+function best(mask) {
+  if (mask === FULL) return 0;
+  if (memo.has(mask)) return memo.get(mask);
+  let v = -99;
+  for (let e=0;e<12;e++) if (!(mask>>e & 1)) {
+    const g = closed(mask,e), nm = mask | 1<<e;
+    v = Math.max(v, g ? g + best(nm) : -best(nm));
+  }
+  memo.set(mask, v); return v;
+}
+function moveValue(mask, e) {
+  const g = closed(mask,e), nm = mask | 1<<e;
+  return g ? g + best(nm) : -best(nm);
+}
+const free = mask => [...Array(12).keys()].filter(e => !(mask>>e & 1));
+const pick = a => a[Math.floor(Math.random()*a.length)];
+
+function hardMove(mask) {
+  const fm = free(mask), vals = fm.map(e => moveValue(mask,e)), top = Math.max(...vals);
+  return pick(fm.filter((e,i) => vals[i] === top));        // random among equally good moves
+}
+// Easy: take a box if possible; else avoid giving the opponent a 3-sided box; else random.
+function easyMove(mask) {
+  const fm = free(mask), take = fm.filter(e => closed(mask,e));
+  if (take.length) return pick(take);
+  const safe = fm.filter(e => !BOX_MASKS.some(bm => (bm>>e & 1) && popcount((mask|1<<e) & bm) === 3));
+  return pick(safe.length ? safe : fm);
+}
+const popcount = n => { let c=0; while(n){c+=n&1;n>>=1;} return c; };
+
+/* ---------- UI / game flow ---------- */
+const svg = document.getElementById('board'), NS = 'http://www.w3.org/2000/svg';
+const $ = id => document.getElementById(id);
+let mask, owner, boxOwner, turn, over, lastEdge, busy;
+
+const dotXY = (r,c) => [40+100*c, 40+100*r];
+function edgeEnds(e) {
+  if (e < 6) { const r=Math.floor(e/2), c=e%2; return [dotXY(r,c), dotXY(r,c+1)]; }
+  const k=e-6, r=Math.floor(k/3), c=k%3; return [dotXY(r,c), dotXY(r+1,c)];
+}
+function mk(tag, attrs) { const el=document.createElementNS(NS,tag); for (const k in attrs) el.setAttribute(k,attrs[k]); return el; }
+
+function render() {
+  svg.innerHTML = '';
+  BOX_MASKS.forEach((_,i) => {
+    const r=Math.floor(i/2), c=i%2, [x,y]=dotXY(r,c);
+    if (boxOwner[i]) {
+      svg.append(mk('rect',{x:x+4,y:y+4,width:92,height:92,rx:6,class:'box '+boxOwner[i]}));
+      const t=mk('text',{x:x+50,y:y+50,class:'lbl '+boxOwner[i]}); t.textContent = boxOwner[i]==='you'?'Y':'C'; svg.append(t);
+    }
+  });
+  for (let e=0;e<12;e++) {
+    const [[x1,y1],[x2,y2]] = edgeEnds(e), taken = mask>>e & 1;
+    const l = mk('line',{x1,y1,x2,y2,class:'edge '+(taken?owner[e]:'free')+(e===lastEdge?' last':'')});
+    if (!taken) {
+      l.addEventListener('click', () => humanMove(e));
+      // wider invisible hit area for fingers
+      const hit = mk('line',{x1,y1,x2,y2,stroke:'transparent','stroke-width':30,style:'cursor:pointer'});
+      hit.addEventListener('click', () => humanMove(e));
+      svg.append(l, hit);
+    } else svg.append(l);
+  }
+  for (let r=0;r<3;r++) for (let c=0;c<3;c++) { const [x,y]=dotXY(r,c); svg.append(mk('circle',{cx:x,cy:y,r:9,class:'dot'})); }
+  $('sy').textContent = boxOwner.filter(b=>b==='you').length;
+  $('sc').textContent = boxOwner.filter(b=>b==='cpu').length;
+}
+
+function play(e, who) {            // returns number of boxes closed
+  const g = closed(mask,e);
+  mask |= 1<<e; owner[e] = who; lastEdge = e;
+  if (g) BOX_MASKS.forEach((bm,i) => { if (!boxOwner[i] && (mask&bm)===bm) boxOwner[i]=who; });
+  return g;
+}
+
+function finishIfOver() {
+  if (mask !== FULL) return false;
+  over = true;
+  const y=boxOwner.filter(b=>b==='you').length, c=4-y;
+  $('status').textContent = y>c ? 'You win! 🎉' : y<c ? 'Computer wins.' : "It's a draw (2–2).";
+  return true;
+}
+
+function humanMove(e) {
+  if (over || busy || turn!=='you' || (mask>>e & 1)) return;
+  const g = play(e,'you'); render();
+  if (finishIfOver()) return;
+  if (g) { $('status').textContent = 'Box! Go again.'; return; }
+  turn = 'cpu'; setTimeout(cpuTurn, 450);
+}
+
+function cpuTurn() {
+  busy = true; $('status').textContent = 'Computer is thinking…';
+  const step = () => {
+    const e = $('level').value==='hard' ? hardMove(mask) : easyMove(mask);
+    const g = play(e,'cpu'); render();
+    if (finishIfOver()) { busy=false; return; }
+    if (g) { setTimeout(step, 550); return; }      // closed a box -> moves again
+    turn='you'; busy=false; $('status').textContent = 'Your turn.';
+  };
+  setTimeout(step, 400);
+}
+
+function newGame() {
+  mask=0; owner=Array(12).fill(null); boxOwner=Array(4).fill(null);
+  turn='you'; over=false; busy=false; lastEdge=-1;
+  $('status').textContent='Your turn. Click a gap between two dots.'; render();
+}
+$('reset').addEventListener('click', newGame);
+newGame();
+</script>
+</body>
+</html>
