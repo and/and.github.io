@@ -15,6 +15,17 @@ layout: default
   {%- endif %}
 </section>
 
+{%- if site.data.try.size > 0 %}
+<section class="try-section">
+  <h2 class="post-list-heading">Things to try</h2>
+  <ul class="try-grid">
+    {%- for t in site.data.try %}
+    <li><a class="try-card" href="{{ t.url | relative_url }}"><span class="try-name">{{ t.name }}</span><span class="try-line">{{ t.line }}</span></a></li>
+    {%- endfor %}
+  </ul>
+</section>
+{%- endif %}
+
 {%- if site.posts.size > 0 -%}
   {%- assign pinned_posts = site.posts | where: "pinned", true -%}
   {%- assign regular_posts = site.posts | where_exp: "post", "post.pinned != true" -%}
@@ -44,13 +55,13 @@ layout: default
     {%- if regular_posts.size > 0 -%}
     <h2 class="post-list-heading">Recent Posts</h2>
     <ul class="post-list">
-      {%- for post in regular_posts limit:5 -%}
-      {% include post-row.html post=post %}
+      {%- for post in regular_posts limit:10 -%}
+      {% include post-row.html post=post excerpt=true %}
       {%- endfor -%}
     </ul>
-    {%- if regular_posts.size > 5 -%}
+    {%- if regular_posts.size > 10 -%}
     <div class="more-posts">
-      <a href="{{ "/archive/" | relative_url }}" class="more-link">more...</a>
+      <a href="{{ "/archive/" | relative_url }}" class="more-link">All posts →</a>
     </div>
     {%- endif -%}
     {%- endif -%}
