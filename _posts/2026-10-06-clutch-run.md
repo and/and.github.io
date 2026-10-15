@@ -2,7 +2,7 @@
 layout: post
 title: "Clutch Run: A Driving Game About Changing Gear"
 date: 2026-10-06
-categories: [cars]
+categories: [cars, games]
 permalink: /cars/clutch-run/
 excerpt: "A small 3D driving game in the browser for practising manual gear changes on different terrain: climbs, descents, gravel and village streets. Plus a fun automatic mode for phones, where tilting the phone is the accelerator."
 ---
