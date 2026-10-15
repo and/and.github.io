@@ -78,7 +78,7 @@ No new nodes are made. Three pointers rewrite each node's `.next` in place: `tai
       box-shadow:0 1px 2px rgba(0,0,0,.15);
     }
     .zipper-viz #zv-ptr-tail{ background:var(--zv-tail); color:#06251d; }
-    .zipper-viz #zv-ptr-cur1{ background:var(--zv-list1); color:#0a1440; }
+    .zipper-viz #zv-ptr-cur1{ background:var(--zv-list1); color:#fff; }
     .zipper-viz #zv-ptr-cur2{ background:var(--zv-list2); color:#2c1300; }
 
     .zipper-viz .zv-desc{ font-size:14.5px; line-height:1.55; min-height:64px; margin-bottom:14px; }

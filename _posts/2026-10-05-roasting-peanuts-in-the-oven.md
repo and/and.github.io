@@ -42,8 +42,8 @@ Preheat to 175°C, spread the peanuts in a single layer, then start the timer.
 .pt-cue{min-height:3.6em;margin:.5rem 0;font-size:.95rem}
 .pt-btns{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}
 .pt-btns button{font:inherit;font-size:.95rem;padding:.45rem .9rem;border-radius:999px;border:1px solid rgba(127,127,127,.5);background:transparent;color:inherit;cursor:pointer}
-.pt-btns button.pt-go{background:#c98a3b;border-color:#c98a3b;color:#fff;font-weight:600}
-.pt-btns button:focus-visible{outline:2px solid #c98a3b;outline-offset:2px}
+.pt-btns button.pt-go{background:#8f5a1c;border-color:#8f5a1c;color:#fff;font-weight:600}
+.pt-btns button:focus-visible{outline:2px solid #8f5a1c;outline-offset:2px}
 </style>
 <div class="pt-wrap">
 <article class="pt-card" id="pt-timer" data-minutes="11" data-warn="120" data-add="1">

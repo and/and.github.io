@@ -24,6 +24,7 @@ excerpt: "What RPM means, how it connects to speed, and how to read the rev coun
   --bg:#EDF0F3; --surface:#FFFFFF; --surface-2:#E1E6EC; --fg:#131B23; --muted:#56626F; --line:#C8D0D9;
   --accent:#E0730F; --accent-ink:#A34E00;
   --good:#1F7F55; --warn:#A87400; --bad:#C8352A;
+  --good-ink:#17613F; --warn-ink:#7A5500; --bad-ink:#A3241B;
   --dial:#111920; --dial-fg:#E8EDF2; --dial-dim:#7C8896;
   --f-display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
   --f-body:'Source Serif 4',Georgia,'Times New Roman',serif;
@@ -33,12 +34,14 @@ excerpt: "What RPM means, how it connects to speed, and how to read the rev coun
   :root:not([data-theme="light"]){
     --bg:#0E141A; --surface:#161F28; --surface-2:#1E2833; --fg:#E5EAEF; --muted:#94A1AE; --line:#2B3744;
     --accent:#F28C2B; --accent-ink:#F7A452; --good:#4DB883; --warn:#E0AE3A; --bad:#EF5D50;
+    --good-ink:#4DB883; --warn-ink:#E0AE3A; --bad-ink:#F47A6F;
     --dial:#090D12; --dial-fg:#E8EDF2; --dial-dim:#7C8896; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0E141A; --surface:#161F28; --surface-2:#1E2833; --fg:#E5EAEF; --muted:#94A1AE; --line:#2B3744;
   --accent:#F28C2B; --accent-ink:#F7A452; --good:#4DB883; --warn:#E0AE3A; --bad:#EF5D50;
+  --good-ink:#4DB883; --warn-ink:#E0AE3A; --bad-ink:#F47A6F;
   --dial:#090D12; --dial-fg:#E8EDF2; --dial-dim:#7C8896; color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -125,9 +128,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .status{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:8px;background:var(--surface-2)}
 .status p{margin:0;font-size:16px;line-height:1.5}
 .pill{flex:none;font:600 13px/1 var(--f-display);text-transform:uppercase;letter-spacing:.1em;padding:6px 9px;border-radius:999px;white-space:nowrap}
-.t-good{color:var(--good);background:color-mix(in srgb,var(--good) 16%,transparent)}
-.t-warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 18%,transparent)}
-.t-bad{color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,transparent)}
+.t-good{color:var(--good-ink);background:color-mix(in srgb,var(--good) 16%,transparent)}
+.t-warn{color:var(--warn-ink);background:color-mix(in srgb,var(--warn) 18%,transparent)}
+.t-bad{color:var(--bad-ink);background:color-mix(in srgb,var(--bad) 15%,transparent)}
 .t-acc{color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 16%,transparent)}
 
 .strip{display:grid;gap:8px}
