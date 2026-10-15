@@ -5,15 +5,15 @@
 - name: dsaviz
   line: Watch your Python run as boxes and arrows.
   url: /dsaviz/
-- name: Clutch Run
-  line: A driving game for practising gear changes.
-  url: /clutch-run/
-- name: Trace Table
-  line: Dry-run a loop, one variable per column.
-  url: /dsa/trace-table/
 - name: Rev Counter
   line: Find the right gear for any speed.
   url: /cars/rev-counter/
+- name: Sand Timer
+  line: An hourglass on your Mac's desktop.
+  url: /utilities/sand-timer/
+- name: Battery Alert
+  line: An alarm when your phone is low or full.
+  url: /utilities/battery-alert/
 - name: Dots and Boxes
   line: Play a quick game against me.
   url: /about/
