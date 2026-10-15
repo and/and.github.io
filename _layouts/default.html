@@ -152,6 +152,7 @@ pre code{padding:0;background:transparent;font-size:1em}
       <a href="{{ "/about/" | relative_url }}">About</a>
       <span class="text-size" role="group" aria-label="Text size">
         <button type="button" data-step="-1" aria-label="Smaller text" title="Smaller text">A−</button>
+        <button type="button" data-step="0" aria-label="Reset text size" title="Reset text size">A</button>
         <button type="button" data-step="1" aria-label="Larger text" title="Larger text">A+</button>
       </span>
     </nav>
@@ -172,12 +173,12 @@ pre code{padding:0;background:transparent;font-size:1em}
 (function(){
   var steps=[.875,1,1.125,1.25,1.375,1.5],root=document.documentElement,btns=document.querySelectorAll('.text-size button');
   function get(){try{var z=parseFloat(localStorage.getItem('textScale'));return steps.indexOf(z)>=0?z:1;}catch(e){return 1;}}
-  function show(z){root.style.fontSize=(z*100)+'%';btns[0].disabled=z===steps[0];btns[1].disabled=z===steps[steps.length-1];}
+  function show(z){root.style.fontSize=(z*100)+'%';btns[0].disabled=z===steps[0];btns[1].disabled=z===1;btns[2].disabled=z===steps[steps.length-1];}
   var cur=get();show(cur);
   btns.forEach(function(b){b.addEventListener('click',function(){
-    var i=Math.max(0,Math.min(steps.length-1,steps.indexOf(cur)+Number(b.dataset.step)));
-    cur=steps[i];
-    try{localStorage.setItem('textScale',cur);}catch(e){}
+    var d=Number(b.dataset.step);
+    cur=d?steps[Math.max(0,Math.min(steps.length-1,steps.indexOf(cur)+d))]:1;
+    try{if(cur===1)localStorage.removeItem('textScale');else localStorage.setItem('textScale',cur);}catch(e){}
     show(cur);
   });});
 })();
