@@ -15,6 +15,18 @@ layout: default
   {%- endif %}
 </section>
 
+{%- assign pinned_posts = site.posts | where: "pinned", true -%}
+{%- if pinned_posts.size > 0 %}
+<section class="pinned-section">
+  <h2 class="post-list-heading">Pinned</h2>
+  <ul class="post-list">
+    {%- for post in pinned_posts -%}
+    {% include post-row.html post=post excerpt=true %}
+    {%- endfor -%}
+  </ul>
+</section>
+{%- endif %}
+
 {%- if site.data.try.size > 0 %}
 <section class="try-section">
   <h2 class="post-list-heading">Things to try</h2>
@@ -27,30 +39,9 @@ layout: default
 {%- endif %}
 
 {%- if site.posts.size > 0 -%}
-  {%- assign pinned_posts = site.posts | where: "pinned", true -%}
   {%- assign regular_posts = site.posts | where_exp: "post", "post.pinned != true" -%}
 
   <section class="posts-section">
-    {%- if pinned_posts.size > 0 -%}
-    <h2 class="post-list-heading">Pinned Posts</h2>
-    <ul class="post-list post-list-pinned">
-      {%- for post in pinned_posts -%}
-      <li class="post-item-pinned">
-        <a class="post-link" href="{{ post.url | relative_url }}">
-          <div class="pinned-card-header">
-            <span class="label label-blue">Pinned</span>
-            {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-            <span class="post-meta">{{ post.date | date: date_format }}</span>
-          </div>
-          <h3 class="post-title">{{ post.title | escape }}</h3>
-          <div class="pinned-card-excerpt">
-            {{ post.excerpt | strip_html | truncatewords: 30 }}
-          </div>
-        </a>
-      </li>
-      {%- endfor -%}
-    </ul>
-    {%- endif -%}
 
     {%- if regular_posts.size > 0 -%}
     <h2 class="post-list-heading">Recent Posts</h2>
