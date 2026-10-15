@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "memory.span: How Many Things Can You Hold in Your Head?"
-date: 2026-10-15 20:00:00 +0530
+date: 2026-10-15 12:00:00 +0530
 categories: [dsa, games]
 permalink: /games/memory-span/
 excerpt: "A small browser game that measures your working memory: digits forwards, digits backwards, and a pointers mode that asks you to track variables as they are copied and changed. Practise offline, or play Live on a public leaderboard."
