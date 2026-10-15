@@ -1,0 +1,730 @@
+---
+layout: null
+title: "Building Anchor"
+date: 2026-10-15 09:00:00 +0530
+categories: [utilities]
+permalink: /utilities/anchor/
+pinned: true
+excerpt: "I built a set of apps that see where my attention actually goes, compare it with what I planned, and step in when the two come apart. A Mac menu bar app, with iPhone and Android companions."
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ page.title }} | {{ site.title }}</title>
+<meta name="description" content="{{ page.excerpt | strip_html | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link type="application/atom+xml" rel="alternate" href="{{ "/feed.xml" | relative_url }}" title="{{ site.title | escape }}">
+<script>
+  // Text size: the same setting as the rest of the site.
+  try{var z=parseFloat(localStorage.getItem('textScale'));if(z>=.875&&z<=1.5)document.documentElement.style.fontSize=(z*100)+'%';}catch(e){}
+</script>
+{% raw %}<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~66ch); figures break out wider. Crisp white and a bright
+   cobalt for the page; the Mac wallpaper mockup keeps the real Quiet colours (see .wall). */
+:root {
+  --paper: #FAFBFC;
+  --surface: #FFFFFF;
+  --ink: #0B0C0F;
+  --muted: #545B66;
+  --rule: #E3E6EB;
+  --track: #D5DAE1;
+  --accent: #0047FF;
+  --health: #0B7A3E;
+  --warn: #C2410C;
+  --now: #E0001B;
+  --tint: rgba(0, 71, 255, 0.08);
+  --shadow: 0 1px 2px rgba(11, 12, 15, 0.06), 0 12px 32px rgba(11, 12, 15, 0.10);
+
+  --display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+
+  --step-0: 1.0625rem;
+  --step-1: 1.375rem;
+  --step-2: 1.875rem;
+  --step-3: clamp(2.4rem, 6vw, 4.25rem);
+  --read: 40rem;
+  --wide: 66rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0A0B0F; --surface: #16181E; --ink: #F5F6F8; --muted: #A3AAB6; --rule: #262A33;
+    --track: #323743; --accent: #6F95FF; --health: #3DDC84; --warn: #FF9F43; --now: #FF5A50;
+    --tint: rgba(111, 149, 255, 0.12); --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0A0B0F; --surface: #16181E; --ink: #F5F6F8; --muted: #A3AAB6; --rule: #262A33;
+  --track: #323743; --accent: #6F95FF; --health: #3DDC84; --warn: #FF9F43; --now: #FF5A50;
+  --tint: rgba(111, 149, 255, 0.12); --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.45);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  padding-inline: 20px;
+  padding-block: 0 96px;
+  -webkit-font-smoothing: antialiased;
+}
+.col { max-width: var(--read); margin-inline: auto; }
+.wide { max-width: var(--wide); margin-inline: auto; }
+main { display: flex; flex-direction: column; gap: 28px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+h2 { font-size: var(--step-2); line-height: 1.15; font-weight: 800; margin-top: 40px; }
+h3 { font-size: var(--step-1); font-weight: 700; line-height: 1.25; margin-top: 8px; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+code { font-family: var(--mono); font-size: 0.82em; background: var(--tint); padding: 0.1em 0.35em; border-radius: 4px; }
+.label { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Site bar: back to the blog, and the site's text size controls */
+.topbar { max-width: var(--wide); margin-inline: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px 18px; padding-block: 1.5rem 0.9rem; border-bottom: 1px solid var(--rule); font-family: var(--mono); }
+.topbar a { color: var(--ink); text-decoration: none; font-size: 0.9375rem; font-weight: 500; }
+.topbar .navs { display: flex; align-items: center; gap: 18px; }
+.topbar a.nav { font-size: 0.8125rem; font-weight: 400; color: var(--muted); }
+.topbar a:hover { color: var(--accent); }
+.text-size { display: flex; gap: 2px; }
+.text-size button { font: 500 0.8125rem/1 var(--mono); color: var(--muted); background: none; border: 1px solid var(--rule); border-radius: 6px; padding: 4px 7px; cursor: pointer; }
+.text-size button:hover { color: var(--ink); border-color: var(--ink); }
+.text-size button:disabled { opacity: 0.45; cursor: default; color: var(--muted); border-color: var(--rule); }
+
+/* Masthead */
+.mast { padding-block: 56px 8px; display: flex; flex-direction: column; gap: 18px; }
+.mast .kicker { display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; }
+.mast h1 { font-size: var(--step-3); line-height: 1.02; font-weight: 800; }
+.mast h1 .glyph { color: var(--accent); font-weight: 500; }
+.dek { font-size: var(--step-1); line-height: 1.45; color: var(--muted); max-width: 34rem; }
+
+/* Figures */
+figure { margin: 12px 0; display: flex; flex-direction: column; gap: 12px; }
+figcaption { font-family: var(--display); font-size: 0.9rem; line-height: 1.45; color: var(--muted); max-width: var(--read); }
+figcaption b { color: var(--ink); font-weight: 700; }
+.example { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--warn); margin-left: 6px; }
+
+/* Wallpaper mockup: a Mac screen showing the Quiet wallpaper (follows the page theme, as the real one follows the system) */
+.screen { border-radius: 14px; padding: 10px; background: #0D0E10; box-shadow: var(--shadow); }
+.wall {
+  aspect-ratio: 16 / 10; max-width: 100%; border-radius: 6px; overflow: hidden;
+  background: var(--paper); color: var(--ink); font-family: var(--ui);
+  display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 4%; padding: 5% 5%;
+  container-type: inline-size; position: relative;
+  border: 1px solid var(--rule);
+}
+.wall .menubar { position: absolute; inset: 0 0 auto 0; height: 3.4cqw; display: flex; justify-content: flex-end; align-items: center; gap: 2cqw; padding-inline: 2cqw; font-size: 1.3cqw; color: var(--muted); }
+.wall .side { display: flex; flex-direction: column; gap: 2.2cqw; font-size: 1.35cqw; line-height: 1.4; min-width: 0; }
+.wall .big { font-size: 5.6cqw; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.wall .sec { color: var(--muted); }
+.wall .bar { height: 0.5cqw; border-radius: 1cqw; background: var(--track); overflow: hidden; margin-top: 0.6cqw; }
+.wall .bar i { display: block; height: 100%; border-radius: inherit; }
+.wall .quote { align-self: center; text-align: center; font-family: var(--serif); font-size: 2.4cqw; line-height: 1.35; color: var(--ink); }
+.wall .quote small { display: block; margin-top: 1.4cqw; font-family: var(--ui); font-size: 1.2cqw; color: var(--muted); }
+.wall .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.8cqw; align-items: end; height: 7cqw; }
+.wall .week span { background: var(--accent); border-radius: 0.3cqw; opacity: 0.85; }
+.wall .week span.off { background: var(--track); }
+.wall .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.8cqw; font-size: 1cqw; color: var(--muted); text-align: center; }
+
+/* Phone wallpaper: Android draws its own dark palette whatever the page theme, so these colours are fixed */
+.walls { display: grid; grid-template-columns: minmax(0, 3.3fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+@media (max-width: 760px) { .walls { grid-template-columns: 1fr; } .walls .phone { width: min(260px, 72%); justify-self: center; } }
+.phone { border-radius: 30px; padding: 8px; background: #0D0E10; box-shadow: var(--shadow); container-type: inline-size; }
+.phone .pw {
+  aspect-ratio: 9 / 19.5; border-radius: 23px; overflow: hidden; position: relative;
+  background: linear-gradient(#0C0918, #1A1431); color: #E9E6F5; font-family: var(--ui);
+  display: flex; flex-direction: column; padding: 0 6cqw;
+}
+.pw .clock { margin-top: 20cqw; text-align: center; font-size: 22cqw; font-weight: 300; letter-spacing: -0.02em; line-height: 1; }
+.pw .date { text-align: center; font-size: 4.2cqw; color: #A9A3C4; margin-top: 2cqw; }
+.pw .card { margin-top: auto; margin-bottom: 30cqw; background: #1B1729; border: 1px solid #2E2B3D; border-radius: 5cqw; padding: 5cqw 4.5cqw; display: flex; flex-direction: column; gap: 3cqw; font-size: 3.4cqw; line-height: 1.25; }
+.pw .k { font-size: 2.9cqw; font-weight: 600; letter-spacing: 0.15em; color: #9C8FD0; }
+.pw .hero { display: flex; align-items: center; gap: 3.5cqw; }
+.pw .hero b { font-size: 14cqw; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+.pw .hero span, .pw .m { color: #A9A3C4; }
+.pw .f { color: #8A84A3; font-size: 2.9cqw; }
+.pw .split { display: flex; height: 2cqw; border-radius: 1cqw; overflow: hidden; }
+.pw .row { display: grid; grid-template-columns: 11cqw 1fr auto; gap: 2.5cqw; align-items: center; }
+.pw .row i { height: 1.6cqw; border-radius: 1cqw; background: #2E2A40; overflow: hidden; display: block; }
+.pw .row i em { display: block; height: 100%; border-radius: inherit; }
+.pw .row span:last-child { color: #A9A3C4; font-size: 3.1cqw; }
+.pw .two { display: flex; justify-content: space-between; gap: 2cqw; color: #A9A3C4; font-size: 3.1cqw; }
+.pw .lk { color: #9C8FD0; font-weight: 500; }
+.pw .dock { position: absolute; inset: auto 0 9cqw 0; display: flex; justify-content: space-between; padding: 0 12cqw; }
+.pw .dock span { width: 11cqw; height: 11cqw; border-radius: 50%; background: rgba(233, 230, 245, 0.12); }
+
+/* The Mac mockup shows the real Quiet wallpaper colours, not the page's */
+.wall { --paper: #F3F2EE; --ink: #1B1D20; --muted: #5B6068; --rule: #D6D4CC; --track: #C9C7C0; --accent: #2F5BD3; --health: #2B7A44; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .wall { --paper: #15171A; --ink: #EDEEF0; --muted: #9AA0A8; --rule: #2E3238; --track: #3A3E44; --accent: #8FB3FF; --health: #8FD0A0; }
+}
+:root[data-theme="dark"] .wall { --paper: #15171A; --ink: #EDEEF0; --muted: #9AA0A8; --rule: #2E3238; --track: #3A3E44; --accent: #8FB3FF; --health: #8FD0A0; }
+
+/* Numbers strip */
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--rule); }
+.facts div { padding: 18px 16px; display: flex; flex-direction: column; gap: 2px; }
+.facts div + div { border-left: 1px solid var(--rule); }
+.facts b { font-family: var(--display); font-size: var(--step-2); font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.facts span { font-family: var(--display); font-size: 0.85rem; color: var(--muted); line-height: 1.35; }
+@media (max-width: 640px) {
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facts div:nth-child(3) { border-left: 0; }
+  .facts div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+}
+
+/* Architecture */
+.arch { display: grid; grid-template-columns: 1fr auto 1.1fr auto 1fr; gap: 14px; align-items: stretch; font-family: var(--display); }
+.arch .lane { border: 1px solid var(--rule); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); min-width: 0; }
+.arch .lane.core { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.arch .lane h4 { margin: 0; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.arch ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.95rem; line-height: 1.3; }
+.arch li small { display: block; color: var(--muted); font-size: 0.8rem; }
+.arch .arrow { align-self: center; color: var(--muted); font-family: var(--ui); font-size: 1.4rem; }
+.relay { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: center; font-family: var(--display); font-size: 0.92rem; padding: 14px; border: 1px dashed var(--rule); border-radius: 12px; color: var(--muted); }
+.relay b { color: var(--ink); }
+@media (max-width: 760px) {
+  .arch { grid-template-columns: 1fr; }
+  .arch .arrow { transform: rotate(90deg); justify-self: center; }
+}
+
+/* Ordered rules */
+.rules { counter-reset: r; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.rules li { counter-increment: r; display: grid; grid-template-columns: 2.4rem 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--rule); font-size: 1.02rem; line-height: 1.5; }
+.rules li::before { content: counter(r); font-family: var(--mono); font-size: 0.85rem; color: var(--accent); padding-top: 3px; }
+
+/* macOS-style popover and nudge (follow the theme, like the real ones) */
+.duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 760px) { .duo { grid-template-columns: 1fr; } }
+.pop { font-family: var(--ui); font-size: 13px; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; box-shadow: var(--shadow); padding: 12px; display: flex; flex-direction: column; gap: 12px; max-width: 380px; width: 100%; justify-self: center; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--tint); border-radius: 7px; padding: 2px; }
+.seg span { text-align: center; padding: 3px 0; border-radius: 5px; color: var(--muted); }
+.seg span.on { background: var(--paper); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,0.12); }
+.pop .head { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; gap: 8px; flex-wrap: wrap; }
+.pop .head b { font-size: 17px; }
+.pop .src { padding: 0 4px; margin-top: -6px; font-size: 11px; line-height: 1.4; color: var(--muted); }
+.legend { display: flex; gap: 10px; font-size: 11px; color: var(--muted); }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 4px; vertical-align: 0; }
+.hours { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); }
+.hour { display: grid; grid-template-columns: 40px minmax(0, 1fr) 64px; gap: 10px; align-items: center; padding: 6px 10px; min-height: 30px; }
+.hour:nth-child(even) { background: var(--tint); }
+.hour .t { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; }
+.hour .ev { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hour .ev.dim { color: var(--muted); font-weight: 400; }
+.hour .ev .warn { color: var(--warn); font-weight: 500; font-size: 11px; margin-left: 4px; }
+.en { height: 6px; border-radius: 3px; }
+.nowline { position: absolute; left: 0; right: 0; height: 0; border-top: 2px solid var(--now); }
+.nowline::before { content: ""; position: absolute; left: 4px; top: -5px; width: 8px; height: 8px; border-radius: 4px; background: var(--now); }
+
+.nudge { font-family: var(--ui); background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 14px; box-shadow: var(--shadow); padding: 16px; display: flex; flex-direction: column; gap: 8px; max-width: 420px; width: 100%; justify-self: center; }
+.nudge b { font-size: 14px; }
+.nudge p { font-size: 13px; color: var(--muted); line-height: 1.45; }
+.nudge .row { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.btn { font-family: var(--ui); font-size: 13px; border-radius: 999px; padding: 7px 14px; border: 0; background: var(--tint); color: var(--ink); cursor: pointer; }
+.btn.primary { background: var(--accent); color: var(--paper); font-weight: 600; }
+.stack { display: flex; flex-direction: column; gap: 18px; }
+
+/* Bedtime demo: deliberately one look (the real screen is always dark) */
+.bed { --b-bg: #0B0D12; --b-ink: #FFFFFF; --b-soft: #C9CDD6; --b-dim: #9AA0AC; --b-moon: #B9C6FF; --b-amber: #FFC073;
+  background: var(--b-bg); color: var(--b-ink); border-radius: 18px; box-shadow: var(--shadow);
+  padding: 40px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; font-family: var(--ui); }
+.bed .moon { font-size: 52px; color: var(--b-moon); line-height: 1; }
+.bed h4 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
+.bed .sub { color: var(--b-soft); font-size: 16px; line-height: 1.45; }
+.bed .promise { color: var(--b-amber); font-weight: 600; font-size: 16px; margin-top: 6px; }
+.bed .nth { color: var(--b-soft); font-size: 14px; }
+.bed .log { color: var(--b-dim); font-size: 13px; line-height: 1.6; font-variant-numeric: tabular-nums; }
+.bed .ask { margin-top: 18px; font-weight: 600; font-size: 18px; }
+.bed .slider { width: min(340px, 100%); display: flex; flex-direction: column; gap: 4px; }
+.bed input[type="range"] { width: 100%; accent-color: var(--b-moon); }
+.bed .scale { display: flex; justify-content: space-between; color: var(--b-dim); font-size: 13px; font-variant-numeric: tabular-nums; }
+.bed .answer { margin-top: 10px; width: min(340px, 100%); height: 52px; border-radius: 26px; border: 0; background: var(--b-moon); color: var(--b-bg); font-family: var(--ui); font-size: 16px; font-weight: 600; cursor: pointer; }
+.bed .answer:disabled { opacity: 0.45; cursor: not-allowed; }
+.bed .locked { margin-top: 18px; font-weight: 600; font-size: 18px; max-width: 22rem; }
+.demo-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-family: var(--display); font-size: 0.9rem; color: var(--muted); }
+.demo-bar button { font-family: var(--display); font-size: 0.85rem; background: transparent; color: var(--accent); border: 1px solid var(--rule); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+
+/* Heart rate by activity */
+.hr { display: flex; flex-direction: column; border-top: 1px solid var(--rule); font-family: var(--display); }
+.hr div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) 4.5rem; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: 0.95rem; }
+.hr .track { position: relative; height: 8px; border-radius: 4px; background: var(--track); }
+.hr .range { position: absolute; top: 0; height: 8px; border-radius: 4px; opacity: 0.45; }
+.hr .dot { position: absolute; top: -3px; width: 14px; height: 14px; margin-left: -7px; border-radius: 7px; border: 2px solid var(--paper); }
+.hr .v { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.axis { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) 4.5rem; gap: 14px; font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+.axis span:nth-child(2) { display: flex; justify-content: space-between; }
+
+/* Build log chart */
+.log-chart { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 10px; align-items: start; font-family: var(--display); }
+.log-chart .d { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.log-chart .col-bar { height: 150px; display: flex; align-items: flex-end; border-bottom: 1px solid var(--rule); }
+.log-chart .col-bar i { display: block; width: 100%; background: var(--accent); border-radius: 4px 4px 0 0; position: relative; }
+.log-chart .col-bar i b { position: absolute; top: -20px; left: 0; right: 0; text-align: center; font-size: 0.8rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.log-chart .date { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+.log-chart .what { font-size: 0.78rem; line-height: 1.3; color: var(--ink); overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .log-chart { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 28px; }
+}
+
+.pull { font-family: var(--display); font-size: var(--step-1); line-height: 1.35; font-weight: 700; letter-spacing: -0.01em; border-left: 3px solid var(--accent); padding: 4px 0 4px 18px; }
+.lessons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 32px; }
+.lessons div { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.lessons h3 { font-size: 1.1rem; margin: 0; }
+.lessons p { font-size: 1rem; line-height: 1.55; }
+@media (max-width: 640px) { .lessons { grid-template-columns: 1fr; } }
+
+/* Early-access sign-up */
+.waitlist { border: 1px solid var(--rule); border-radius: 14px; background: var(--surface); padding: 20px; display: flex; flex-direction: column; gap: 10px; font-family: var(--display); }
+.waitlist label { font-weight: 700; font-size: 0.95rem; }
+.wl-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.wl-row input { flex: 1 1 220px; min-width: 0; font: inherit; font-size: 1rem; padding: 10px 14px; border: 1px solid var(--muted); border-radius: 999px; background: var(--paper); color: var(--ink); }
+.waitlist .go { font: inherit; font-size: 1rem; font-weight: 700; padding: 10px 20px; border: 0; border-radius: 999px; background: var(--accent); color: var(--paper); cursor: pointer; }
+.waitlist .go:disabled { opacity: 0.6; cursor: default; }
+.wl-note { font-size: 0.875rem; line-height: 1.45; color: var(--muted); }
+.wl-msg { font-size: 0.875rem; }
+.wl-msg:empty { display: none; }
+.wl-msg.err { color: var(--warn); }
+.wl-done { display: flex; flex-direction: column; gap: 6px; }
+.wl-remove { align-self: flex-start; padding: 0; border: 0; background: none; font: inherit; font-size: 0.875rem; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.wl-remove:hover { color: var(--ink); }
+.wl-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+footer { border-top: 1px solid var(--rule); padding-top: 18px; font-family: var(--display); font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+@media (prefers-reduced-motion: no-preference) {
+  .bed .answer, .btn, .demo-bar button { transition: opacity 0.15s ease, transform 0.15s ease; }
+  .bed .answer:not(:disabled):active { transform: scale(0.98); }
+}
+</style>
+{% endraw %}
+</head>
+<body>
+<nav class="topbar" aria-label="Site">
+  <a href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+  <span class="navs">
+    <a class="nav" href="{{ "/topics/" | relative_url }}">Topics</a>
+    <a class="nav" href="{{ "/about/" | relative_url }}">About</a>
+    <span class="text-size" role="group" aria-label="Text size">
+      <button type="button" data-step="-1" aria-label="Smaller text" title="Smaller text">A−</button>
+      <button type="button" data-step="0" aria-label="Reset text size" title="Reset text size">A</button>
+      <button type="button" data-step="1" aria-label="Larger text" title="Larger text">A+</button>
+    </span>
+  </span>
+</nav>
+{% raw %}
+<main>
+  <header class="mast col">
+    <div class="kicker"><span class="label">Project write-up</span><span class="label">macOS · iOS · Android</span><span class="label">October 2026</span></div>
+    <h1><span class="glyph">⚓︎</span> Anchor</h1>
+    <p class="dek">I built a set of apps that see where my attention actually goes, compare it with what I planned, and step in when the two come apart.</p>
+  </header>
+
+  <figure class="wide">
+    <div class="walls">
+    <div class="screen">
+      <div class="wall" role="img" aria-label="Mockup of the Anchor wallpaper on a Mac: today's progress on the left, a quote in the middle, the week on the right">
+        <div class="menubar"><span>⚓︎ 42%</span><span>Thu 10:20</span></div>
+        <div class="side">
+          <div><div class="big tnum">42%</div><div class="sec">of today went to DSA and Exercise</div></div>
+          <div>DSA <span class="sec tnum">1h 50m of 3h</span><div class="bar"><i style="width:61%; background: var(--accent)"></i></div></div>
+          <div>Solved <span class="sec tnum">2 of 4</span><div class="bar"><i style="width:50%; background: var(--accent)"></i></div></div>
+          <div>Exercise <span class="sec tnum">20 of 30 min</span><div class="bar"><i style="width:66%; background: var(--health)"></i></div></div>
+          <div class="sec">Next: Lunch at 12:30</div>
+        </div>
+        <div class="quote">We are what we repeatedly do.<small>Will Durant</small></div>
+        <div class="side">
+          <div class="sec">This week</div>
+          <div class="week"><span style="height:30%"></span><span style="height:55%"></span><span style="height:48%"></span><span style="height:70%"></span><span style="height:42%"></span><span class="off" style="height:8%"></span><span class="off" style="height:8%"></span></div>
+          <div class="days"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+          <div><span class="sec">Finish line</span><br>On plan by mid-March</div>
+          <div><span class="sec">Heart</span><br>Calm this morning</div>
+        </div>
+      </div>
+    </div>
+    <div class="phone">
+      <div class="pw" role="img" aria-label="Mockup of the Anchor wallpaper on an Android lock screen: the clock at the top, today's card in the middle">
+        <div class="clock tnum">10:20</div>
+        <div class="date">Thursday 8 October</div>
+        <div class="card">
+          <div class="k">ANCHOR · TODAY</div>
+          <div class="hero"><b class="tnum">42%</b><span>of today's tracked time<br>went to DSA + Ex</span></div>
+          <div class="split"><i style="flex:42; background:#7C6AE0"></i><i style="flex:8; background:#5FB98A"></i><i style="flex:22; background:#4C3A86"></i><i style="flex:18; background:#46425C"></i><i style="flex:10; background:#F2876B"></i></div>
+          <div class="f">Timed vs target</div>
+          <div class="row"><span>DSA</span><i><em style="width:61%; background:#7C6AE0"></em></i><span class="tnum">1h 50m / 3h 00m</span></div>
+          <div class="row"><span>Ex</span><i><em style="width:66%; background:#5FB98A"></em></i><span class="tnum">20 min / 30 min</span></div>
+          <div class="lk">Next: Lunch at 12:30</div>
+          <div class="two"><span class="tnum">This week  DSA 9h10/15h00</span><span class="tnum">3 of 5 days</span></div>
+          <div class="two"><span class="tnum">Problems 24/150</span><span class="lk">on plan: mid-Mar</span></div>
+        </div>
+        <div class="dock" aria-hidden="true"><span></span><span></span></div>
+      </div>
+    </div>
+    </div>
+    <figcaption><b>The wallpapers.</b> Anchor redraws the Mac's desktop every half hour, so the answer to "how is today going?" is always behind my windows. The Mac version follows the system's Light and Dark appearance, as this mockup follows yours, and every text colour passes WCAG AA. The Android app draws a portrait version for the home and lock screens, leaving the top for the clock and the bottom for the shortcuts. The iPhone, which doesn't let apps set the wallpaper, gets the same card as widgets.<span class="example">Example data</span></figcaption>
+  </figure>
+
+  <div class="col stack">
+    <p>I'd just started working through data structures and algorithms (DSA), alongside building side projects. Within days I could see the problem: my plans were fine, but following them wasn't. I'd sit down for a DSA block and an hour later find myself refactoring a project, or on a shopping site, with no memory of deciding to switch. I wanted to fix that in the first week, not after months of it.</p>
+    <p>Time trackers didn't help, because they report the drift afterwards. I wanted something that knew my plan, watched what I was actually doing, and spoke up while it was happening. So I built Anchor. It does three jobs: it remembers my goals, it sees where my time goes, and it shows me when I'm drifting.</p>
+  </div>
+
+  <div class="wide facts">
+    <div><b>8</b><span>days from the first commit to daily use</span></div>
+    <div><b>86</b><span>commits</span></div>
+    <div><b>3</b><span>apps: Mac menu bar, iPhone, Android</span></div>
+    <div><b>31</b><span>tests that run before every release</span></div>
+  </div>
+
+  <div class="col stack">
+    <h2>How it fits together</h2>
+    <p>Everything is worked out on the Mac. It reads my screen time from <a href="https://activitywatch.net">ActivityWatch</a>, which records the active app and browser tab only while I'm at the keyboard. It also reads my timer, my calendar, and a health summary from my iPhone. From that it works out a single number for the day, the share of my tracked time that went to the goals I'd chosen, and draws everything else around it.</p>
+    <p>The phones never see the raw data. The Mac encrypts a small summary and uploads it, and the phones decrypt it with a key that only travels inside the QR code used to pair them. The relay in the middle can't read what it carries.</p>
+  </div>
+
+  <figure class="wide">
+    <div class="arch">
+      <div class="lane">
+        <h4>What it reads</h4>
+        <ul>
+          <li>ActivityWatch<small>apps, window and tab titles</small></li>
+          <li>Sand Timer<small>focused minutes per project</small></li>
+          <li>Calendar<small>the plan, via EventKit</small></li>
+          <li>Apple Health<small>sleep, exercise, heart rate (opt-in)</small></li>
+          <li>Manual Check-ins<small>"where did 13:30 go?"</small></li>
+        </ul>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="lane core">
+        <h4>Mac menu bar app</h4>
+        <ul>
+          <li>Sorts every minute into a goal, Building, Other or Drift</li>
+          <li>Estimates energy hour by hour</li>
+          <li>Compares the calendar with the screen, once a minute</li>
+          <li>Writes a daily log and an encrypted snapshot</li>
+        </ul>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="lane">
+        <h4>Where it shows up</h4>
+        <ul>
+          <li>Wallpaper<small>desktop and lock screen</small></li>
+          <li>Menu bar popover<small>Energy, Today, Stats</small></li>
+          <li>Nudge window<small>centred, shows even in a Focus</small></li>
+          <li>Bedtime screen<small>full screen, during Sleep</small></li>
+        </ul>
+      </div>
+    </div>
+    <div class="relay"><b>Encrypted snapshot</b><span aria-hidden="true">→</span><span>Firebase relay (can't read it)</span><span aria-hidden="true">→</span><b>iPhone app and widgets</b><span>·</span><b>Android app, widget and wallpaper</b></div>
+    <figcaption><b>Local first.</b> The Mac does the work. The phones get an encrypted summary, including the next 36 hours of calendar blocks, so they can nudge at night while the Mac sleeps.</figcaption>
+  </figure>
+
+  <div class="col stack">
+    <h2>Teaching it what counts</h2>
+    <p>The hardest part was deciding what a minute <em>is</em>. A terminal can hold DSA practice in one tab and a side project in the next. A browser can be LeetCode or Reddit. Anchor applies a short list of rules, in order, and the first one that matches wins:</p>
+    <ol class="rules">
+      <li><span>A window or tab whose title contains a goal's keyword counts toward that goal. Naming a terminal tab "dsa" is enough.</span></li>
+      <li><span>A goal's own websites and pages count toward it, along with any apps I've added to it.</span></li>
+      <li><span>A helper app, like the Claude app, counts toward whichever goal's timer ran for ten or more minutes that hour.</span></li>
+      <li><span>Terminal work that isn't labelled counts as Building. It's tracked, but it doesn't count toward the day's score.</span></li>
+      <li><span>Known distraction sites count as Drift. Everything else is Other.</span></li>
+    </ol>
+    <p>The rules were never going to be complete, so the nudge itself became the way to correct them. When Anchor flags something I was actually using for the goal, like a trace-table tool I wrote for stepping through loops, one button adds that page to the goal. It saves the page's address, not the whole domain, so adding one tool on a site doesn't turn every page on that site into DSA time.</p>
+  </div>
+
+  <figure class="wide">
+    <div class="duo">
+      <div class="pop" aria-label="Mockup of the Energy tab in the menu bar popover">
+        <div class="seg"><span class="on">Energy</span><span>Today</span><span>Stats</span></div>
+        <div class="head"><b>Plan and energy</b><span class="legend"><span><i style="background: var(--health)"></i>High</span><span><i style="background: var(--accent)"></i>Medium</span><span><i style="background: var(--warn)"></i>Low</span></span></div>
+        <div class="src">From Apple Health: slept 7h 10m last night · HRV 52 today (usual 48) · resting heart rate 58 (usual 60).</div>
+        <div class="hours" id="hours"></div>
+      </div>
+      <div class="stack">
+        <div class="nudge" aria-label="Mockup of a calendar nudge">
+          <b>⚓︎ DSA until 11:30</b>
+          <p>1 of the last 2 min went to tools.example.dev. Back to DSA?</p>
+          <div class="row"><button class="btn" type="button">Add "Trace Table" to DSA</button><button class="btn primary" type="button">Got it</button></div>
+        </div>
+        <figcaption><b>Left: the Energy tab.</b> Today's calendar sits beside expected energy, estimated from Apple Health data that the iPhone sends each morning: last night's sleep and wake time, and today's HRV and resting heart rate against my usual. My past days' focus at each hour adds to it. The line under the title says which numbers went in, or says none have arrived yet. A DSA block that lands in a low-energy hour gets a warning, so I can move it in the morning.<span class="example">Example data</span></figcaption>
+        <figcaption><b>Right: a nudge.</b> If the screen doesn't match the calendar block, a small window appears in the middle of the screen. The first version used notifications, and a Focus mode silenced every one of them. A window can't be silenced that way.</figcaption>
+      </div>
+    </div>
+  </figure>
+
+  <div class="col stack">
+    <h2>Designing a screen I can't argue with</h2>
+    <p>The feature I changed most was the bedtime screen. My calendar has a Sleep block, and the phones and the Mac know when it's running. During that block, using a device brings up a full-screen "Time to sleep" screen.</p>
+    <p>The first version had a big "Going to bed" button. I tapped it on reflex, closed the screen, and kept scrolling. A default answer let me dismiss the screen without thinking about it. Every change after that was about making me stop and decide:</p>
+    <ul>
+      <li>There is no "stop now" button. If I'm stopping, I put the phone down.</li>
+      <li>The only answer is a snooze, chosen on a slider that starts at zero. At zero the button is disabled, so I can't tap it without choosing.</li>
+      <li>Each snooze allows less time: 10 minutes, then 5, then 2.</li>
+      <li>Every snooze is logged as a promise. The next screen opens with "Earlier you agreed to stop by 22:40".</li>
+      <li>After three snoozes the slider and button are gone, and the screen stays until the Sleep block ends. On Android it still gets out of the way for phone calls.</li>
+    </ul>
+    <p class="pull">A default button lets you dismiss a screen on reflex. A slider that starts at zero makes you decide.</p>
+  </div>
+
+  <figure class="col">
+    <div class="demo-bar"><span>Try it: move the slider, then snooze.</span><button type="button" id="bed-reset">Start the night again</button></div>
+    <div class="bed" id="bed" aria-live="polite"></div>
+    <figcaption><b>A working copy of the bedtime screen.</b> It follows the same rules as the apps, which are shared between the Swift and Kotlin code and covered by tests on both. One test came from a real bug: sliding right and back to zero used to turn the button back on.</figcaption>
+  </figure>
+
+  <div class="col stack">
+    <h2>Heart rate, honestly labelled</h2>
+    <p>With an Apple Watch, the iPhone can send heart rate for each half hour. The Mac lines each half hour up with what I was doing, from my Manual Check-in answer, sleep, screen time or timer, and shows how my heart rate differs by activity. It also flags "raised" half hours: 20 or more beats a minute above that day's resting rate while I was sitting still. Sharing is off by default, and the screen says plainly that this is a rough signal, not a medical one.</p>
+  </div>
+
+  <figure class="col">
+    <div class="axis" aria-hidden="true"><span></span><span><span>50</span><span>90</span><span>130 bpm</span></span><span></span></div>
+    <div class="hr" id="hr"></div>
+    <figcaption><b>Heart rate by activity, one week.</b> The dot is the average and the band is the usual range. In my data, drift was the most raised activity. That's a pattern to look into, not a diagnosis.<span class="example">Example data</span></figcaption>
+  </figure>
+
+  <div class="col stack">
+    <h2>Eight days, built in public with myself</h2>
+    <p>Anchor started as a Python script that drew a wallpaper. By the end of the first day it had an Android app. The Mac app replaced the scripts on day two. The rest of the week was spent living with it and fixing what annoyed me, usually the same evening.</p>
+  </div>
+
+  <figure class="wide">
+    <div class="log-chart" id="log"></div>
+    <figcaption><b>Commits per day</b>, with what changed. The quieter days in the middle went to Manual Check-ins and polish, and to using it and noting what felt wrong.</figcaption>
+  </figure>
+
+  <div class="col stack">
+    <h2>What I learned</h2>
+  </div>
+  <div class="col lessons">
+    <div><h3>Test on yourself, the same day</h3><p>Most of the best changes came from a screenshot and one sentence of annoyance: "why does it say Ghostty when the page is Chrome?" Using it all day was the real test suite.</p></div>
+    <div><h3>Platforms have opinions</h3><p>macOS Focus hides notifications. Android 15 blocks background apps from opening screens. iOS Screen Time needs a signed developer account. Each one changed the design, not just the code.</p></div>
+    <div><h3>Write the rules down as code</h3><p>Once the bedtime rules lived in one small, UI-free module on each platform, a bug became one failing test, and a release script now refuses to ship if any test fails.</p></div>
+    <div><h3>Keep the data at home</h3><p>Health and screen data are personal. Doing the work on the Mac and relaying only an encrypted summary kept the cloud part small and simple.</p></div>
+  </div>
+
+  <div class="col stack">
+    <h2>What's next</h2>
+    <p>The backlog holds Screen Time nudges on the iPhone, an always-on notification for phones whose lock screens don't allow custom widgets, and bringing the Mac's Apple-style design to the phone apps. The question I'll keep coming back to is the one on the wallpaper: did today go where I meant it to?</p>
+  </div>
+
+  <div class="col stack">
+    <h2>Try it early</h2>
+    <p>Right now Anchor is set up for me. Next, I'm turning it into something anyone can install and set up in a few minutes. If you'd like to try it when it's ready, leave your email.</p>
+    <div class="waitlist" data-source="anchor">
+      <form class="wl-form" novalidate>
+        <label for="wl-email">Email</label>
+        <div class="wl-row">
+          <input id="wl-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+          <button class="go" type="submit">Get early access</button>
+        </div>
+        <div class="wl-trap" aria-hidden="true"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <p class="wl-note">I'll email you once, when Anchor is ready to try. Nothing else, and your address isn't shared with anyone.</p>
+        <p class="wl-msg" role="status" aria-live="polite"></p>
+      </form>
+      <div class="wl-done" hidden>
+        <p><strong>You're on the list.</strong> I'll email you when Anchor is ready.</p>
+        <button type="button" class="wl-remove">Remove my email</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="col">Built with SwiftUI, Kotlin and Jetpack Compose, ActivityWatch, EventKit, HealthKit and Firebase. All screens here are recreations with example data, not my personal numbers.</footer>
+</main>
+
+<script>
+(function () {
+  // Energy tab rows (example data): hour, calendar block, energy level.
+  var rows = [
+    ["08:00", "Wake up, walk", "", "Medium"],
+    ["09:00", "DSA", "", "High"],
+    ["10:00", "DSA", "", "High"],
+    ["11:00", "DSA", "", "High"],
+    ["12:00", "Lunch", "", "Medium"],
+    ["13:00", "Build", "", "Low"],
+    ["14:00", "DSA review", "Low energy", "Low"],
+    ["15:00", "Build", "", "Medium"],
+    ["16:00", "Exercise", "", "Medium"],
+    ["17:00", "Free", "dim", "Medium"],
+    ["18:00", "Free", "dim", "Low"]
+  ];
+  var colour = { High: "var(--health)", Medium: "var(--accent)", Low: "var(--warn)" };
+  var width = { High: "100%", Medium: "66%", Low: "36%" };
+  var hours = document.getElementById("hours");
+  rows.forEach(function (r) {
+    var row = document.createElement("div");
+    row.className = "hour";
+    var ev = r[2] === "dim" ? '<span class="ev dim">' + r[1] + "</span>"
+      : '<span class="ev">' + r[1] + (r[2] ? '<span class="warn">· ' + r[2] + "</span>" : "") + "</span>";
+    row.innerHTML = '<span class="t">' + r[0] + "</span>" + ev +
+      '<span><span class="en" style="display:block; width:' + width[r[3]] + "; background:" + colour[r[3]] + '"></span></span>';
+    hours.appendChild(row);
+  });
+  // The red current-time line at 10:20 (row 2 is 10:00).
+  requestAnimationFrame(function () {
+    var r = hours.children[2];
+    if (!r) return;
+    var line = document.createElement("div");
+    line.className = "nowline";
+    line.style.top = (r.offsetTop + r.offsetHeight * (20 / 60)) + "px";
+    hours.appendChild(line);
+  });
+
+  // Heart rate by activity (example data): name, average, low, high, colour.
+  var hr = [
+    ["Drift", 98, 82, 116, "var(--warn)"],
+    ["DSA", 86, 72, 104, "var(--accent)"],
+    ["Building", 88, 74, 106, "var(--accent)"],
+    ["Exercise", 118, 96, 128, "var(--health)"],
+    ["Sleep", 62, 54, 76, "var(--muted)"]
+  ];
+  var lo = 50, hi = 130, x = function (v) { return ((v - lo) / (hi - lo) * 100).toFixed(1) + "%"; };
+  var hrEl = document.getElementById("hr");
+  hr.forEach(function (h) {
+    var row = document.createElement("div");
+    row.innerHTML = "<span>" + h[0] + '</span><span class="track"><span class="range" style="left:' + x(h[2]) +
+      "; width:calc(" + x(h[3]) + " - " + x(h[2]) + "); background:" + h[4] + '"></span><span class="dot" style="left:' +
+      x(h[1]) + "; background:" + h[4] + '"></span></span><span class="v">' + h[1] + " bpm</span>";
+    hrEl.appendChild(row);
+  });
+
+  // Build log: commits per day from git, with the main change.
+  var log = [
+    ["2 Oct", 19, "Wallpaper, Android app, Firebase sync"],
+    ["3 Oct", 15, "Native Mac app, iPhone app"],
+    ["4 Oct", 6, "Manual Check-ins, Apple Health"],
+    ["5 Oct", 5, "Daily quote, polish"],
+    ["6 Oct", 3, "DSA targets, drift nudges"],
+    ["7 Oct", 17, "Heart rate, calendar nudges, Energy"],
+    ["8 Oct", 17, "Bedtime screen, tests, release script"],
+    ["9 Oct", 4, "Add-to-goal from a nudge"]
+  ];
+  var max = 19, logEl = document.getElementById("log");
+  log.forEach(function (d) {
+    var el = document.createElement("div");
+    el.className = "d";
+    el.innerHTML = '<div class="col-bar"><i style="height:' + (d[1] / max * 100).toFixed(1) + '%"><b>' + d[1] +
+      '</b></i></div><span class="date">' + d[0] + '</span><span class="what">' + d[2] + "</span>";
+    logEl.appendChild(el);
+  });
+
+  // Bedtime screen: the same rules as BedtimeRules.swift / BedtimeRules.kt.
+  var limits = [10, 5, 2], maxSnoozes = 3, until = "06:00";
+  var promises = [], clock = 22 * 60 + 30;
+  var bed = document.getElementById("bed");
+  function hhmm(m) { m = (m + 1440) % 1440; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); }
+  function ordinal(n) {
+    var s = n % 10 === 1 && n % 100 !== 11 ? "st" : n % 10 === 2 && n % 100 !== 12 ? "nd" : n % 10 === 3 && n % 100 !== 13 ? "rd" : "th";
+    return n + s;
+  }
+  function label(m) { return m > 0 ? "I'll stop in " + m + " min" : "Move the slider to choose"; }
+  function render() {
+    var snoozes = promises.length;
+    var max = limits[Math.min(snoozes, limits.length - 1)];
+    var html = '<div class="moon" aria-hidden="true">☾</div><h4>Time to sleep</h4>' +
+      '<div class="sub">Your Sleep block runs until ' + until + '.<br>Put the phone down and rest.</div>';
+    if (snoozes > 0) {
+      var last = promises[promises.length - 1];
+      html += '<div class="promise">Earlier you agreed to stop by ' + last.by + ".</div>" +
+        '<div class="nth">This is your ' + ordinal(snoozes + 1) + " reminder tonight.</div>" +
+        '<div class="log">' + promises.slice().reverse().map(function (p) { return p.at + ": " + p.m + " more min, stop by " + p.by; }).join("<br>") + "</div>";
+    }
+    if (snoozes >= maxSnoozes) {
+      html += '<div class="locked">You\'ve used your ' + maxSnoozes + " snoozes. This screen stays until " + until + ".</div>";
+    } else {
+      html += '<div class="ask">Need more time?</div><div class="slider">' +
+        '<input type="range" id="bed-slider" min="0" max="' + max + '" step="1" value="0" aria-label="Snooze minutes">' +
+        '<div class="scale"><span>0</span><span>' + max + ' min</span></div></div>' +
+        '<button class="answer" id="bed-answer" type="button" disabled>' + label(0) + "</button>";
+    }
+    bed.innerHTML = html;
+    var slider = document.getElementById("bed-slider"), answer = document.getElementById("bed-answer");
+    if (!slider) return;
+    slider.addEventListener("input", function () {
+      var m = Number(slider.value);
+      answer.disabled = !(m > 0);
+      answer.textContent = label(m);
+    });
+    answer.addEventListener("click", function () {
+      var m = Number(slider.value);
+      if (!(m > 0)) return;
+      promises.push({ at: hhmm(clock), m: m, by: hhmm(clock + m) });
+      clock += m + 1;
+      render();
+    });
+  }
+  document.getElementById("bed-reset").addEventListener("click", function () { promises = []; clock = 22 * 60 + 30; render(); });
+  render();
+})();
+
+// Text size controls: the same steps and saved setting as the rest of the site.
+(function () {
+  var steps = [.875, 1, 1.125, 1.25, 1.375, 1.5], root = document.documentElement, btns = document.querySelectorAll(".text-size button");
+  function get() { try { var z = parseFloat(localStorage.getItem("textScale")); return steps.indexOf(z) >= 0 ? z : 1; } catch (e) { return 1; } }
+  function show(z) { root.style.fontSize = (z * 100) + "%"; btns[0].disabled = z === steps[0]; btns[1].disabled = z === 1; btns[2].disabled = z === steps[steps.length - 1]; }
+  var cur = get(); show(cur);
+  btns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var d = Number(b.dataset.step);
+      cur = d ? steps[Math.max(0, Math.min(steps.length - 1, steps.indexOf(cur) + d))] : 1;
+      try { if (cur === 1) localStorage.removeItem("textScale"); else localStorage.setItem("textScale", cur); } catch (e) {}
+      show(cur);
+    });
+  });
+})();
+
+// Early-access sign-up, stored by the waitlist Worker.
+(function () {
+  var API = "https://waitlist.anand-bbc.workers.dev/api/waitlist";
+  var box = document.querySelector(".waitlist"), source = box.dataset.source, key = "waitlist-" + source;
+  var form = box.querySelector(".wl-form"), done = box.querySelector(".wl-done"), msg = box.querySelector(".wl-msg");
+  var btn = form.querySelector(".go"), input = form.querySelector("#wl-email"), remove = box.querySelector(".wl-remove");
+  function read() { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch (e) { return null; } }
+  function save(v) { try { v ? localStorage.setItem(key, JSON.stringify(v)) : localStorage.removeItem(key); } catch (e) {} }
+  function show(state) { form.hidden = !!state; done.hidden = !state; remove.hidden = !(state && state.token); }
+  function say(text, err) { msg.textContent = text; msg.classList.toggle("err", !!err); }
+  show(read());
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = input.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say("Please enter a full email address, like you@example.com.", true); input.focus(); return; }
+    btn.disabled = true; say("Adding you…");
+    fetch(API, { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, source: source, website: form.website.value }) })
+      .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, b: b }; }); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.b.error || "Something went wrong.");
+        var state = { token: res.b.token || null };
+        save(state); say(""); show(state);
+        if (res.b.already) done.querySelector("p").innerHTML = "<strong>You're already on the list.</strong> I'll email you when Anchor is ready.";
+      })
+      .catch(function (err) { say(err.message === "Failed to fetch" ? "Couldn't reach the server. Please try again." : err.message, true); })
+      .then(function () { btn.disabled = false; });
+  });
+
+  remove.addEventListener("click", function () {
+    var state = read(); if (!state || !state.token) return;
+    remove.disabled = true;
+    fetch(API + "/remove", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: state.token }) })
+      .then(function (r) { if (!r.ok) throw new Error(); save(null); input.value = ""; show(null); say("Removed. Your email has been deleted."); })
+      .catch(function () { remove.disabled = false; remove.textContent = "Couldn't remove it. Try again"; });
+  });
+})();
+</script>
+{% endraw %}
+</body>
+</html>

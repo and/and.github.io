@@ -15,6 +15,17 @@ layout: default
   {%- endif %}
 </section>
 
+{%- if site.data.try.size > 0 %}
+<section class="try-section">
+  <h2 class="post-list-heading">Things to try</h2>
+  <ul class="try-grid">
+    {%- for t in site.data.try %}
+    <li><a class="try-card" href="{{ t.url | relative_url }}"><span class="try-name">{{ t.name }}</span><span class="try-line">{{ t.line }}</span></a></li>
+    {%- endfor %}
+  </ul>
+</section>
+{%- endif %}
+
 {%- assign pinned_posts = site.posts | where: "pinned", true -%}
 {%- if pinned_posts.size > 0 %}
 <section class="pinned-section">
@@ -23,17 +34,6 @@ layout: default
     {%- for post in pinned_posts -%}
     {% include post-row.html post=post excerpt=true %}
     {%- endfor -%}
-  </ul>
-</section>
-{%- endif %}
-
-{%- if site.data.try.size > 0 %}
-<section class="try-section">
-  <h2 class="post-list-heading">Things to try</h2>
-  <ul class="try-grid">
-    {%- for t in site.data.try %}
-    <li><a class="try-card" href="{{ t.url | relative_url }}"><span class="try-name">{{ t.name }}</span><span class="try-line">{{ t.line }}</span></a></li>
-    {%- endfor %}
   </ul>
 </section>
 {%- endif %}
