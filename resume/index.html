@@ -262,6 +262,7 @@ a:hover { text-decoration-thickness: 2px; }
           <button type="button" data-sort="theme" aria-pressed="true">By theme</button>
         </div>
       </div>
+      <p class="lens-meta" id="proj-meta" hidden style="margin:-6px 0 18px"></p>
       <article class="job" data-job>
         <ul class="pts" style="margin-top:0">
           <li class="dated" data-theme="productivity" data-v="sw des"><div class="pt"><b>Anchor:</b> Mac menu bar <a href="https://and.github.io/utilities/anchor/" target="_blank" rel="noopener">app</a> with iPhone and Android companions. Compares where your attention goes with what you planned and nudges you when they diverge. Built with SwiftUI and Kotlin.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a Mac menu bar with a small blue anchor icon and a panel dropping down from it, comparing a planned bar with a shorter actual bar, next to a phone showing the same comparison">
@@ -490,6 +491,30 @@ a:hover { text-decoration-thickness: 2px; }
     Array.prototype.forEach.call(groupsEl.children, function (g) { g.hidden = !visibleIn(g); });
   }
 
+  var projMeta = document.getElementById("proj-meta");
+  var sortBox = document.querySelector("#projects .sort");
+  function updateProjMeta(v) {
+    var shown = projItems.filter(function (li) { return !li.hidden; }).length;
+    var n = projItems.length;
+    projMeta.textContent = "";
+    sortBox.hidden = shown === 0;
+    if (v === "all" || shown === n) { projMeta.hidden = true; return; }
+    if (shown === 0) {
+      projMeta.appendChild(document.createTextNode("None of my " + n + " projects are tagged for this view · "));
+    } else {
+      var b = document.createElement("b");
+      b.textContent = shown;
+      projMeta.appendChild(b);
+      projMeta.appendChild(document.createTextNode(" of " + n + " projects shown · "));
+    }
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "Show all projects";
+    btn.addEventListener("click", function () { apply("all", true); });
+    projMeta.appendChild(btn);
+    projMeta.hidden = false;
+  }
+
   function setSort(mode) {
     groupsEl.textContent = "";
     if (mode === "theme") {
@@ -530,8 +555,9 @@ a:hover { text-decoration-thickness: 2px; }
       if (on) shown++;
     });
     jobs.forEach(function (j) { j.hidden = !visibleIn(j); });
-    secs.forEach(function (s) { s.hidden = !visibleIn(s); });
+    secs.forEach(function (s) { s.hidden = !visibleIn(s) && !(s.id === "projects" && v !== "all"); });
     updateGroups();
+    updateProjMeta(v);
     sum.textContent = LENS[v].s;
     note.innerHTML = LENS[v].n;
     note.hidden = !LENS[v].n;
