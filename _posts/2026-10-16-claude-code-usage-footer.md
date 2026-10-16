@@ -21,6 +21,10 @@ footer shows it all the time:
 .ccf-key i{width:.8rem;height:.8rem;border-radius:2px;display:inline-block}
 /* The prompts are prose: wrap them instead of scrolling sideways */
 .post-content div.language-text pre{white-space:pre-wrap;overflow-wrap:anywhere}
+.ccf-copybar{display:flex;margin-top:.75rem;margin-bottom:.5rem}
+.ccf-copy{font:inherit;font-size:.9rem;font-weight:600;padding:.4rem .9rem;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer}
+.ccf-copy:hover{background:rgba(127,127,127,.12)}
+.ccf-copy:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 </style>
 <div class="ccf-term" role="img" aria-label="Footer: Opus 5.5, Context 7%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30"><span class="ccf-seg">Opus 5.5</span> <span class="ccf-seg">| Context: <span class="ccf-e ccf-g">▋</span><span class="ccf-t">█████████</span> <b>7%</b></span> <span class="ccf-seg">| Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30)</span> <span class="ccf-seg">| Weekly: <span class="ccf-y">███████</span><span class="ccf-e ccf-y">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</span></div>
 
@@ -238,3 +242,34 @@ fi
 - **The footer can trail `/usage` by a point or two.** It only gets new numbers when a reply
   arrives in that window, while your other windows keep using the same limit.
 - **It works on macOS and Linux.** Reset times use your computer's time zone.
+
+<script>
+// A copy button above every prompt and command. Blocks inside a collapsed
+// "Show ..." section get their button above that section, so you can copy
+// without opening it.
+document.querySelectorAll('.post-content div.language-text, .post-content div.language-bash').forEach(block => {
+  const code = block.querySelector('code');
+  const label = block.classList.contains('language-text') ? 'Copy prompt' : 'Copy command';
+  const bar = document.createElement('div');
+  bar.className = 'ccf-copybar';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'ccf-copy';
+  btn.textContent = label;
+  bar.appendChild(btn);
+  const anchor = block.closest('details') || block;
+  anchor.parentNode.insertBefore(bar, anchor);
+  btn.addEventListener('click', () => {
+    const reset = () => setTimeout(() => { btn.textContent = label; }, 1800);
+    const fallback = () => {
+      const d = block.closest('details'); if (d) d.open = true;
+      const r = document.createRange(); r.selectNodeContents(code);
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      btn.textContent = 'Selected: press Ctrl+C or ⌘C'; reset();
+    };
+    try {
+      navigator.clipboard.writeText(code.textContent).then(() => { btn.textContent = 'Copied'; reset(); }, fallback);
+    } catch (e) { fallback(); }
+  });
+});
+</script>
