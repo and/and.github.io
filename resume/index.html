@@ -95,7 +95,17 @@ a:hover { text-decoration-thickness: 2px; }
 .pts li { position: relative; padding-left: 20px; max-width: 70ch; text-wrap: pretty; }
 .pts li::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 6px; height: 6px; background: var(--accent); border-radius: 1px; }
 .pts b { font-weight: 650; }
-.pts li.dated { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 24px; align-items: baseline; max-width: none; }
+.pts li.dated { display: grid; grid-template-columns: minmax(0, 1fr) 10.5rem; gap: 6px 28px; align-items: start; max-width: none; }
+.side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.art { margin: 0; width: 10.5rem; }
+.art svg { display: block; width: 100%; height: auto; color: var(--text); }
+.ln { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.thin { stroke-width: 1.1; }
+.water { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.kib { fill: none; stroke: currentColor; stroke-width: 1.3; }
+.tint { fill: var(--accent); fill-opacity: .16; stroke: none; }
+.tint-strong { fill: var(--accent); fill-opacity: .32; stroke: none; }
+.body { fill: var(--bg); stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
 .pts .pt { min-width: 0; max-width: 70ch; text-wrap: pretty; }
 
 .skills { margin: 0; display: grid; gap: 8px; }
@@ -113,8 +123,9 @@ a:hover { text-decoration-thickness: 2px; }
 @media (max-width: 560px) {
   body { padding-block: 32px 56px; }
   .job-h, .edu > div { grid-template-columns: minmax(0, 1fr); }
-  .pts li.dated { grid-template-columns: minmax(0, 1fr); }
-  .pts li.dated .dates { order: -1; }
+  .pts li.dated { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .side { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .art { width: 8.5rem; }
   .dates { white-space: normal; }
   .skills > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
 }
@@ -227,13 +238,59 @@ a:hover { text-decoration-thickness: 2px; }
       <h2 class="sec-h">Projects</h2>
       <article class="job" data-job>
         <ul class="pts" style="margin-top:0">
-          <li class="dated" data-v="sw des"><div class="pt"><b>Anchor:</b> Mac menu bar <a href="https://and.github.io/utilities/anchor/" target="_blank" rel="noopener">app</a> with iPhone and Android companions. Compares where your attention goes with what you planned and nudges you when they diverge. Built with SwiftUI and Kotlin.</div><span class="dates">2026</span></li>
-          <li class="dated" data-v="sw des"><div class="pt"><b>Sand Timer:</b> A free <a href="/utilities/sand-timer/">hourglass for your Mac’s desktop</a> that sits above your other windows, so you see how much time is left without reading a number. Keeps a daily target, projects, and session statistics.</div><span class="dates">2026</span></li>
-          <li class="dated" data-v="sw des"><div class="pt"><b>Driver Safety AI:</b> Browser-based <a href="https://and.github.io/dashcam/" target="_blank" rel="noopener">advanced driver-assistance system (ADAS)</a> that turns a phone camera into a dashcam with collision, lane-departure, and drowsiness alerts, all on the phone. Tested on Indian roads: the phone overheated and shut down in under 10 minutes, and false alerts made drivers stop trusting it. Next: lighter models and smarter alert filtering.</div><span class="dates">2026</span></li>
-          <li class="dated" data-v="sw"><div class="pt"><b>Productivity utilities:</b> <a href="https://github.com/and/meeting-alerts-mac" target="_blank" rel="noopener">Meeting alerts</a> and <a href="https://github.com/and/battery" target="_blank" rel="noopener">battery notification apps</a> for macOS, iOS, and Android.</div><span class="dates">2025 – 2026</span></li>
-          <li class="dated" data-v="des hw"><div class="pt"><b><a href="/making/ant-proof-pet-bowl/">Ant-proof pet bowl</a>:</b> Took two months of pottery classes to learn slab building, then made a two-part ceramic bowl with a water moat. Tested with my cats: the moat stopped the ants, but the cats were reluctant to eat near water and the glaze degraded with use.</div><span class="dates">2024</span></li>
-          <li class="dated" data-v="des hw"><div class="pt"><b><a href="/making/pomodoro-availability-light/">Pomodoro availability light</a>:</b> Designed the four-state interaction model and form factor for a laptop-mounted LED status bar. A remote collaborator did the Arduino code and 3D printing. Tested in the office: it was too heavy for the screen, and people were more curious about the device than deterred by it.</div><span class="dates">2024</span></li>
-          <li class="dated" data-v="des hw"><div class="pt"><b><a href="/making/open-toothbrush-connector-standard/">Open toothbrush connector standard</a> (proposal):</b> Researched ISO 20126:2022 and the patent landscape, and wrote to AENOR, Spain’s national standards body, to ask whether such a standard has been proposed.</div><span class="dates">2022 – present</span></li>
+          <li class="dated" data-v="sw des"><div class="pt"><b>Anchor:</b> Mac menu bar <a href="https://and.github.io/utilities/anchor/" target="_blank" rel="noopener">app</a> with iPhone and Android companions. Compares where your attention goes with what you planned and nudges you when they diverge. Built with SwiftUI and Kotlin.</div><div class="side"><p class="dates">2026</p></div></li>
+          <li class="dated" data-v="sw des"><div class="pt"><b>Sand Timer:</b> A free <a href="/utilities/sand-timer/">hourglass for your Mac’s desktop</a> that sits above your other windows, so you see how much time is left without reading a number. Keeps a daily target, projects, and session statistics.</div><div class="side"><p class="dates">2026</p></div></li>
+          <li class="dated" data-v="sw des"><div class="pt"><b>Driver Safety AI:</b> Browser-based <a href="https://and.github.io/dashcam/" target="_blank" rel="noopener">advanced driver-assistance system (ADAS)</a> that turns a phone camera into a dashcam with collision, lane-departure, and drowsiness alerts, all on the phone. Tested on Indian roads: the phone overheated and shut down in under 10 minutes, and false alerts made drivers stop trusting it. Next: lighter models and smarter alert filtering.</div><div class="side"><p class="dates">2026</p></div></li>
+          <li class="dated" data-v="sw"><div class="pt"><b>Productivity utilities:</b> <a href="https://github.com/and/meeting-alerts-mac" target="_blank" rel="noopener">Meeting alerts</a> and <a href="https://github.com/and/battery" target="_blank" rel="noopener">battery notification apps</a> for macOS, iOS, and Android.</div><div class="side"><p class="dates">2025 – 2026</p></div></li>
+          <li class="dated" data-v="des hw"><div class="pt"><b><a href="/making/ant-proof-pet-bowl/">Ant-proof pet bowl</a>:</b> Took two months of pottery classes to learn slab building, then made a two-part ceramic bowl with a water moat. Tested with my cats: the moat stopped the ants, but the cats were reluctant to eat near water and the glaze degraded with use.</div><div class="side"><p class="dates">2024</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of the bowl from above and the side: an oval ceramic dish holding water, a round food bowl standing off-centre inside it, and an ant on the outer rim">
+              <!-- water in the moat: the space between the dish wall and the food bowl -->
+              <path class="tint" fill-rule="evenodd" d="M16 48 A64 26.5 0 1 0 144 48 A64 26.5 0 1 0 16 48 Z M68 46 A30 13 0 1 0 128 46 A30 13 0 1 0 68 46 Z"/>
+              <path class="water" d="M26 54 q5 -2.5 10 0 t10 0"/>
+              <path class="water thin" d="M34 61 q5 -2.5 10 0 t10 0" opacity=".7"/>
+              <!-- outer dish: front wall, rim and inner lip -->
+              <path class="ln" d="M10 48 V58 A70 30 0 0 0 150 58 V48"/>
+              <ellipse class="ln" cx="80" cy="48" rx="70" ry="30"/>
+              <ellipse class="ln thin" cx="80" cy="48" rx="64" ry="26.5"/>
+              <!-- food bowl, off-centre, with its own wall and rim -->
+              <path class="body" d="M68 46 V52 A30 13 0 0 0 128 52 V46 A30 13 0 0 0 68 46 Z"/>
+              <ellipse class="ln thin" cx="98" cy="46.5" rx="25.5" ry="10.5"/>
+              <!-- food -->
+              <circle class="kib" cx="86" cy="47" r="2.6"/><circle class="kib" cx="93" cy="44.5" r="2.6"/>
+              <circle class="kib" cx="100" cy="47.5" r="2.6"/><circle class="kib" cx="107" cy="45" r="2.6"/>
+              <circle class="kib" cx="96" cy="50" r="2.6"/><circle class="kib" cx="104" cy="51" r="2.6"/>
+              <circle class="kib" cx="112" cy="48.5" r="2.6"/>
+              <!-- ant on the outer rim, stopped at the water -->
+              <g class="ln thin" transform="rotate(-30 24 30) translate(13 22)">
+                <circle cx="3" cy="8" r="2.3"/><circle cx="9" cy="8" r="2.7"/><circle cx="15" cy="8" r="3.1"/>
+                <path d="M3 10 L1.5 12.5 M9 10.5 L9 12.5 M14 11 L15.5 12.5 M3.5 6 L2 3 M9 5.5 L9 3 M14.5 5.5 L16 3 M17.5 6.5 L21 4 M17.5 9 L21 10.5"/>
+              </g>
+            </svg></figure></div></li>
+          <li class="dated" data-v="des hw"><div class="pt"><b><a href="/making/pomodoro-availability-light/">Pomodoro availability light</a>:</b> Designed the four-state interaction model and form factor for a laptop-mounted LED status bar. A remote collaborator did the Arduino code and 3D printing. Tested in the office: it was too heavy for the screen, and people were more curious about the device than deterred by it.</div><div class="side"><p class="dates">2024</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a laptop with a light bar sitting on top of its screen. The bar has tick marks like a countdown, part of it lit, with short rays above it">
+              <g>
+                <rect class="ln" x="41" y="36" width="78" height="38" rx="3"/>
+                <path class="ln thin" d="M50 46 H80 M50 53 H98 M50 60 H74" opacity=".6"/>
+                <path class="ln" d="M41 74 L31 85 H129 L119 74 M31 85 V88 H129 V85"/>
+                <rect class="tint-strong" x="52" y="26" width="26" height="8" rx="2"/>
+                <rect class="ln" x="52" y="26" width="56" height="8" rx="2"/>
+                <path class="ln thin" d="M60 26 V34 M68 26 V34 M76 26 V34 M84 26 V34 M92 26 V34 M100 26 V34"/>
+                <path class="water" d="M58 21 L56 17 M68 21 V16 M80 21 V16 M92 21 L94 17"/>
+              </g>
+            </svg></figure></div></li>
+          <li class="dated" data-v="des hw"><div class="pt"><b><a href="/making/open-toothbrush-connector-standard/">Open toothbrush connector standard</a> (proposal):</b> Researched ISO 20126:2022 and the patent landscape, and wrote to AENOR, Spain’s national standards body, to ask whether such a standard has been proposed.</div><div class="side"><p class="dates">2022 – present</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a toothbrush taken apart, vertical: the top half of a handle with a socket, a brush head on a threaded stem, and the round connector seen end-on">
+              <path class="body" d="M24 74 V33 A7 7 0 0 1 38 33 V74 l-3.5 3.5 l-3.5 -3.5 l-3.5 3.5 l-3.5 -3.5 Z"/>
+              <rect class="tint-strong" x="27" y="26" width="8" height="12"/>
+              <path class="water" d="M27 38 V26 M35 38 V26"/>
+              <path class="ln thin" d="M31 48 V64" opacity=".6"/>
+              <path class="ln thin" d="M75 26 V20 M78 26 V19 M81 26 V20"/>
+              <rect class="body" x="72" y="26" width="12" height="24" rx="6"/>
+              <path class="body" d="M76 50 V60 H80 V50"/>
+              <rect class="tint-strong" x="75.5" y="60" width="5" height="22"/>
+              <path class="water" d="M75.5 60 V82 H80.5 V60"/>
+              <path class="water thin" d="M75.5 65 H80.5 M75.5 70 H80.5 M75.5 75 H80.5"/>
+              <circle class="body" cx="125" cy="54" r="10"/>
+              <circle class="tint-strong" cx="125" cy="54" r="4"/>
+              <circle class="water" cx="125" cy="54" r="4"/>
+            </svg></figure></div></li>
         </ul>
       </article>
     </section>
