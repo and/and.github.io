@@ -66,14 +66,18 @@ header.site-header{padding:28px 0 0}
 .post-header{margin-bottom:32px}
 .post-header .post-title,.post .post-title{font-size:clamp(2.25rem,5vw,3rem);font-weight:800;line-height:1.05;letter-spacing:-.025em;margin-bottom:10px}
 .post-header .post-meta{font-size:1.0625rem}
-/* Wide pages: prose sits in a centred column of readable length; tools and pictures (divs, figures) can use the full width. */
+/* Wide pages: everything in a post sits in a centred column of readable length, so
+   layouts made for the old 640px page (side-by-side pictures, tools) keep their size.
+   Add class="wide" to a block that should use the full width. */
 .post-content{max-width:none}
-.post-content>*:not(div):not(figure):not(iframe),.post-header{max-width:var(--measure);margin-left:auto;margin-right:auto}
-.post-content>div.highlighter-rouge{max-width:var(--measure);margin-left:auto;margin-right:auto}
+.post-content>*,.post-header{max-width:var(--measure);margin-left:auto;margin-right:auto}
+.post-content>.wide{max-width:none}
 .post-content p,.post-content ul,.post-content ol{margin-bottom:18px}
 .post-content ul,.post-content ol{padding-left:1.2em}
-.post-content h2{font-size:1.875rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin:44px 0 12px}
-.post-content h3{font-size:1.375rem;font-weight:700;line-height:1.35;margin:28px 0 8px}
+/* Chrome sets list numbers in tabular figures, which this font spaces as "1 ." */
+.post-content li::marker{font-variant-numeric:normal}
+.post-content h2{font-size:1.875rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-top:44px;margin-bottom:12px}
+.post-content h3{font-size:1.375rem;font-weight:700;line-height:1.35;margin-top:28px;margin-bottom:8px}
 .post-content a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 .post-content a:hover{background:var(--mark)}
 .post-content img{max-width:100%;height:auto}
@@ -84,7 +88,7 @@ header.site-header{padding:28px 0 0}
 .about-name{font-size:1.375rem;font-weight:800;letter-spacing:-.01em}
 .about-link{font-size:1.0625rem}
 .post-content blockquote{border-left:2px solid var(--text);padding-left:16px;color:var(--muted);margin-bottom:18px}
-.post-content table{border-collapse:collapse;width:100%;margin:0 0 18px;font-size:.95em}
+.post-content table{border-collapse:collapse;width:100%;margin-top:0;margin-bottom:18px;font-size:.95em}
 .post-content th,.post-content td{border:1px solid var(--rule);padding:8px 12px;text-align:left;vertical-align:top}
 .post-content thead th{background:var(--subtle)}
 
