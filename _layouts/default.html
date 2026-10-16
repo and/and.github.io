@@ -105,6 +105,12 @@ pre code{padding:0;background:transparent;font-size:1em}
 
 
 .post-row{display:flex;align-items:baseline;gap:20px}
+/* The whole row opens the post: the title link stretches over it. Topic links sit above, so they still go to Topics. */
+.post-row{position:relative;cursor:pointer}
+.post-row .post-link::after{content:"";position:absolute;inset:0}
+.post-row .post-topics a{position:relative;z-index:1}
+.post-row:hover .post-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.post-row:hover .post-excerpt{color:var(--text)}
 .post-main{flex:1;min-width:0}
 .post-topics{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px;font-size:1rem}
 .post-excerpt{max-width:var(--measure);margin:4px 0 0;font-size:1.0625rem;line-height:1.6;color:var(--muted);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
