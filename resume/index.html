@@ -252,8 +252,8 @@ a:hover { text-decoration-thickness: 2px; }
       <div class="sec-top">
         <h2 class="sec-h">Projects</h2>
         <div class="sort" role="group" aria-label="Order the projects">
-          <button type="button" data-sort="year" aria-pressed="true">By year</button>
-          <button type="button" data-sort="theme" aria-pressed="false">By theme</button>
+          <button type="button" data-sort="year" aria-pressed="false">By year</button>
+          <button type="button" data-sort="theme" aria-pressed="true">By theme</button>
         </div>
       </div>
       <article class="job" data-job>
@@ -555,6 +555,8 @@ a:hover { text-decoration-thickness: 2px; }
       if (j > -1) { e.preventDefault(); apply(tabs[j].getAttribute("data-view"), true); }
     });
   });
+
+  setSort("theme");
 
   var start = "all";
   try { start = (location.hash || "").slice(1); } catch (e) {}
