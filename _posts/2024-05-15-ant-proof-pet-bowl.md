@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "An Ant-proof Pet Bowl, Made by Hand"
-date: 2026-10-16 10:00:00 +0530
+date: 2024-05-15 10:00:00 +0530
 categories: [making]
 permalink: /making/ant-proof-pet-bowl/
 excerpt: "A two-part ceramic bowl with a water moat, slab-built after two months of pottery classes. The moat stopped the ants. It also put the cats off their food, and the glaze wore out."
