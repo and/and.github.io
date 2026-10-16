@@ -95,7 +95,7 @@ a:hover { text-decoration-thickness: 2px; }
 .pts li { position: relative; padding-left: 20px; max-width: 70ch; text-wrap: pretty; }
 .pts li::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 6px; height: 6px; background: var(--accent); border-radius: 1px; }
 .pts b { font-weight: 650; }
-.pts li.dated { display: grid; grid-template-columns: minmax(0, 1fr) 10.5rem; gap: 6px 28px; align-items: start; max-width: none; }
+.pts li.dated { display: grid; grid-template-columns: minmax(0, 1fr) 10.5rem; gap: 6px 28px; align-items: center; max-width: none; }
 .side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
 .art { margin: 0; width: 10.5rem; }
 .art svg { display: block; width: 100%; height: auto; color: var(--text); }
@@ -107,6 +107,10 @@ a:hover { text-decoration-thickness: 2px; }
 .tint-strong { fill: var(--accent); fill-opacity: .32; stroke: none; }
 .body { fill: var(--bg); stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
 .pts .pt { min-width: 0; max-width: 70ch; text-wrap: pretty; }
+.pts li.dated { padding-left: 0; }
+.pts li.dated::before { display: none; }
+.pts li.dated .pt { position: relative; padding-left: 20px; }
+.pts li.dated .pt::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 6px; height: 6px; background: var(--accent); border-radius: 1px; }
 
 .skills { margin: 0; display: grid; gap: 8px; }
 .skills > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 4px 16px; }
@@ -123,7 +127,8 @@ a:hover { text-decoration-thickness: 2px; }
 @media (max-width: 560px) {
   body { padding-block: 32px 56px; }
   .job-h, .edu > div { grid-template-columns: minmax(0, 1fr); }
-  .pts li.dated { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .pts li.dated { grid-template-columns: minmax(0, 1fr); gap: 6px; align-items: start; }
+  .pts li.dated .side { padding-left: 20px; }
   .side { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 16px; }
   .art { width: 8.5rem; }
   .dates { white-space: normal; }
