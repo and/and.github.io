@@ -23,8 +23,23 @@ A bowl with a water moat. The inner bowl holds the food. The outer ring holds wa
 I had never worked with clay. I took pottery classes for two months, with a teacher, specifically to learn the skill this idea needed. The bowl is slab-built by hand, and I built it in a single attempt.
 
 <figure>
+  <img src="{{ "/assets/images/making/pet-bowl/wet-clay.jpg" | relative_url }}" alt="The bowl in wet grey clay on a studio table: an oval outer dish with a smaller round bowl standing off-centre inside it" loading="lazy">
+  <figcaption>The bowl in wet clay, before drying.</figcaption>
+</figure>
+
+<figure>
+  <img src="{{ "/assets/images/making/pet-bowl/bisque.jpg" | relative_url }}" alt="The dried terracotta bowl on a studio table in front of other hand-built clay pieces: a bird, a vase and a textured pot with ring handles" loading="lazy">
+  <figcaption>The clay dried to terracotta, with some of my other pieces from class.</figcaption>
+</figure>
+
+<figure>
   <img src="{{ "/assets/images/making/pet-bowl/finished.jpg" | relative_url }}" alt="The finished two-part ceramic bowl on a dark wooden table">
   <figcaption>The finished bowl.</figcaption>
+</figure>
+
+<figure>
+  <img src="{{ "/assets/images/making/pet-bowl/glazed.jpg" | relative_url }}" alt="The glazed bowl on a windowsill: white inside, with the bare terracotta rim and outer wall showing" loading="lazy" style="max-width:320px">
+  <figcaption>The glazed bowl on the windowsill.</figcaption>
 </figure>
 
 ## What I learned
