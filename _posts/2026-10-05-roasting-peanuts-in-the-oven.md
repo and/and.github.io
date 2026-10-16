@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Roasting Peanuts in the Oven (and Rescuing Soggy Ones)"
+title: "How to Roast Peanuts in the Oven (Perfectly) and Rescue Soggy Ones"
 date: 2026-10-05
 categories:
   - cooking
