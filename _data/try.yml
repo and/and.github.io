@@ -1,13 +1,13 @@
 # Things to try, shown at the top of the home page. Each card links straight to the tool.
+- name: Anchor
+  line: See where your attention really goes.
+  url: /utilities/anchor/
 - name: memory.span
   line: How many digits can you hold in your head?
   url: /memory/
 - name: dsaviz
   line: Watch your Python run as boxes and arrows.
   url: /dsaviz/
-- name: Rev Counter
-  line: Find the right gear for any speed.
-  url: /cars/rev-counter/
 - name: Sand Timer
   line: An hourglass on your Mac's desktop.
   url: /utilities/sand-timer/
