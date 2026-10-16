@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <style>*{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>
+// Apply a saved light/dark choice before first paint, so the page doesn't flash the wrong colours.
+try { var m = localStorage.getItem("resumeMode"); if (m === "light" || m === "dark") document.documentElement.setAttribute("data-theme", m); } catch (e) {}
+</script>
 <title>Anand Hrushikesh Resume</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
 <style>
@@ -55,6 +59,11 @@ a:hover { text-decoration-thickness: 2px; }
 .tag { margin: 10px 0 0; color: var(--muted); font-size: 1.0625rem; }
 .contact { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 18px 0 0; padding: 0; list-style: none; font-size: 0.9375rem; }
 .contact li { min-width: 0; overflow-wrap: anywhere; }
+.mode { font: inherit; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; color: var(--muted); background: transparent; border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; }
+.mode:hover { border-color: var(--accent); color: var(--text); }
+.mode[aria-pressed="true"] { background: var(--accent-soft); color: var(--text); border-color: var(--accent); }
+.mode svg { width: 14px; height: 14px; flex: none; }
+@media print { .mode { display: none; } }
 
 /* View switcher */
 .views-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); margin-top: 28px; padding: 10px 0; border-bottom: 1px solid transparent; display: flex; align-items: center; gap: 12px; }
@@ -184,6 +193,7 @@ a:hover { text-decoration-thickness: 2px; }
       <li>anands.email.id@gmail.com</li>
       <li><a href="https://www.linkedin.com/in/anandhms/" target="_blank" rel="noopener">linkedin.com/in/anandhms</a></li>
       <li><a href="https://and.github.io/" target="_blank" rel="noopener">and.github.io</a></li>
+      <li><button type="button" class="mode" id="mode-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>Dark mode</button></li>
     </ul>
   </header>
 
@@ -610,6 +620,21 @@ a:hover { text-decoration-thickness: 2px; }
   }
   sortBtns.forEach(function (b) { b.addEventListener("click", function () { setSort(b.getAttribute("data-sort")); }); });
 
+  var modeBtn = document.getElementById("mode-btn");
+  var darkMq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function isDark() {
+    var a = document.documentElement.getAttribute("data-theme");
+    return a ? a === "dark" : !!(darkMq && darkMq.matches);
+  }
+  function syncMode() { modeBtn.setAttribute("aria-pressed", isDark() ? "true" : "false"); }
+  modeBtn.addEventListener("click", function () {
+    var next = isDark() ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("resumeMode", next); } catch (e) {}
+    syncMode();
+  });
+  if (darkMq && darkMq.addEventListener) darkMq.addEventListener("change", syncMode);
+  syncMode();
   var viewsBar = document.getElementById("views-bar");
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (es) {
