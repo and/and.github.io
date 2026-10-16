@@ -18,7 +18,12 @@ It's a personal tracker, not medical advice. Check with your doctor or physical 
 
 ## The program
 
-It runs for 28 days in two phases: Weeks 1 and 2 are Foundation, and Weeks 3 and 4 are Progression. Each exercise has set buttons, a cue for how to do it, an animation and a video link. A rest timer starts when you finish a set. You can pause it, skip it, or add 15 seconds.
+It runs for 28 days in two phases: Weeks 1 and 2 are Foundation, and Weeks 3 and 4 are Progression. Each exercise has set buttons, a cue for how to do it, an animation and a video link (shown below). A rest timer starts when you finish a set. You can pause it, skip it, or add 15 seconds.
+
+<figure>
+  <img src="{{ "/assets/images/exercise/exercise-expanded.jpg" | relative_url }}" alt="An expanded exercise, Quad Sets, 3 sets of 10 with a 5 second hold. It shows a written cue, three set buttons, a Rest button, a simple line animation of a leg pressing the knee down, and a red Find Videos on YouTube button" loading="lazy" style="max-width:420px">
+  <figcaption>One exercise expanded: the cue, the set buttons, a simple animation of the movement, and a button that searches YouTube for videos if you want to see it done.</figcaption>
+</figure>
 
 ## The day only moves when you finish
 
