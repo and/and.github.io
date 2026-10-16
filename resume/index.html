@@ -131,13 +131,13 @@ a:hover { text-decoration-thickness: 2px; }
 .pts li { position: relative; padding-left: 20px; max-width: 70ch; text-wrap: pretty; }
 .pts li::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 6px; height: 6px; background: var(--accent); border-radius: 1px; }
 .pts b { font-weight: 650; }
-.pts li.dated { display: grid; grid-template-columns: minmax(0, 1fr) 10.5rem; gap: 6px 28px; align-items: center; max-width: none; }
+.pts li.dated { display: grid; grid-template-columns: minmax(0, 1fr) 8.5rem; gap: 6px 28px; align-items: center; max-width: none; }
 .side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; position: relative; }
-.side .dates { position: absolute; right: 0; bottom: 100%; margin-bottom: 2px; }
-.pts li.dated { margin-top: 24px; }
+.side .dates { line-height: 1.25rem; }
+.pts li.dated { margin-top: 18px; min-height: calc(1.25rem + 8px + 8.5rem * 0.45); }
 .pts li.dated:first-child { margin-top: 0; }
 .pts li.dated:first-child .pt { align-self: start; }
-.art { margin: 0; width: 10.5rem; }
+.art { margin: 0; width: 8.5rem; }
 .art svg { display: block; width: 100%; height: auto; color: var(--text); }
 .ln { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .thin { stroke-width: 1.1; }
@@ -176,8 +176,7 @@ a:hover { text-decoration-thickness: 2px; }
   .side { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 16px; }
   .art { width: 8.5rem; }
   .dates { white-space: normal; }
-  .side .dates { position: static; margin-bottom: 0; }
-  .pts li.dated { margin-top: 0; }
+  .pts li.dated { margin-top: 0; min-height: 0; }
   .skills > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
