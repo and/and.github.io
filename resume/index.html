@@ -57,13 +57,11 @@ a:hover { text-decoration-thickness: 2px; }
 .contact li { min-width: 0; overflow-wrap: anywhere; }
 
 /* View switcher */
-.views-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); margin-top: 28px; padding: 12px 0; border-bottom: 1px solid transparent; }
-.views-bar.stuck { padding-block: 8px; border-bottom-color: var(--rule); }
-.views-bar.stuck .views-label { display: none; }
-.views-bar.stuck .views button { min-height: 34px; padding: 5px 12px; }
+.views-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); margin-top: 28px; padding: 10px 0; border-bottom: 1px solid transparent; display: flex; align-items: center; gap: 12px; }
+.views-bar.stuck { border-bottom-color: var(--rule); }
 .sec { scroll-margin-top: 64px; }
-.views-label { margin: 0 0 10px; font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
-.views { display: flex; flex-wrap: wrap; gap: 8px; }
+.views-label { margin: 0; flex: none; font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
+.views { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; min-width: 0; }
 .views button {
   font: inherit; font-weight: 600; font-size: 0.9375rem;
   display: inline-flex; align-items: baseline; gap: 8px;
@@ -180,7 +178,7 @@ a:hover { text-decoration-thickness: 2px; }
 
   <div id="views-sentinel" aria-hidden="true"></div>
   <div class="views-bar" id="views-bar">
-  <p class="views-label" id="views-label">View this resume as</p>
+  <p class="views-label" id="views-label">View as</p>
   <div class="views" role="tablist" aria-labelledby="views-label">
     <button role="tab" id="tab-all" data-view="all" aria-selected="true" aria-controls="panel">Everything <span class="n">30</span></button>
     <button role="tab" id="tab-lead" data-view="lead" aria-selected="false" tabindex="-1" aria-controls="panel">Leadership <span class="n">13</span></button>
