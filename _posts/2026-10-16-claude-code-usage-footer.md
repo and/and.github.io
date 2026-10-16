@@ -26,7 +26,7 @@ footer shows it all the time:
 .ccf-copy:hover{background:rgba(127,127,127,.12)}
 .ccf-copy:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 </style>
-<div class="ccf-term" role="img" aria-label="Footer: Opus 5.5, Context 7%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30"><span class="ccf-seg">Opus 5.5</span> <span class="ccf-seg">| Context: <span class="ccf-e ccf-g">▋</span><span class="ccf-t">█████████</span> <b>7%</b></span> <span class="ccf-seg">| Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30)</span> <span class="ccf-seg">| Weekly: <span class="ccf-y">███████</span><span class="ccf-e ccf-y">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</span></div>
+<div class="ccf-term" role="img" aria-label="Footer: Opus 5.5, Context 7%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30"><span class="ccf-seg">Opus 5.5</span> <span class="ccf-seg">| Context: <span class="ccf-e ccf-g">▋</span><span class="ccf-t">█████████</span> <b>7%</b></span> <span class="ccf-seg">| Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30)</span> <span class="ccf-seg">| Weekly: <span class="ccf-o">███████</span><span class="ccf-e ccf-o">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</span></div>
 
 - **Context** is how much of the current conversation's context window is used.
 - **Session** is your rolling 5-hour plan limit. It counts every Claude Code window, claude.ai
@@ -38,8 +38,8 @@ Each bar has 10 blocks of 10%. The filled part changes colour as you use more:
 <ul class="ccf-key">
 <li><i style="background:#bcbcbc"></i>Up to 50%</li>
 <li><i style="background:#ffd700"></i>Over 50%</li>
-<li><i style="background:#ff8700"></i>Over 75%</li>
-<li><i style="background:#ff0000"></i>Over 85%</li>
+<li><i style="background:#ff8700"></i>Over 70%</li>
+<li><i style="background:#ff0000"></i>Over 80%</li>
 </ul>
 
 ## How it works
@@ -90,13 +90,13 @@ input=$(cat)
 B=$'\033[1m'; N=$'\033[22m'
 
 # 10-block bar: filled part on a solid dark gray track, so it reads as progress.
-# Fill is light gray, then yellow above 50%, orange above 75%, red above 85%.
+# Fill is light gray, then yellow above 50%, orange above 70%, red above 80%.
 # Leftover under 10% becomes a partial block (eighths) drawn over the track.
 T=$'\033[38;5;238m'; R=$'\033[39;49m'
 bar() {
   local p=$1 fill='' track='' edge='' i c
   [ "$p" -gt 100 ] && p=100
-  if [ "$p" -gt 85 ]; then c=196; elif [ "$p" -gt 75 ]; then c=208; elif [ "$p" -gt 50 ]; then c=220; else c=250; fi
+  if [ "$p" -gt 80 ]; then c=196; elif [ "$p" -gt 70 ]; then c=208; elif [ "$p" -gt 50 ]; then c=220; else c=250; fi
   local F=$'\033[38;5;'"${c}m" P=$'\033[38;5;'"${c};48;5;238m"
   local filled=$((p / 10)) part=$(( (p % 10) * 8 / 10 ))
   [ $part -eq 0 ] && [ $((p % 10)) -gt 0 ] && part=1
@@ -158,13 +158,13 @@ input=$(cat)
 B=$'\033[1m'; N=$'\033[22m'
 
 # 10-block bar: filled part on a solid dark gray track, so it reads as progress.
-# Fill is light gray, then yellow above 50%, orange above 75%, red above 85%.
+# Fill is light gray, then yellow above 50%, orange above 70%, red above 80%.
 # Leftover under 10% becomes a partial block (eighths) drawn over the track.
 T=$'\033[38;5;238m'; R=$'\033[39;49m'
 bar() {
   local p=$1 fill='' track='' edge='' i c
   [ "$p" -gt 100 ] && p=100
-  if [ "$p" -gt 85 ]; then c=196; elif [ "$p" -gt 75 ]; then c=208; elif [ "$p" -gt 50 ]; then c=220; else c=250; fi
+  if [ "$p" -gt 80 ]; then c=196; elif [ "$p" -gt 70 ]; then c=208; elif [ "$p" -gt 50 ]; then c=220; else c=250; fi
   local F=$'\033[38;5;'"${c}m" P=$'\033[38;5;'"${c};48;5;238m"
   local filled=$((p / 10)) part=$(( (p % 10) * 8 / 10 ))
   [ $part -eq 0 ] && [ $((p % 10)) -gt 0 ] && part=1
