@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "A Tracker for a 28-Day Leg Strength Program"
-date: 2026-10-16 12:54:24 +0530
+date: 2026-02-14 10:21:42 +0530
 categories: [utilities]
 permalink: /utilities/exercise-tracker/
 excerpt: "A small web app for following a 4-week resistance-band leg strengthening program. The day only advances when you finish the workout, so a missed day never skips the plan."
