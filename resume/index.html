@@ -306,6 +306,26 @@ a:hover { text-decoration-thickness: 2px; }
               <path class="water" d="M100 62 L91.5 46 A9.5 9.5 0 1 1 108.5 46 Z"/>
               <circle class="water thin" cx="100" cy="42" r="2.6"/>
             </svg></figure></div></li>
+          <li class="dated" data-v="sw des" data-theme="health"><div class="pt"><b><a href="/utilities/trace/">Trace</a>:</b> iPhone app where I log what I’m doing and see it drawn over my Apple Health heart rate, to find which activities raise it. Everything stays on the phone. I removed a daily strain score after finding it described the night, not the day.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a heart-rate line across a day with one stretch shaded in blue, the activity that was logged over it">
+              <rect class="tint-strong" x="62" y="30" width="48" height="52" rx="3"/>
+              <rect class="water thin" x="62" y="30" width="48" height="52" rx="3"/>
+              <path class="ln" d="M10 64 L28 62 L40 66 L52 60 L66 52 L76 70 L86 46 L96 66 L106 54 L118 62 L134 60 L150 63"/>
+              <path class="ln thin" d="M10 84 H150" opacity=".6"/>
+            </svg></figure></div></li>
+          <li class="dated" data-v="sw" data-theme="health"><div class="pt"><b><a href="/utilities/exercise-tracker/">Leg Strength Tracker</a>:</b> Web app for a 28-day resistance-band leg program. The day advances only when you finish the workout, and you can look back at earlier days without changing anything. Syncs across devices.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a workout checklist: a progress bar partly filled in blue above three exercises, two of them ticked">
+              <rect class="body" x="40" y="21" width="80" height="66" rx="6"/>
+              <rect class="ln thin" x="50" y="30" width="60" height="7" rx="3.5"/>
+              <rect class="tint-strong" x="50" y="30" width="20" height="7" rx="3.5"/>
+              <rect class="water thin" x="50" y="30" width="20" height="7" rx="3.5"/>
+              <circle class="tint-strong" cx="58" cy="52" r="5"/><circle class="water thin" cx="58" cy="52" r="5"/>
+              <path class="water thin" d="M55.6 52.2 L57.4 54 L60.6 50.4"/>
+              <path class="ln thin" d="M70 52 H108" opacity=".6"/>
+              <circle class="tint-strong" cx="58" cy="65" r="5"/><circle class="water thin" cx="58" cy="65" r="5"/>
+              <path class="water thin" d="M55.6 65.2 L57.4 67 L60.6 63.4"/>
+              <path class="ln thin" d="M70 65 H100" opacity=".6"/>
+              <circle class="ln thin" cx="58" cy="78" r="5"/>
+              <path class="ln thin" d="M70 78 H104" opacity=".6"/>
+            </svg></figure></div></li>
           <li class="dated" data-theme="productivity" data-v="sw"><div class="pt"><b><a href="/utilities/meeting-alerts/">Meeting Alerts</a>:</b> Free Mac menu bar app that shows your next meeting and opens a panel in the centre of your screen three minutes before it starts. It stays until you act on it, with one-click join for Zoom, Meet, Teams, and Webex.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a meeting alert panel: a label showing the meeting is about to start, three lines of details, and a blue Join button next to a Snooze button">
               <rect class="body" x="40" y="21" width="80" height="66" rx="6"/>
               <rect class="tint-strong" x="50" y="30" width="30" height="8" rx="4"/>
@@ -451,7 +471,8 @@ a:hover { text-decoration-thickness: 2px; }
   var THEMES = [
     { id: "productivity", t: "Productivity", q: "How do I protect my time and attention?" },
     { id: "everyday", t: "Everyday problems", q: "What keeps going wrong in my daily routine?" },
-    { id: "road", t: "Road safety", q: "How do I make roads and driving safer?" }
+    { id: "road", t: "Road safety", q: "How do I make roads and driving safer?" },
+    { id: "health", t: "Health", q: "How do I understand and look after my body?" }
   ];
   var projUl = document.querySelector("#projects .pts");
   var projItems = Array.prototype.slice.call(projUl.children);
