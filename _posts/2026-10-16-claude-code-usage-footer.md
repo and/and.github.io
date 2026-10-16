@@ -19,6 +19,8 @@ footer shows it all the time:
 .ccf-key{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;list-style:none;padding:0;margin-top:0;margin-bottom:1.5rem;font-size:.9rem}
 .ccf-key li{display:flex;align-items:center;gap:.45rem;margin:0}
 .ccf-key i{width:.8rem;height:.8rem;border-radius:2px;display:inline-block}
+/* The prompts are prose: wrap them instead of scrolling sideways */
+.post-content div.language-text pre{white-space:pre-wrap;overflow-wrap:anywhere}
 </style>
 <div class="ccf-term" role="img" aria-label="Footer: Opus 5.5, Context 7%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30"><span class="ccf-seg">Opus 5.5</span> <span class="ccf-seg">| Context: <span class="ccf-e ccf-g">▋</span><span class="ccf-t">█████████</span> <b>7%</b></span> <span class="ccf-seg">| Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30)</span> <span class="ccf-seg">| Weekly: <span class="ccf-y">███████</span><span class="ccf-e ccf-y">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</span></div>
 
