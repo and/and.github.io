@@ -32,6 +32,9 @@ excerpt: "An interactive walkthrough of the Fibonacci sequence: how each number 
   --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
 }
 
+:root{--seg-line:#c9c9c9}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B0C0F;--surface:#13151A;--ink:#EDEEF2;--muted:#A3A9B6;--rule:#262932;--code-bg:#1A1D24;--cur:#ffe14d;--src:#EDEEF2;--src-bg:#2a2d36;--src-ink:#EDEEF2;--bad:#A3A9B6;--bad-bg:#1f2229;--seg-line:#3a3e49;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0B0C0F;--surface:#13151A;--ink:#EDEEF2;--muted:#A3A9B6;--rule:#262932;--code-bg:#1A1D24;--cur:#ffe14d;--src:#EDEEF2;--src-bg:#2a2d36;--src-ink:#EDEEF2;--bad:#A3A9B6;--bad-bg:#1f2229;--seg-line:#3a3e49;color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;font-weight:300;line-height:1.75;letter-spacing:-.011em;-webkit-font-smoothing:antialiased;padding-inline:20px;padding-block:0 4rem}
 .col{max-width:680px;margin-inline:auto}
 .wide{max-width:880px;margin-inline:auto}
@@ -134,14 +137,14 @@ pre{border-radius:0}
 .topbar a:hover{color:var(--muted)}
 .col{max-width:640px}
 footer.col{font-family:var(--mono);font-size:12px}
-input[type=range]{accent-color:#111}
+input[type=range]{accent-color:var(--ink)}
 .wide{max-width:640px}
 .topbar .navs{display:flex;gap:18px}
 .eyebrow a{color:inherit;text-decoration:none}
 .eyebrow a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .reader .lab{color:var(--muted)}
-.seg{display:inline-flex;gap:0;padding:0;border:1px solid #c9c9c9;background:var(--bg)}
-.seg button{margin:0;padding:.3rem .75rem;border:0;border-radius:0;border-left:1px solid #c9c9c9;color:var(--ink);font-size:13px;text-decoration:none;cursor:pointer;background:none}
+.seg{display:inline-flex;gap:0;padding:0;border:1px solid var(--seg-line);background:var(--bg)}
+.seg button{margin:0;padding:.3rem .75rem;border:0;border-radius:0;border-left:1px solid var(--seg-line);color:var(--ink);font-size:13px;text-decoration:none;cursor:pointer;background:none}
 .seg button:first-child{border-left:0}
 .seg button:hover{background:var(--code-bg)}
 .seg button[aria-pressed="true"]{background:var(--cur-bg);color:var(--ink);font-weight:500;text-decoration:none}
@@ -150,6 +153,7 @@ input[type=range]{accent-color:#111}
 .reader .col{border-bottom:1px solid var(--rule);padding-bottom:.5rem}
 </style>
 {% endraw %}
+<script>try{var m=localStorage.getItem('siteMode');if(m==='light'||m==='dark')document.documentElement.setAttribute('data-theme',m);}catch(e){}</script>
 </head>
 <body data-reader="intermediate">
 <nav class="topbar" aria-label="Site"><a href="{{ "/" | relative_url }}">{{ site.title | escape }}</a><span class="navs"><a class="nav" href="{{ "/topics/" | relative_url }}">Topics</a><a class="nav" href="{{ "/archive/" | relative_url }}">All posts</a></span></nav>

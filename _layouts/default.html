@@ -14,6 +14,8 @@
 <script>
   // Text size: steps of 12.5% of the browser's own default, saved per browser.
   try{var z=parseFloat(localStorage.getItem('textScale'));if(z>=.875&&z<=1.5)document.documentElement.style.fontSize=(z*100)+'%';}catch(e){}
+  // Light or dark: a saved choice wins; otherwise the page follows the device setting.
+  try{var m=localStorage.getItem('siteMode');if(m==='light'||m==='dark')document.documentElement.setAttribute('data-theme',m);}catch(e){}
 </script>
 <style>
 :root{
@@ -23,6 +25,18 @@
   --font:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
   --max-width:960px;--measure:46rem;
+  --danger:#b00020;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B0C0F;--surface:#13151A;--text:#EDEEF2;--muted:#A3A9B6;--faint:#8D94A2;--rule:#262932;--subtle:#1A1D24;
+    --accent:#7A9CFF;--mark:#40370a;--danger:#ff7a85;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B0C0F;--surface:#13151A;--text:#EDEEF2;--muted:#A3A9B6;--faint:#8D94A2;--rule:#262932;--subtle:#1A1D24;
+  --accent:#7A9CFF;--mark:#40370a;--danger:#ff7a85;color-scheme:dark;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{font-size:100%}
@@ -45,6 +59,11 @@ header.site-header{padding:28px 0 0}
 .text-size button:hover{color:var(--text);border-color:var(--text)}
 .text-size button:disabled{color:var(--faint);opacity:.5;border-color:var(--rule);cursor:default}
 .text-size button:focus-visible{outline:2px solid var(--text);outline-offset:1px}
+.mode-btn{display:inline-flex;align-items:center;align-self:center;font:inherit;color:var(--muted);background:none;border:1px solid var(--rule);border-radius:6px;padding:4px 6px;cursor:pointer}
+.mode-btn:hover{color:var(--text);border-color:var(--text)}
+.mode-btn:focus-visible{outline:2px solid var(--text);outline-offset:1px}
+.mode-btn svg{width:1rem;height:1rem;display:block}
+.mode-btn[aria-pressed="true"]{color:var(--text);border-color:var(--muted)}
 
 .hero{padding:0 0 4px}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -105,8 +124,8 @@ pre code{padding:0;background:transparent;font-size:1em}
 .highlight,.highlighter-rouge .highlight{background:var(--subtle)}
 .highlight .c,.highlight .cm,.highlight .cp,.highlight .c1,.highlight .cs,.highlight .sd{color:var(--faint);font-style:italic}
 .highlight .k,.highlight .kc,.highlight .kd,.highlight .kp,.highlight .kr,.highlight .ow{font-weight:600}
-.highlight .s,.highlight .sb,.highlight .sc,.highlight .s2,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#555}
-.highlight .err,.highlight .gr,.highlight .gt{color:#b00020}
+.highlight .s,.highlight .sb,.highlight .sc,.highlight .s2,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:var(--muted)}
+.highlight .err,.highlight .gr,.highlight .gt{color:var(--danger)}
 
 .site-footer{margin-top:24px}
 .footer-content{display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:var(--max-width);margin:0 auto;padding:14px 20px 40px;border-top:1px solid var(--rule);font-size:1rem;color:var(--faint)}
@@ -172,6 +191,7 @@ pre code{padding:0;background:transparent;font-size:1em}
       <a href="{{ "/topics/" | relative_url }}">Topics</a>
       <a href="{{ "/about/" | relative_url }}">About</a>
       <a class="gh" href="https://github.com/and" aria-label="GitHub" title="GitHub"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg></a>
+      <button type="button" class="mode-btn" id="mode-btn" aria-pressed="false" aria-label="Dark mode" title="Dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
       <span class="text-size" role="group" aria-label="Text size">
         <button type="button" data-step="-1" aria-label="Smaller text" title="Smaller text">A−</button>
         <button type="button" data-step="0" aria-label="Reset text size" title="Reset text size">A</button>
@@ -203,6 +223,12 @@ pre code{padding:0;background:transparent;font-size:1em}
     try{if(cur===1)localStorage.removeItem('textScale');else localStorage.setItem('textScale',cur);}catch(e){}
     show(cur);
   });});
+  var mb=document.getElementById('mode-btn'),mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+  function dark(){var a=root.getAttribute('data-theme');return a?a==='dark':!!(mq&&mq.matches);}
+  function sync(){mb.setAttribute('aria-pressed',dark()?'true':'false');}
+  mb.addEventListener('click',function(){var n=dark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('siteMode',n);}catch(e){}sync();});
+  if(mq&&mq.addEventListener)mq.addEventListener('change',sync);
+  sync();
 })();
 </script>
 {% include analytics.html %}

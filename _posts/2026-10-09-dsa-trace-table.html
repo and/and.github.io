@@ -39,6 +39,16 @@ excerpt: "A dry-run trace table in the browser. Paste a snippet, every variable 
   --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
+:root[data-theme="dark"] {
+  --bg:#0B0C0F; --surface:#13151A; --line:#2a2e38; --fg:#EDEEF2; --muted:#A3A9B6; --accent:#7A9CFF; --accent-soft:#1B2340;
+  --marker:#4a3f00; --marker-ink:#ffe27a; --danger:#ff7a85; --danger-soft:#3a1a1f; --shadow:rgba(0,0,0,.5); color-scheme:dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#0B0C0F; --surface:#13151A; --line:#2a2e38; --fg:#EDEEF2; --muted:#A3A9B6; --accent:#7A9CFF; --accent-soft:#1B2340;
+    --marker:#4a3f00; --marker-ink:#ffe27a; --danger:#ff7a85; --danger-soft:#3a1a1f; --shadow:rgba(0,0,0,.5); color-scheme:dark;
+  }
+}
 html, body { height: 100%; }
 body { margin: 0; }
 [hidden] { display: none !important; }
@@ -233,6 +243,7 @@ dialog#help::backdrop { background: rgba(17, 21, 28, 0.35); }
 .help-body strong { font-weight: 600; }
 .help-body code { font-family: var(--mono); font-size: 0.9em; background: var(--bg); padding: 1px 4px; border-radius: 3px; }
 </style>
+<script>try{var m=localStorage.getItem('siteMode');if(m==='light'||m==='dark')document.documentElement.setAttribute('data-theme',m);}catch(e){}</script>
 </head>
 <body>
 <header>

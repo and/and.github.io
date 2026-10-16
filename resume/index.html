@@ -7,7 +7,7 @@
 <style>*{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <script>
 // Apply a saved light/dark choice before first paint, so the page doesn't flash the wrong colours.
-try { var m = localStorage.getItem("resumeMode"); if (m === "light" || m === "dark") document.documentElement.setAttribute("data-theme", m); } catch (e) {}
+try { var m = localStorage.getItem("siteMode"); if (m === "light" || m === "dark") document.documentElement.setAttribute("data-theme", m); } catch (e) {}
 </script>
 <title>Anand Hrushikesh Resume</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
@@ -630,7 +630,7 @@ a:hover { text-decoration-thickness: 2px; }
   modeBtn.addEventListener("click", function () {
     var next = isDark() ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
-    try { localStorage.setItem("resumeMode", next); } catch (e) {}
+    try { localStorage.setItem("siteMode", next); } catch (e) {}
     syncMode();
   });
   if (darkMq && darkMq.addEventListener) darkMq.addEventListener("change", syncMode);

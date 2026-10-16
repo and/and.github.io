@@ -29,6 +29,9 @@ Take turns joining two dots. Close a box to win it and go again. I'm blue.
            margin:8px 0 24px; padding:8px 0 18px; color:var(--dab-ink);
            font-family:"Caveat","Segoe Print","Comic Sans MS",cursive; font-size:23px; line-height:1.2;
            }
+    /* dark mode: lighter pencil colours on the dark page */
+    @media (prefers-color-scheme:dark) { :root:not([data-theme="light"]) .dab { --dab-ink:#e6e3dc; --dab-soft:#76726a; --dab-you:#f08a55; --dab-cpu:#7aa8ff; } }
+    :root[data-theme="dark"] .dab { --dab-ink:#e6e3dc; --dab-soft:#76726a; --dab-you:#f08a55; --dab-cpu:#7aa8ff; }
     .dab p { margin:0; }
     .dab-bar { display:flex; gap:18px; align-items:center; flex-wrap:wrap; justify-content:center; }
     .dab-name { display:flex; align-items:baseline; gap:8px; }
@@ -144,8 +147,8 @@ const DEFS = '<defs>' +
     '<feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.4 0 0 0 1.35" result="grainAlpha"/>' +
     '<feComposite in="wobbly" in2="grainAlpha" operator="in"/>' +
   '</filter>' +
-  '<pattern id="dab-hatch-you" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="7" stroke="#c8551b" stroke-width="1.7"/></pattern>' +
-  '<pattern id="dab-hatch-cpu" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="0" y1="0" x2="0" y2="7" stroke="#1f68b5" stroke-width="1.7"/></pattern>' +
+  '<pattern id="dab-hatch-you" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="7" style="stroke:var(--dab-you)" stroke-width="1.7"/></pattern>' +
+  '<pattern id="dab-hatch-cpu" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="0" y1="0" x2="0" y2="7" style="stroke:var(--dab-cpu)" stroke-width="1.7"/></pattern>' +
   '</defs>';
 
 // A slightly bent stroke. The bend is fixed per edge so lines don't jump between renders.
