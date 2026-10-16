@@ -62,16 +62,6 @@ Waiting cost more than recording. Watching for the start of a trip is what makes
 
 One phone can't tell a pothole from a speed bump. The plan is that a pothole is only confirmed when at least three different phones report a jolt in the same spot. So the map gets more reliable with every person who runs it, and one person alone can't make it work.
 
-## Help me build the map
-
-I'm looking for people in Bangalore who would try it when I open it up for testing, on Android or iPhone. It's built to use little of your data and to keep your trips private:
-
-- **Only potholes are sent, never your trip.** The plan is to upload each pothole's location, speed and impact, and never your route.
-- **No account or phone number.** Each install gets a random ID, so reports aren't tied to you.
-- **You do nothing.** It starts by itself when you get into a vehicle.
-
-If you'd like to try it, get in touch through [my GitHub profile](https://github.com/and). The app isn't available to install yet, but I'll write to you when it is.
-
 ## What isn't done yet
 
 - **Nothing is uploaded.** The reports stay on my phone, and I export them by hand.
