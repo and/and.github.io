@@ -3,7 +3,7 @@ description: "Interactive notes on things I am learning, from algorithms and mat
 url: "https://and.github.io"
 
 # Cloudflare Web Analytics site token (see _includes/analytics.html). Empty turns it off.
-cloudflare_analytics_token: ""
+cloudflare_analytics_token: "4f5287a7748d4f9abe3a1e759582e6b8"
 
 # Theme
 theme: minima
