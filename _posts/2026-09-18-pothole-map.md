@@ -36,6 +36,15 @@ On 22 September 2026, the app saved 549 reports, and 40 of them were marked seve
 
 These are reports of jolts, not confirmed potholes. A speed bump or a rough patch makes a jolt too, so the number is not a count of potholes. One drive can't tell the two apart. The test that will is driving the same road again and seeing which reports show up in the same places.
 
+## How the map could look
+
+Once reports from many phones are joined, each one can be a dot on a map. The colour shows how severe the jolt was, and the size shows its impact score. Where several phones report the same spot, it counts as a confirmed pothole.
+
+<figure>
+  <img src="{{ "/assets/images/pothole-map/report-map-example.png" | relative_url }}" alt="An illustration of a street map with six round markers. Colour shows severity: two large red markers for severe, one orange for moderate and three small light-orange markers for minor. Each is labelled with its impact score, from 2.9 to 9.8." loading="lazy">
+  <figcaption>An illustration, not a real map. The streets and positions are made up, and the impact scores come from six of my real reports.</figcaption>
+</figure>
+
 ## Battery
 
 The app keeps its own battery log. In my first test:
