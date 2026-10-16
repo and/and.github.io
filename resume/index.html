@@ -57,7 +57,12 @@ a:hover { text-decoration-thickness: 2px; }
 .contact li { min-width: 0; overflow-wrap: anywhere; }
 
 /* View switcher */
-.views-label { margin: 40px 0 10px; font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
+.views-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); margin-top: 28px; padding: 12px 0; border-bottom: 1px solid transparent; }
+.views-bar.stuck { padding-block: 8px; border-bottom-color: var(--rule); }
+.views-bar.stuck .views-label { display: none; }
+.views-bar.stuck .views button { min-height: 34px; padding: 5px 12px; }
+.sec { scroll-margin-top: 64px; }
+.views-label { margin: 0 0 10px; font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
 .views { display: flex; flex-wrap: wrap; gap: 8px; }
 .views button {
   font: inherit; font-weight: 600; font-size: 0.9375rem;
@@ -140,7 +145,11 @@ a:hover { text-decoration-thickness: 2px; }
 
 .foot { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.875rem; max-width: 62ch; }
 
+@media print { .views-bar { position: static; } }
 @media (max-width: 560px) {
+  .views { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .views::-webkit-scrollbar { display: none; }
+  .views button { flex: none; white-space: nowrap; }
   body { padding-block: 32px 56px; }
   .job-h, .edu > div { grid-template-columns: minmax(0, 1fr); }
   .pts li.dated { grid-template-columns: minmax(0, 1fr); gap: 6px; align-items: start; }
@@ -169,6 +178,8 @@ a:hover { text-decoration-thickness: 2px; }
     </ul>
   </header>
 
+  <div id="views-sentinel" aria-hidden="true"></div>
+  <div class="views-bar" id="views-bar">
   <p class="views-label" id="views-label">View this resume as</p>
   <div class="views" role="tablist" aria-labelledby="views-label">
     <button role="tab" id="tab-all" data-view="all" aria-selected="true" aria-controls="panel">Everything <span class="n">30</span></button>
@@ -176,6 +187,7 @@ a:hover { text-decoration-thickness: 2px; }
     <button role="tab" id="tab-sw" data-view="sw" aria-selected="false" tabindex="-1" aria-controls="panel">Software <span class="n">21</span></button>
     <button role="tab" id="tab-hw" data-view="hw" aria-selected="false" tabindex="-1" aria-controls="panel">Hardware &amp; field <span class="n">10</span></button>
     <button role="tab" id="tab-des" data-view="des" aria-selected="false" tabindex="-1" aria-controls="panel">Design &amp; making <span class="n">8</span></button>
+  </div>
   </div>
 
   <main id="panel" role="tabpanel" aria-labelledby="tab-all">
@@ -588,6 +600,12 @@ a:hover { text-decoration-thickness: 2px; }
   }
   sortBtns.forEach(function (b) { b.addEventListener("click", function () { setSort(b.getAttribute("data-sort")); }); });
 
+  var viewsBar = document.getElementById("views-bar");
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) {
+      viewsBar.classList.toggle("stuck", !es[0].isIntersecting && es[0].boundingClientRect.top < 0);
+    }).observe(document.getElementById("views-sentinel"));
+  }
   var curView = "all";
   function apply(v, focus) {
     if (!LENS[v]) v = "all";
@@ -627,6 +645,8 @@ a:hover { text-decoration-thickness: 2px; }
       t.tabIndex = on ? 0 : -1;
       if (on) {
         panel.setAttribute("aria-labelledby", t.id);
+        var vs = t.parentNode;
+        if (vs.scrollWidth > vs.clientWidth) vs.scrollLeft = t.offsetLeft - (vs.clientWidth - t.offsetWidth) / 2;
         if (focus) t.focus();
       }
     });
