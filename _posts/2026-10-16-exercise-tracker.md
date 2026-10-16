@@ -7,7 +7,7 @@ permalink: /utilities/exercise-tracker/
 excerpt: "A small web app for following a 4-week resistance-band leg strengthening program. The day only advances when you finish the workout, so a missed day never skips the plan."
 ---
 
-This is a small web app for following a 4-week leg strengthening program with resistance bands. It tracks each day's workout, your measurements and your progress, and syncs across devices when you sign in with Google. You can [use it here](https://and.github.io/exercise/).
+This is the "change something and see progress" step. It is a small web app for following a 4-week leg strengthening program with resistance bands. It tracks each day's workout, your measurements and your progress, and syncs across devices when you sign in with Google. You can [use it here](https://and.github.io/exercise/).
 
 It's a personal tracker, not medical advice. Check with your doctor or physical therapist before starting any program.
 
