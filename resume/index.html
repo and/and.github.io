@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>*{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Anand Hrushikesh Resume</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one narrow reading column; a view switcher under the header filters the same facts by lens. */
+:root {
+  --bg: #FAFBFC;
+  --surface: #FFFFFF;
+  --text: #0B0C0F;
+  --muted: #4F5562;
+  --rule: #E3E6EC;
+  --accent: #0047FF;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E8EEFF;
+  color-scheme: light;
+  --sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B0C0F; --surface: #13151A; --text: #EDEEF2; --muted: #A3A9B6;
+    --rule: #262932; --accent: #7A9CFF; --accent-ink: #0B0C0F; --accent-soft: #1B2340;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B0C0F; --surface: #13151A; --text: #EDEEF2; --muted: #A3A9B6;
+  --rule: #262932; --accent: #7A9CFF; --accent-ink: #0B0C0F; --accent-soft: #1B2340;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  padding-block: 48px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 880px; margin: 0 auto; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* Header */
+.name { font-size: clamp(2.1rem, 6vw, 3.25rem); line-height: 1.05; letter-spacing: -0.025em; font-weight: 700; margin: 0; text-wrap: balance; }
+.tag { margin: 10px 0 0; color: var(--muted); font-size: 1.0625rem; }
+.contact { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 18px 0 0; padding: 0; list-style: none; font-size: 0.9375rem; }
+.contact li { min-width: 0; overflow-wrap: anywhere; }
+
+/* View switcher */
+.views-label { margin: 40px 0 10px; font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
+.views { display: flex; flex-wrap: wrap; gap: 8px; }
+.views button {
+  font: inherit; font-weight: 600; font-size: 0.9375rem;
+  display: inline-flex; align-items: baseline; gap: 8px;
+  padding: 9px 14px; min-height: 40px;
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--rule); border-radius: 999px; cursor: pointer;
+}
+.views button:hover { border-color: var(--accent); }
+.views button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.views .n { font-weight: 400; font-size: 0.8125rem; opacity: 0.8; }
+
+.lens { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.lens-summary { margin: 0; font-size: 1.1875rem; line-height: 1.5; max-width: 62ch; text-wrap: pretty; }
+.lens-note { margin: 12px 0 0; max-width: 62ch; color: var(--muted); font-size: 0.9375rem; }
+.lens-meta { margin: 14px 0 0; font-size: 0.9375rem; color: var(--text); }
+.lens-meta b { font-weight: 650; }
+.lens-meta button { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.lens-meta button:hover { text-decoration-thickness: 2px; }
+
+/* Sections */
+.sec { margin-top: 44px; }
+.sec-h { margin: 0 0 18px; font-size: 1.125rem; font-weight: 700; letter-spacing: -0.01em; color: var(--accent); }
+
+.job { padding: 22px 0; border-top: 1px solid var(--rule); }
+.job:first-of-type { border-top: 0; padding-top: 0; }
+.job-h { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 24px; align-items: baseline; }
+.job-h h3 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; }
+.job-h h3 .loc { font-weight: 400; color: var(--muted); }
+.role { margin: 2px 0 0; font-weight: 500; }
+.sub { margin: 2px 0 0; color: var(--muted); font-size: 0.9375rem; }
+.dates { margin: 0; font-size: 0.875rem; font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+
+.pts { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
+.pts li { position: relative; padding-left: 20px; max-width: 70ch; text-wrap: pretty; }
+.pts li::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 6px; height: 6px; background: var(--accent); border-radius: 1px; }
+.pts b { font-weight: 650; }
+
+.skills { margin: 0; display: grid; gap: 8px; }
+.skills > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 4px 16px; }
+.skills dt { font-weight: 650; }
+.skills dd { margin: 0; }
+
+.edu { display: grid; gap: 12px; }
+.edu > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 24px; align-items: baseline; }
+.edu p { margin: 0; }
+.edu .where { color: var(--muted); font-size: 0.9375rem; }
+
+.foot { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.875rem; max-width: 62ch; }
+
+@media (max-width: 560px) {
+  body { padding-block: 32px 56px; }
+  .job-h, .edu > div { grid-template-columns: minmax(0, 1fr); }
+  .dates { white-space: normal; }
+  .skills > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .views button { transition: background-color .15s, border-color .15s, color .15s; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="name">Anand Hrushikesh</h1>
+    <p class="tag">Software engineer and technical leader · Bangalore, India</p>
+    <ul class="contact">
+      <li>anands.email.id@gmail.com</li>
+      <li><a href="https://www.linkedin.com/in/anandhms/" target="_blank" rel="noopener">linkedin.com/in/anandhms</a></li>
+      <li><a href="https://and.github.io/" target="_blank" rel="noopener">and.github.io</a></li>
+    </ul>
+  </header>
+
+  <p class="views-label" id="views-label">View this resume as</p>
+  <div class="views" role="tablist" aria-labelledby="views-label">
+    <button role="tab" id="tab-all" data-view="all" aria-selected="true" aria-controls="panel">Everything <span class="n">29</span></button>
+    <button role="tab" id="tab-lead" data-view="lead" aria-selected="false" tabindex="-1" aria-controls="panel">Leadership <span class="n">13</span></button>
+    <button role="tab" id="tab-sw" data-view="sw" aria-selected="false" tabindex="-1" aria-controls="panel">Software <span class="n">20</span></button>
+    <button role="tab" id="tab-hw" data-view="hw" aria-selected="false" tabindex="-1" aria-controls="panel">Hardware &amp; field <span class="n">10</span></button>
+    <button role="tab" id="tab-des" data-view="des" aria-selected="false" tabindex="-1" aria-controls="panel">Design &amp; making <span class="n">7</span></button>
+  </div>
+
+  <main id="panel" role="tabpanel" aria-labelledby="tab-all">
+    <div class="lens" aria-live="polite">
+      <p class="lens-summary" id="lens-summary">Software engineer and technical leader with 15+ years of experience. Field-tested a hardware product (cricket-bat sensors) and built the systems that took its data to live broadcast; most recently built AI tools and enterprise integrations at Rocketium. Comfortable taking a problem from a physical test, through the data, to a working system. Known for empathy, active listening, and making complexity accessible.</p>
+      <p class="lens-note" id="lens-note" hidden></p>
+      <p class="lens-meta" id="lens-meta" hidden></p>
+    </div>
+
+    <section class="sec" data-sec>
+      <h2 class="sec-h">Experience</h2>
+
+      <article class="job" data-job>
+        <div class="job-h">
+          <div>
+            <h3>Rocketium <span class="loc">· Bangalore</span></h3>
+            <p class="role">Sr. Engineering Manager, individual contributor (Labs)</p>
+            <p class="sub">Creative Operations &amp; Automation Platform</p>
+          </div>
+          <p class="dates">DEC 2022 – SEP 2026</p>
+        </div>
+        <ul class="pts">
+          <li data-v="lead sw"><b>Enterprise delivery:</b> Primary technical contact for Flipkart, Metro and Axis Bank integrations. Led the technical response to Amazon’s penetration-testing requirements, including hands-on AWS and code-level fixes.</li>
+          <li data-v="lead sw"><b>Executive advisor:</b> Advised the co-founder, Head of Business and Head of Customer Success on technical questions. Taught them to build and deploy their own AI-powered internal apps on AWS/GCP using Cursor, Claude Code and Lovable.</li>
+          <li data-v="lead sw"><b>Brand Compliance AI:</b> Built the hackathon <a href="https://compliance.rocketiumlabs.com/?platform=default" target="_blank" rel="noopener">prototype</a>, which was used in enterprise customer <a href="https://www.linkedin.com/posts/satejs_sharing-something-cool-that-most-folks-do-ugcPost-7398822516238016512-QJTD/?utm_source=share&amp;utm_medium=member_desktop&amp;rcm=ACoAAAC9724BOq8dIe1t_ITSCoSVFkSAb3GnRFs" target="_blank" rel="noopener">demos</a>. Wrote the <a href="https://rocketium.ai/academy/all/how-rocketium-achieves-90-brand-compliance-accuracy" target="_blank" rel="noopener">whitepaper</a> documenting the production architecture (OCR, ML classification, NLP, SIFT feature matching).</li>
+          <li data-v="lead sw"><b>Labs:</b> Built AI-powered tools outside the core roadmap and owned their go-to-market, targeting the first 1,000 external users. Built agentic chatbot proofs of concept on Google ADK, connected to Maps and Databricks.</li>
+          <li data-v="lead"><b>Security:</b> Acted as CISO and Privacy Officer for SOC 2, ISO 27001 and GDPR compliance.</li>
+        </ul>
+      </article>
+
+      <article class="job" data-job>
+        <div class="job-h">
+          <div>
+            <h3>Spektacom Technologies Pvt. Ltd <span class="loc">· Bangalore, Singapore</span></h3>
+            <p class="role">Sr. Engineering Manager, Lead Software Engineer</p>
+            <p class="sub"><a href="https://spektacom.com/product" target="_blank" rel="noopener">Cricket-bat sensors</a> (hardware product)</p>
+          </div>
+          <p class="dates">AUG 2018 – NOV 2022</p>
+        </div>
+        <ul class="pts">
+          <li data-v="hw"><b>Field testing:</b> The sensor worked in the US lab but lost range on Indian grounds. Tested it in real playing conditions: damp soil and wooden stumps reduced the range, and the concrete pavement used in earlier tests reflected Bluetooth and made the range look better than it was. The hardware team modified the sensor based on these findings.</li>
+          <li data-v="hw"><b>Product iterations:</b> Across three iterations, recorded how the sensor behaved in ground tests and live tournaments. Fed that into improvements to data capture, accuracy and battery charging.</li>
+          <li data-v="hw lead"><b>Ground infrastructure:</b> Set up the on-ground infrastructure at cricket grounds. Carried data and Power over Ethernet (PoE) from the middle of the pitch to the boundary to the broadcast room. Pitch distances varied, so tested cable lengths and PoE switches to find a setup that worked across grounds at low cost.</li>
+          <li data-v="hw sw"><b>Live data to broadcast:</b> Built the real-time link from the receiver software to the broadcast network, first reading the receiver’s log file and later serving the data on a port. It replaced values read out over walkie-talkie, which cut transcription errors and sped up delivery. One key press put each value on live TV.</li>
+          <li data-v="hw sw"><b>Scoring software:</b> Built a scoring application that combined match data with sensor data, so a full match report could be generated at any point. Match officials and the broadcast team saw it live.</li>
+          <li data-v="hw sw"><b>Data collection and trials:</b> Wrote the Python data collection and testing code for the sensors. Ran proofs of concept at live tournaments in India, Singapore and the US.</li>
+        </ul>
+      </article>
+
+      <article class="job" data-job>
+        <div class="job-h">
+          <div>
+            <h3>Microsoft Ventures <span class="loc">· Microsoft India R&amp;D Pvt. Ltd, Bangalore</span></h3>
+            <p class="role">Sr. Software Engineer (Contract)</p>
+            <p class="sub">Startup ranking and deal flow management tool</p>
+          </div>
+          <p class="dates">MAR 2014 – JUL 2018</p>
+        </div>
+        <ul class="pts">
+          <li data-v="lead sw">Built the tool for Microsoft Accelerator; recruited and scaled the technical team from scratch.</li>
+          <li data-v="sw">Designed distributed system improvements (Redis, Elasticsearch, Azure Search) for higher data loads and concurrent multi-team access.</li>
+          <li data-v="lead">Reported to managers in the US and Israel; 50% of the team was Israel-based. Sustained cross-time-zone collaboration across a 4-year engagement.</li>
+        </ul>
+      </article>
+
+      <article class="job" data-job>
+        <div class="job-h">
+          <div>
+            <h3>GitGrow · CASE · ZoomScan <span class="loc">· Bangalore, Kerala</span></h3>
+            <p class="role">Technical Lead · Software Developer · Co-founder</p>
+          </div>
+          <p class="dates">2007 – 2013</p>
+        </div>
+        <ul class="pts">
+          <li data-v="lead sw"><b>GitGrow:</b> Transitioned an outsourced analytics platform in-house; led the product roadmap for a Google Analytics-based web analytics tool.</li>
+          <li data-v="lead sw"><b>CASE:</b> Delivered custom web solutions for UK-based clients; mentored interns and junior developers.</li>
+          <li data-v="lead sw des"><b>ZoomScan:</b> Co-founded a digital maps value-added services startup; designed product interfaces, built proofs of concept, pitched to investors.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="sec" data-sec>
+      <h2 class="sec-h">Making and prototypes</h2>
+      <article class="job" data-job>
+        <ul class="pts" style="margin-top:0">
+          <li data-v="des hw"><b>Ant-proof pet bowl (2024):</b> Took two months of pottery classes to learn slab building, then made a two-part ceramic bowl with a water moat. Tested with my cats: the moat stopped the ants, but the cats were reluctant to eat near water and the glaze degraded with use.</li>
+          <li data-v="des hw"><b>Pomodoro availability light (2024):</b> Designed the four-state interaction model and form factor for a laptop-mounted LED status bar. A remote collaborator did the Arduino code and 3D printing. Tested in the office: it was too heavy for the screen, and people were more curious about the device than deterred by it.</li>
+          <li data-v="des hw"><b>Open toothbrush connector standard (proposal, 2022 – present):</b> Researched ISO 20126:2022 and the patent landscape, and wrote to AENOR, Spain’s national standards body, to ask whether such a standard has been proposed.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="sec" data-sec>
+      <h2 class="sec-h">Technical skills</h2>
+      <dl class="skills">
+        <div data-v="sw hw"><dt>Languages</dt><dd>JavaScript, Node.js, Python, PHP, HTML, CSS</dd></div>
+        <div data-v="sw lead"><dt>Cloud</dt><dd>AWS (EC2, ECS, Lambda, App Runner, CloudTrail, Security Hub), GCP, Microsoft Azure</dd></div>
+        <div data-v="sw"><dt>AI &amp; LLM</dt><dd>Google ADK, Claude Code, Cursor, Google AI Studio, NotebookLM</dd></div>
+        <div data-v="sw"><dt>Databases</dt><dd>MongoDB, MySQL, Redis, BigQuery, SQLite, Elasticsearch</dd></div>
+        <div data-v="lead"><dt>Compliance</dt><dd>SOC 2, ISO 27001, GDPR, VAPT/WAPT, DPA, privacy frameworks</dd></div>
+        <div data-v="sw des"><dt>Tools</dt><dd>GitHub CLI, Datadog, New Relic, Honeycomb, Figma, Photoshop</dd></div>
+      </dl>
+    </section>
+
+    <section class="sec" data-sec>
+      <h2 class="sec-h">Personal projects</h2>
+      <article class="job" data-job>
+        <ul class="pts" style="margin-top:0">
+          <li data-v="sw des"><b>Anchor:</b> Mac menu bar <a href="https://and.github.io/utilities/anchor/" target="_blank" rel="noopener">app</a> with iPhone and Android companions. Compares where your attention goes with what you planned and nudges you when they diverge. Built with SwiftUI and Kotlin.</li>
+          <li data-v="sw"><b>Productivity utilities:</b> <a href="https://github.com/and/meeting-alerts-mac" target="_blank" rel="noopener">Meeting alerts</a> and <a href="https://github.com/and/battery" target="_blank" rel="noopener">battery notification apps</a> for macOS, iOS and Android.</li>
+          <li data-v="sw des"><b>Driver Safety AI (<a href="https://and.github.io/dashcam/" target="_blank" rel="noopener">advanced driver-assistance system, ADAS</a>):</b> Browser-based app that turns a phone camera into a dashcam with collision, lane-departure and drowsiness alerts, all on the phone. Tested on Indian roads: the phone overheated and shut down in under 10 minutes, and false alerts made drivers stop trusting it. Next: lighter models and smarter alert filtering.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="sec">
+      <h2 class="sec-h">Education</h2>
+      <div class="edu">
+        <div><div><p><b>Stoa</b></p><p class="where">General Management Program</p></div><p class="dates">2022 – 2023</p></div>
+        <div><div><p><b>Sam Higginbottom University of Agriculture, Technology and Sciences</b></p><p class="where">Allahabad · B.Tech, Computer Engineering</p></div><p class="dates">2004 – 2007</p></div>
+        <div><div><p><b>NTTF Technical Training Center</b></p><p class="where">Tellicherry · Diploma in Computer Engineering</p></div><p class="dates">2001 – 2004</p></div>
+      </div>
+    </section>
+  </main>
+
+  <p class="foot">Every view shows the same facts. A view only changes which entries appear and how the summary is framed.</p>
+</div>
+
+<script>
+(function () {
+  var LENS = {
+    all: {
+      s: "Software engineer and technical leader with 15+ years of experience. Field-tested a hardware product (cricket-bat sensors) and built the systems that took its data to live broadcast; most recently built AI tools and enterprise integrations at Rocketium. Comfortable taking a problem from a physical test, through the data, to a working system. Known for empathy, active listening, and making complexity accessible.",
+      n: ""
+    },
+    lead: {
+      s: "Senior engineering manager with 15+ years across startups and enterprise delivery. Primary technical contact for Flipkart, Metro and Axis Bank, adviser to executives at Rocketium, and acting CISO. Recruited and scaled a technical team from scratch at Microsoft Ventures. Known for empathy, active listening, and making complexity accessible.",
+      n: ""
+    },
+    sw: {
+      s: "Software engineer with 15+ years of experience, from Python data collection and a real-time broadcast link to AI tools and enterprise integrations. Builds personal apps for Mac, iOS, Android and the browser.",
+      n: ""
+    },
+    hw: {
+      s: "Works on the software and field side of hardware, not as a hardware designer. Field-tested cricket-bat sensors through three product iterations, set up on-ground infrastructure at cricket grounds, and built the software that took the sensor data to live broadcast. Makes physical prototypes outside work.",
+      n: "My role on these projects: tester, systems builder and software engineer. Spektacom’s hardware team designed and built the sensor. The prototypes under Making and prototypes are small personal builds."
+    },
+    des: {
+      s: "Builds things to learn from them: a ceramic pet bowl, a Pomodoro availability light, a proposed open toothbrush connector standard, and a dashcam app tested on Indian roads. Most entries note what testing showed.",
+      n: ""
+    }
+  };
+
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  var items = Array.prototype.slice.call(document.querySelectorAll("[data-v]"));
+  var jobs = Array.prototype.slice.call(document.querySelectorAll("[data-job]"));
+  var secs = Array.prototype.slice.call(document.querySelectorAll("[data-sec]"));
+  var sum = document.getElementById("lens-summary");
+  var note = document.getElementById("lens-note");
+  var meta = document.getElementById("lens-meta");
+  var panel = document.getElementById("panel");
+  var total = items.length;
+
+  function has(el, v) { return (" " + el.getAttribute("data-v") + " ").indexOf(" " + v + " ") > -1; }
+
+  tabs.forEach(function (t) {
+    var v = t.getAttribute("data-view");
+    var n = v === "all" ? total : items.filter(function (i) { return has(i, v); }).length;
+    t.querySelector(".n").textContent = n;
+  });
+
+  function visibleIn(root) {
+    return Array.prototype.some.call(root.querySelectorAll("[data-v]"), function (el) { return !el.hidden; });
+  }
+
+  function apply(v, focus) {
+    if (!LENS[v]) v = "all";
+    var shown = 0;
+    items.forEach(function (el) {
+      var on = v === "all" || has(el, v);
+      el.hidden = !on;
+      if (on) shown++;
+    });
+    jobs.forEach(function (j) { j.hidden = !visibleIn(j); });
+    secs.forEach(function (s) { s.hidden = !visibleIn(s); });
+    sum.textContent = LENS[v].s;
+    note.textContent = LENS[v].n;
+    note.hidden = !LENS[v].n;
+    meta.textContent = "";
+    if (v === "all") {
+      meta.hidden = true;
+    } else {
+      var num = document.createElement("b");
+      num.textContent = shown;
+      meta.appendChild(num);
+      meta.appendChild(document.createTextNode(" of " + total + " items shown · "));
+      var all = document.createElement("button");
+      all.type = "button";
+      all.textContent = "Show everything";
+      all.addEventListener("click", function () { apply("all", true); });
+      meta.appendChild(all);
+      meta.hidden = false;
+    }
+    tabs.forEach(function (t) {
+      var on = t.getAttribute("data-view") === v;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      if (on) {
+        panel.setAttribute("aria-labelledby", t.id);
+        if (focus) t.focus();
+      }
+    });
+    try { history.replaceState(null, "", v === "all" ? location.pathname + location.search : "#" + v); } catch (e) {}
+  }
+
+  tabs.forEach(function (t, i) {
+    t.addEventListener("click", function () { apply(t.getAttribute("data-view")); });
+    t.addEventListener("keydown", function (e) {
+      var k = e.key, j = -1;
+      if (k === "ArrowRight" || k === "ArrowDown") j = (i + 1) % tabs.length;
+      else if (k === "ArrowLeft" || k === "ArrowUp") j = (i + tabs.length - 1) % tabs.length;
+      else if (k === "Home") j = 0;
+      else if (k === "End") j = tabs.length - 1;
+      if (j > -1) { e.preventDefault(); apply(tabs[j].getAttribute("data-view"), true); }
+    });
+  });
+
+  var start = "all";
+  try { start = (location.hash || "").slice(1); } catch (e) {}
+  if (LENS[start] && start !== "all") apply(start);
+})();
+</script>
+</body>
+</html>
