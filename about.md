@@ -24,14 +24,11 @@ Take turns joining two dots. Close a box to win it and go again. I'm blue.
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap">
   <style>
     /* pencil on graph paper: graphite ink, two coloured pencils, hand-drawn edges */
-    .dab { --dab-ink:#3a3a3a; --dab-soft:#9a958c; --dab-you:#c8551b; --dab-cpu:#1f68b5; --dab-paper:#fffdf7; --dab-grid:rgba(60,110,180,.09);
+    .dab { --dab-ink:#3a3a3a; --dab-soft:#9a958c; --dab-you:#c8551b; --dab-cpu:#1f68b5;
            display:flex; flex-direction:column; align-items:center; gap:10px;
-           margin:8px 0 24px; padding:22px 16px 18px; color:var(--dab-ink);
+           margin:8px 0 24px; padding:8px 0 18px; color:var(--dab-ink);
            font-family:"Caveat","Segoe Print","Comic Sans MS",cursive; font-size:23px; line-height:1.2;
-           background-color:var(--dab-paper);
-           background-image:linear-gradient(var(--dab-grid) 1px,transparent 1px),linear-gradient(90deg,var(--dab-grid) 1px,transparent 1px);
-           background-size:20px 20px;
-           border:2px solid var(--dab-ink); border-radius:255px 18px 225px 18px/18px 225px 18px 255px; }
+           }
     .dab p { margin:0; }
     .dab-bar { display:flex; gap:18px; align-items:center; flex-wrap:wrap; justify-content:center; }
     .dab-name { display:flex; align-items:baseline; gap:8px; }
