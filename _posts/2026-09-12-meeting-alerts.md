@@ -7,14 +7,14 @@ permalink: /utilities/meeting-alerts/
 excerpt: "A free Mac menu bar app that shows your next meeting and puts a panel on screen three minutes before it starts, with a one-click Join. How to install it and use it."
 ---
 
-Meeting Alerts helps you walk into meetings on time. It keeps your next meeting in the menu bar, and three minutes before it starts, a small panel appears with the details and a **Join** button. No more hunting through your calendar for the link at the last second.
+Meeting Alerts helps you walk into meetings on time. It keeps your next meeting in the menu bar, and three minutes before it starts, a panel opens in the centre of your screen with the details and a **Join** button. It stays there until you act on it. No more hunting through your calendar for the link at the last second.
 
 ![The Meeting Alerts panel for a meeting called Quarterly planning review: the time, a "Starting in 2 min" label, the video call link, the room, the attendees and their replies, and Snooze and Join buttons]({{ "/assets/images/meeting-alerts-panel.png" | relative_url }}){: style="max-width:360px;display:block;margin:0 auto 24px"}
 
 ## What it does for you
 
 - **Shows what's next.** Your next meeting sits in the menu bar, so one glance tells you the time and the title.
-- **Warns you before it starts.** A panel appears three minutes ahead. A notification you can swipe away is easy to miss; this one stays on screen until you act on it.
+- **Warns you before it starts.** A panel appears three minutes ahead. A notification in the corner is easy to miss; this one opens in the middle of your screen, where you're already looking.
 - **Gets you into the call.** Press **Join** or hit **Return**. It works with Zoom, Google Meet, Microsoft Teams and Webex.
 - **Gives you more time.** **Snooze** brings the panel back about a minute before the meeting.
 - **Shows who's coming.** The panel lists the attendees and whether they've replied.
