@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "A Busy Light for My Laptop"
-date: 2026-10-16 10:05:00 +0530
+date: 2024-10-31 10:00:00 +0530
 categories: [making]
 permalink: /making/pomodoro-availability-light/
 excerpt: "A light bar for a laptop screen that shows whether I'm free or busy, with a Pomodoro countdown. It worked, but it was too heavy for the screen, and everyone wanted to talk about the gadget instead."
