@@ -11,15 +11,16 @@ I kept typing `/usage` in Claude Code to check how close I was to my plan limits
 footer shows it all the time:
 
 <style>
-.ccf-term{background:#1c2029;color:#c9cdd6;border-radius:10px;padding:.9rem 1rem;font:13px/1.5 "JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;white-space:nowrap;margin:1.25rem 0}
+.ccf-term{background:#1c2029;color:#c9cdd6;border-radius:10px;padding:.9rem 1rem;font:13px/1.5 "JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;margin-top:1.25rem;margin-bottom:1.25rem}
+.ccf-term span.ccf-seg{white-space:nowrap}
 .ccf-term b{color:#fff}
 .ccf-t{color:#444}.ccf-e{background:#444}
 .ccf-g{color:#bcbcbc}.ccf-y{color:#ffd700}.ccf-o{color:#ff8700}.ccf-r{color:#ff0000}
-.ccf-key{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;list-style:none;padding:0;margin:0 0 1.5rem;font-size:.9rem}
+.ccf-key{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;list-style:none;padding:0;margin-top:0;margin-bottom:1.5rem;font-size:.9rem}
 .ccf-key li{display:flex;align-items:center;gap:.45rem;margin:0}
 .ccf-key i{width:.8rem;height:.8rem;border-radius:2px;display:inline-block}
 </style>
-<div class="ccf-term" role="img" aria-label="Footer: Opus 5.5, Context 7%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30">Opus 5.5 | Context: <span class="ccf-e ccf-g">▋</span><span class="ccf-t">█████████</span> <b>7%</b> | Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30) | Weekly: <span class="ccf-y">███████</span><span class="ccf-e ccf-y">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</div>
+<div class="ccf-term" role="img" aria-label="Footer: Opus 5.5, Context 7%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30"><span class="ccf-seg">Opus 5.5</span> <span class="ccf-seg">| Context: <span class="ccf-e ccf-g">▋</span><span class="ccf-t">█████████</span> <b>7%</b></span> <span class="ccf-seg">| Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30)</span> <span class="ccf-seg">| Weekly: <span class="ccf-y">███████</span><span class="ccf-e ccf-y">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</span></div>
 
 - **Context** is how much of the current conversation's context window is used.
 - **Session** is your rolling 5-hour plan limit. It counts every Claude Code window, claude.ai
