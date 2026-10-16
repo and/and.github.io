@@ -22,7 +22,7 @@
   --accent:#0047FF;--mark:#ffe14d;
   --font:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-  --max-width:640px;
+  --max-width:960px;--measure:46rem;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{font-size:100%}
@@ -47,7 +47,7 @@ header.site-header{padding:28px 0 0}
 .hero{padding:0 0 4px}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .page-heading{font-size:1.875rem;font-weight:800;line-height:1.2;letter-spacing:-.02em;margin-bottom:10px}
-.page-description{font-size:1.375rem;line-height:1.45;color:var(--muted)}
+.page-description{max-width:var(--measure);font-size:1.375rem;line-height:1.45;color:var(--muted)}
 
 .posts-section{padding:28px 0 8px}
 .section-heading,.post-list-heading{display:block;font-size:1.875rem;font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin:0 0 12px}
@@ -66,7 +66,10 @@ header.site-header{padding:28px 0 0}
 .post-header{margin-bottom:32px}
 .post-header .post-title,.post .post-title{font-size:clamp(2.25rem,5vw,3rem);font-weight:800;line-height:1.05;letter-spacing:-.025em;margin-bottom:10px}
 .post-header .post-meta{font-size:1.0625rem}
-.post-content{max-width:640px}
+/* Wide pages: prose sits in a centred column of readable length; tools and pictures (divs, figures) can use the full width. */
+.post-content{max-width:none}
+.post-content>*:not(div):not(figure):not(iframe),.post-header{max-width:var(--measure);margin-left:auto;margin-right:auto}
+.post-content>div.highlighter-rouge{max-width:var(--measure);margin-left:auto;margin-right:auto}
 .post-content p,.post-content ul,.post-content ol{margin-bottom:18px}
 .post-content ul,.post-content ol{padding-left:1.2em}
 .post-content h2{font-size:1.875rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin:44px 0 12px}
@@ -104,7 +107,7 @@ pre code{padding:0;background:transparent;font-size:1em}
 .post-row{display:flex;align-items:baseline;gap:20px}
 .post-main{flex:1;min-width:0}
 .post-topics{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px;font-size:1rem}
-.post-excerpt{margin:4px 0 0;font-size:1.0625rem;line-height:1.6;color:var(--muted);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+.post-excerpt{max-width:var(--measure);margin:4px 0 0;font-size:1.0625rem;line-height:1.6;color:var(--muted);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
 .pinned-section{padding-top:28px}
 .pinned-section .post-list{margin-bottom:0}
 .try-section{padding-top:28px}
