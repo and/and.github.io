@@ -100,6 +100,9 @@ a:hover { text-decoration-thickness: 2px; }
 .theme-g + .theme-g { margin-top: 32px; }
 .theme-h { margin: 0; font-size: 1rem; font-weight: 700; }
 .theme-q { margin: 2px 0 12px; font-size: 0.9375rem; color: var(--muted); }
+.theme-note { margin: 8px 0 0; padding-left: 20px; font-size: 0.8125rem; color: var(--muted); }
+.theme-note button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.theme-note button:hover { color: var(--accent); }
 .pts { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
 .pts li { position: relative; padding-left: 20px; max-width: 70ch; text-wrap: pretty; }
 .pts li::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 6px; height: 6px; background: var(--accent); border-radius: 1px; }
@@ -488,7 +491,38 @@ a:hover { text-decoration-thickness: 2px; }
   var sortBtns = Array.prototype.slice.call(document.querySelectorAll("[data-sort]"));
 
   function updateGroups() {
-    Array.prototype.forEach.call(groupsEl.children, function (g) { g.hidden = !visibleIn(g); });
+    var anyShown = projItems.some(function (li) { return !li.hidden; });
+    Array.prototype.forEach.call(groupsEl.children, function (g) {
+      var lis = Array.prototype.slice.call(g.querySelectorAll("li.dated"));
+      var vis = lis.filter(function (li) { return !li.hidden; });
+      var off = lis.filter(function (li) { return curView !== "all" && !has(li, curView); });
+      var revealed = off.some(function (li) { return li._rev; });
+      var note = g.querySelector(".theme-note");
+      var q = g.querySelector(".theme-q");
+      g.hidden = !anyShown;
+      q.hidden = vis.length === 0;
+      note.textContent = "";
+      note.hidden = off.length === 0;
+      if (!off.length) return;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      if (revealed) {
+        note.appendChild(document.createTextNode("Showing " + off.length + (off.length === 1 ? " project" : " projects") + " outside this view \u00b7 "));
+        btn.textContent = "Hide";
+        btn.addEventListener("click", function () {
+          off.forEach(function (li) { li.hidden = true; li._rev = false; });
+          updateGroups(); updateProjMeta(curView);
+        });
+      } else {
+        note.appendChild(document.createTextNode((vis.length ? off.length + " more" : "All " + off.length) + (off.length === 1 ? " project" : " projects") + " in this theme hidden by this view \u00b7 "));
+        btn.textContent = "Show";
+        btn.addEventListener("click", function () {
+          off.forEach(function (li) { li.hidden = false; li._rev = true; });
+          updateGroups(); updateProjMeta(curView);
+        });
+      }
+      note.appendChild(btn);
+    });
   }
 
   var projMeta = document.getElementById("proj-meta");
@@ -539,7 +573,10 @@ a:hover { text-decoration-thickness: 2px; }
         ul.className = "pts";
         ul.style.marginTop = "0";
         lis.forEach(function (li) { ul.appendChild(li); });
-        g.appendChild(h); g.appendChild(q); g.appendChild(ul);
+        var note = document.createElement("p");
+        note.className = "theme-note";
+        note.hidden = true;
+        g.appendChild(h); g.appendChild(q); g.appendChild(ul); g.appendChild(note);
         groupsEl.appendChild(g);
       });
     } else {
@@ -551,10 +588,13 @@ a:hover { text-decoration-thickness: 2px; }
   }
   sortBtns.forEach(function (b) { b.addEventListener("click", function () { setSort(b.getAttribute("data-sort")); }); });
 
+  var curView = "all";
   function apply(v, focus) {
     if (!LENS[v]) v = "all";
+    curView = v;
     var shown = 0;
     items.forEach(function (el) {
+      el._rev = false;
       var on = v === "all" || has(el, v);
       el.hidden = !on;
       if (on) shown++;
