@@ -510,7 +510,12 @@ a:hover { text-decoration-thickness: 2px; }
     var btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = "Show all projects";
-    btn.addEventListener("click", function () { apply("all", true); });
+    btn.addEventListener("click", function () {
+      var sec = document.getElementById("projects");
+      var before = sec.getBoundingClientRect().top;
+      apply("all", false);
+      window.scrollBy(0, sec.getBoundingClientRect().top - before);
+    });
     projMeta.appendChild(btn);
     projMeta.hidden = false;
   }
