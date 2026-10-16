@@ -61,7 +61,6 @@ a:hover { text-decoration-thickness: 2px; }
 .contact li { min-width: 0; overflow-wrap: anywhere; }
 .mode { font: inherit; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; color: var(--muted); background: transparent; border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; }
 .mode:hover { border-color: var(--accent); color: var(--text); }
-.mode[aria-pressed="true"] { background: var(--accent-soft); color: var(--text); border-color: var(--accent); }
 .mode svg { width: 14px; height: 14px; flex: none; }
 @media print { .mode { display: none; } }
 
@@ -193,7 +192,7 @@ a:hover { text-decoration-thickness: 2px; }
       <li>anands.email.id@gmail.com</li>
       <li><a href="https://www.linkedin.com/in/anandhms/" target="_blank" rel="noopener">linkedin.com/in/anandhms</a></li>
       <li><a href="https://and.github.io/" target="_blank" rel="noopener">and.github.io</a></li>
-      <li><button type="button" class="mode" id="mode-btn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>Dark mode</button></li>
+      <li><button type="button" class="mode" id="mode-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span>Dark mode</span></button></li>
     </ul>
   </header>
 
@@ -626,7 +625,12 @@ a:hover { text-decoration-thickness: 2px; }
     var a = document.documentElement.getAttribute("data-theme");
     return a ? a === "dark" : !!(darkMq && darkMq.matches);
   }
-  function syncMode() { modeBtn.setAttribute("aria-pressed", isDark() ? "true" : "false"); }
+  var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>', SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  function syncMode() {
+    var d = isDark();
+    modeBtn.querySelector("svg").innerHTML = d ? SUN : MOON;
+    modeBtn.querySelector("span").textContent = d ? "Light mode" : "Dark mode";
+  }
   modeBtn.addEventListener("click", function () {
     var next = isDark() ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
