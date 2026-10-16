@@ -4,12 +4,12 @@ title: "A Tracker for a 28-Day Leg Strength Program"
 date: 2026-10-16 12:54:24 +0530
 categories: [utilities]
 permalink: /utilities/exercise-tracker/
-excerpt: "A small web app for following a 4-week resistance-band leg program after an ACL injury. The day only advances when you finish the workout, so a missed day never skips the plan."
+excerpt: "A small web app for following a 4-week resistance-band leg strengthening program. The day only advances when you finish the workout, so a missed day never skips the plan."
 ---
 
-This is a small web app for following a 4-week leg strengthening program with resistance bands after an ACL injury. It tracks each day's workout, your measurements and your progress, and syncs across devices when you sign in with Google. You can [use it here](https://and.github.io/exercise/).
+This is a small web app for following a 4-week leg strengthening program with resistance bands. It tracks each day's workout, your measurements and your progress, and syncs across devices when you sign in with Google. You can [use it here](https://and.github.io/exercise/).
 
-It's a personal tracker, not medical advice. Get clearance from your surgeon or physical therapist before starting any program.
+It's a personal tracker, not medical advice. Check with your doctor or physical therapist before starting any program.
 
 <figure>
   <img src="{{ "/assets/images/exercise/workout-tab.jpg" | relative_url }}" alt="The Workout tab on Day 2 of 28, in the Weeks 1 to 2 Foundation phase, with a list of eight exercises of which Quad Sets and Straight Leg Raises are ticked, and a Complete Workout button showing 2 of 8" loading="lazy" style="max-width:360px">
