@@ -134,8 +134,8 @@ pre code{padding:0;background:transparent;font-size:1em}
 .topic-index a:hover{text-decoration:underline;text-underline-offset:3px}
 .topic-index span{color:var(--faint)}
 /* Home: description on the left, topic sphere on the right. Without script the tags stay a plain list. */
-.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 32px;align-items:center}
-.tag-sphere{position:relative;width:min(22rem,100%);justify-self:end}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,22rem);gap:8px 32px;align-items:center}
+.tag-sphere{position:relative;width:100%;justify-self:end}
 .sphere-wire{display:none}
 .sphere-tags{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:1.0625rem;padding:8px 0}
 .sphere-tags a{text-decoration:none}
@@ -154,12 +154,14 @@ pre code{padding:0;background:transparent;font-size:1em}
 .topic-block h2 span{color:var(--faint);font-weight:400;margin-left:6px}
 .topic-block:target h2{background:var(--mark)}
 
+@media (max-width:760px){
+  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .tag-sphere{justify-self:center;width:min(20rem,100%)}
+}
 @media (max-width:600px){
   body{font-size:1rem}
   .post-list .post-link,.post-row{flex-direction:column;gap:2px}
   .try-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hero-grid{grid-template-columns:minmax(0,1fr)}
-  .tag-sphere{justify-self:center;width:min(20rem,100%)}
   .post-header .post-title,.post .post-title{font-size:2.125rem}
   .page-heading{font-size:1.625rem}
   .section-heading,.post-list-heading,.post-content h2,.topic-block h2{font-size:1.625rem}
