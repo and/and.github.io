@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "See your Claude usage limits in the Claude Code footer"
-date: 2026-10-16 10:00:00 +0530
+date: 2026-10-16 09:30:00 +0530
 categories: [utilities]
 permalink: /utilities/claude-code-usage-footer/
 excerpt: "A status line for Claude Code that always shows how full your context is and how much of your 5-hour and weekly plan limits you have used, with bars that turn yellow, orange and red as you get close."
