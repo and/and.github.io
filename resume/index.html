@@ -105,7 +105,11 @@ a:hover { text-decoration-thickness: 2px; }
 .pts li::before { content: ""; position: absolute; left: 2px; top: 0.72em; width: 6px; height: 6px; background: var(--accent); border-radius: 1px; }
 .pts b { font-weight: 650; }
 .pts li.dated { display: grid; grid-template-columns: minmax(0, 1fr) 10.5rem; gap: 6px 28px; align-items: center; max-width: none; }
-.side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; position: relative; }
+.side .dates { position: absolute; right: 0; bottom: 100%; margin-bottom: 2px; }
+.pts li.dated { margin-top: 24px; }
+.pts li.dated:first-child { margin-top: 0; }
+.pts li.dated:first-child .pt { align-self: start; }
 .art { margin: 0; width: 10.5rem; }
 .art svg { display: block; width: 100%; height: auto; color: var(--text); }
 .ln { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -141,6 +145,8 @@ a:hover { text-decoration-thickness: 2px; }
   .side { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 16px; }
   .art { width: 8.5rem; }
   .dates { white-space: normal; }
+  .side .dates { position: static; margin-bottom: 0; }
+  .pts li.dated { margin-top: 0; }
   .skills > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -312,7 +318,7 @@ a:hover { text-decoration-thickness: 2px; }
               <path class="ln" d="M10 64 L28 62 L40 66 L52 60 L66 52 L76 70 L86 46 L96 66 L106 54 L118 62 L134 60 L150 63"/>
               <path class="ln thin" d="M10 84 H150" opacity=".6"/>
             </svg></figure></div></li>
-          <li class="dated" data-v="sw" data-theme="health"><div class="pt"><b><a href="/utilities/exercise-tracker/">Leg Strength Tracker</a>:</b> Web app for a 28-day resistance-band leg program. The day advances only when you finish the workout, and you can look back at earlier days without changing anything. The next step: follow the program and see progress. Syncs across devices.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a workout checklist: a progress bar partly filled in blue above three exercises, two of them ticked">
+          <li class="dated" data-v="sw" data-theme="health"><div class="pt"><b><a href="/utilities/exercise-tracker/">Leg Strength Tracker</a>:</b> Web app for a 28-day resistance-band leg program. The day advances only when you finish the workout, and you can look back at earlier days without changing anything.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a workout checklist: a progress bar partly filled in blue above three exercises, two of them ticked">
               <rect class="body" x="40" y="21" width="80" height="66" rx="6"/>
               <rect class="ln thin" x="50" y="30" width="60" height="7" rx="3.5"/>
               <rect class="tint-strong" x="50" y="30" width="20" height="7" rx="3.5"/>
