@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "memory.span: How Many Things Can You Hold in Your Head?"
+title: "memory.span: how many things can you hold in your head?"
 date: 2026-10-15 12:00:00 +0530
 categories: [dsa, games]
 permalink: /games/memory-span/

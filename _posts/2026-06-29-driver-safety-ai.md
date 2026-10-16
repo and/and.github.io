@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A Dashcam That Runs Entirely in the Browser"
+title: "A dashcam that runs entirely in the browser"
 date: 2026-06-29 21:49:02 +0530
 categories: [utilities, cars]
 permalink: /utilities/driver-safety-ai/

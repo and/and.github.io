@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A Busy Light for My Laptop"
+title: "A busy light for my laptop"
 date: 2024-10-31 10:00:00 +0530
 categories: [making]
 permalink: /making/pomodoro-availability-light/

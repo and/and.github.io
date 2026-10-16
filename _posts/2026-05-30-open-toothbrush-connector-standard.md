@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "An Open Connector Standard for Toothbrushes"
+title: "An open connector standard for toothbrushes"
 date: 2026-05-30 15:13:00 +0530
 categories: [making]
 permalink: /making/open-toothbrush-connector-standard/

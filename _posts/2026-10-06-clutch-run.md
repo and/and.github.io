@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Clutch Run: A Driving Game About Changing Gear"
+title: "Clutch Run: a driving game about changing gear"
 date: 2026-10-06
 categories: [cars, games]
 permalink: /cars/clutch-run/

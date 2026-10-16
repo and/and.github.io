@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A Tracker for a 28-Day Leg Strength Program"
+title: "A tracker for a 28-day leg strength program"
 date: 2026-02-14 10:21:42 +0530
 categories: [utilities, health]
 permalink: /utilities/exercise-tracker/
