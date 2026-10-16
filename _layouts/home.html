@@ -4,16 +4,202 @@ layout: default
 
 <section class="hero">
   <h1 class="visually-hidden">{{ page.title | escape }}</h1>
-  <p class="page-description">{{ content | strip_html | strip }}</p>
   {%- assign topics = site.categories | sort %}
-  {%- if topics.size > 0 %}
-  <nav class="topic-index hero-topics" aria-label="Topics">
-    {%- for t in topics %}
-    <a href="{{ '/topics/' | relative_url }}#{{ t[0] | slugify }}">{{ t[0] }} <span>{{ t[1].size }}</span></a>
-    {%- endfor %}
-  </nav>
-  {%- endif %}
+  <div class="hero-grid">
+    <p class="page-description">{{ content | strip_html | strip }}</p>
+    {%- if topics.size > 0 %}
+    <div class="tag-sphere" id="tag-sphere">
+      <canvas class="sphere-wire" aria-hidden="true"></canvas>
+      <nav class="sphere-tags" aria-label="Topics">
+        {%- for t in topics %}
+        <a href="{{ '/topics/' | relative_url }}#{{ t[0] | slugify }}">{{ t[0] }} <span>{{ t[1].size }}</span></a>
+        {%- endfor %}
+      </nav>
+    </div>
+    {%- endif %}
+  </div>
 </section>
+
+{%- if topics.size > 0 %}
+<script>
+/* Topic sphere: the links above turn into tags orbiting a wireframe globe.
+   Without script, or with reduced motion, they stay a plain list or a still sphere. */
+(function () {
+  var box = document.getElementById("tag-sphere");
+  if (!box) return;
+  var cv = box.querySelector(".sphere-wire");
+  var ctx = cv && cv.getContext && cv.getContext("2d");
+  if (!ctx) return;
+  var els = Array.prototype.slice.call(box.querySelectorAll(".sphere-tags a"));
+  var N = els.length;
+  if (!N) return;
+  box.classList.add("is-3d");
+
+  var counts = els.map(function (el) { return parseInt(el.querySelector("span").textContent, 10) || 1; });
+  var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var FOV = 3;
+
+  // Evenly spread starting points on a unit sphere, none on a pole.
+  var GA = Math.PI * (3 - Math.sqrt(5));
+  var pts = els.map(function (_, i) {
+    var y = 1 - (2 * i + 1) / N;
+    var r = Math.sqrt(1 - y * y);
+    var th = GA * i;
+    return [Math.cos(th) * r, y, Math.sin(th) * r];
+  });
+
+  var W = 0, R = 0, dpr = 1;
+  var rx = 0.32, ry = 0.6, vx = 0, vy = 0, spin = REDUCED ? 0 : 0.28;
+  var paused = false, dragging = false, captured = false, moved = 0;
+  var lastX = 0, lastY = 0, lastT = 0;
+  var lineColor = "rgba(11,12,15,0.16)";
+
+  function rot(p) {
+    var cy = Math.cos(ry), sy = Math.sin(ry), cx = Math.cos(rx), sx = Math.sin(rx);
+    var x = p[0] * cy + p[2] * sy;
+    var z = -p[0] * sy + p[2] * cy;
+    var y = p[1] * cx - z * sx;
+    z = p[1] * sx + z * cx;
+    return [x, y, z];
+  }
+  function proj(q) {
+    var s = FOV / (FOV - q[2]);
+    return [W / 2 + q[0] * R * s, W / 2 + q[1] * R * s, s];
+  }
+
+  function sizeUp() {
+    W = box.clientWidth;
+    if (!W) return;
+    R = W * 0.36;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(W * dpr);
+    var k = N <= 8 ? 1 : Math.sqrt(8 / N);
+    els.forEach(function (el, i) {
+      el.style.fontSize = ((W * 0.075 + counts[i] * W * 0.006) * k).toFixed(1) + "px";
+    });
+  }
+
+  function drawWire() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, W);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = lineColor;
+    ctx.globalAlpha = 0.7;
+    ctx.beginPath();
+    ctx.arc(W / 2, W / 2, R, 0, Math.PI * 2);
+    ctx.stroke();
+
+    var back = new Path2D(), front = new Path2D(), STEP = Math.PI / 32;
+    function ring(fn) {
+      var prev = null;
+      for (var a = 0; a <= Math.PI * 2 + 0.001; a += STEP) {
+        var q = rot(fn(a)), p = proj(q);
+        if (prev) {
+          var path = (q[2] + prev.z) / 2 >= 0 ? front : back;
+          path.moveTo(prev.x, prev.y);
+          path.lineTo(p[0], p[1]);
+        }
+        prev = { x: p[0], y: p[1], z: q[2] };
+      }
+    }
+    var d;
+    for (d = -60; d <= 60; d += 30) {
+      (function (phi) {
+        var c = Math.cos(phi), s = Math.sin(phi);
+        ring(function (th) { return [c * Math.cos(th), s, c * Math.sin(th)]; });
+      })(d * Math.PI / 180);
+    }
+    for (d = 0; d < 180; d += 30) {
+      (function (lam) {
+        var cl = Math.cos(lam), sl = Math.sin(lam);
+        ring(function (ph) { return [Math.cos(ph) * cl, Math.sin(ph), Math.cos(ph) * sl]; });
+      })(d * Math.PI / 180);
+    }
+    ctx.globalAlpha = 0.45;
+    ctx.stroke(back);
+    ctx.globalAlpha = 1;
+    ctx.stroke(front);
+  }
+
+  function place() {
+    els.forEach(function (el, i) {
+      var q = rot(pts[i]), p = proj(q), depth = (q[2] + 1) / 2;
+      el.style.transform = "translate(" + p[0].toFixed(1) + "px," + p[1].toFixed(1) + "px) translate(-50%,-50%) scale(" + p[2].toFixed(3) + ")";
+      el.style.setProperty("--o", (0.3 + 0.7 * depth).toFixed(3));
+      el.style.zIndex = String(Math.round(q[2] * 100) + 100);
+    });
+  }
+
+  function render() { if (W) { drawWire(); place(); } }
+
+  var last = performance.now();
+  function frame(t) {
+    var dt = Math.min(0.05, (t - last) / 1000);
+    last = t;
+    if (!dragging) {
+      var target = (paused || REDUCED) ? 0 : 0.28;
+      spin += (target - spin) * Math.min(1, dt * 3);
+      var decay = Math.pow(0.04, dt);
+      vx *= decay;
+      vy *= decay;
+      ry += (vy + spin) * dt;
+      rx = Math.max(-1.25, Math.min(1.25, rx + vx * dt));
+    }
+    render();
+    requestAnimationFrame(frame);
+  }
+
+  box.addEventListener("pointerdown", function (e) {
+    dragging = true; captured = false; moved = 0;
+    lastX = e.clientX; lastY = e.clientY; lastT = e.timeStamp;
+    vx = 0; vy = 0;
+  });
+  box.addEventListener("pointermove", function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - lastX, dy = e.clientY - lastY;
+    moved += Math.abs(dx) + Math.abs(dy);
+    if (moved > 6 && !captured) {
+      captured = true;
+      box.classList.add("dragging");
+      try { box.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    if (!captured) { lastX = e.clientX; lastY = e.clientY; lastT = e.timeStamp; return; }
+    var dtm = Math.max(8, e.timeStamp - lastT) / 1000;
+    ry += dx * 0.008;
+    rx = Math.max(-1.25, Math.min(1.25, rx + dy * 0.008));
+    vy = Math.max(-6, Math.min(6, 0.6 * vy + 0.4 * (dx * 0.008 / dtm)));
+    vx = Math.max(-6, Math.min(6, 0.6 * vx + 0.4 * (dy * 0.008 / dtm)));
+    lastX = e.clientX; lastY = e.clientY; lastT = e.timeStamp;
+  });
+  function endDrag() {
+    dragging = false;
+    box.classList.remove("dragging");
+    if (REDUCED) { vx = 0; vy = 0; }
+  }
+  box.addEventListener("pointerup", endDrag);
+  box.addEventListener("pointercancel", endDrag);
+  // A drag that ends on a tag must not follow its link.
+  box.addEventListener("click", function (e) {
+    if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0; }
+  }, true);
+
+  els.forEach(function (el) {
+    el.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") paused = true; });
+    el.addEventListener("pointerleave", function () { paused = false; });
+    el.addEventListener("focus", function () { paused = true; });
+    el.addEventListener("blur", function () { paused = false; });
+  });
+
+  if (window.ResizeObserver) new ResizeObserver(sizeUp).observe(box);
+  window.addEventListener("resize", sizeUp);
+
+  sizeUp();
+  render();
+  requestAnimationFrame(frame);
+})();
+</script>
+{%- endif %}
 
 {%- if site.data.try.size > 0 %}
 <section class="try-section">
