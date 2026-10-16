@@ -198,7 +198,7 @@ function finishIfOver() {
   if (mask !== FULL) return false;
   over = true;
   const y=boxOwner.filter(b=>b==='you').length, c=4-y;
-  $('dab-status').textContent = y>c ? (nameInput.value.trim() ? playerName() + ' wins! 🎉' : 'You win! 🎉') : y<c ? 'ānand wins.' : "It's a draw (2–2).";
+  $('dab-status').textContent = y>c ? 'You win! 🎉' : y<c ? 'ānand wins.' : "It's a draw (2–2).";
   return true;
 }
 
