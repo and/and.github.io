@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Finding Potholes with a Phone"
+title: "Finding potholes with a phone"
 date: 2026-09-18 20:00:19 +0530
 categories: [utilities]
 permalink: /utilities/pothole-map/

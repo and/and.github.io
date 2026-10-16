@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A Sand Timer for Your Mac"
+title: "A sand timer for your Mac"
 date: 2026-09-27
 categories: [utilities]
 permalink: /utilities/sand-timer/

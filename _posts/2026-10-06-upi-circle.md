@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "UPI Circle: Letting Someone Else Pay From Your Bank Account"
+title: "UPI Circle: letting someone else pay from your bank account"
 date: 2026-10-06
 categories:
   - til

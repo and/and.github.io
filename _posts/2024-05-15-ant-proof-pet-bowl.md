@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "An Ant-proof Pet Bowl, Made by Hand"
+title: "An ant-proof pet bowl, made by hand"
 date: 2024-05-15 10:00:00 +0530
 categories: [making]
 permalink: /making/ant-proof-pet-bowl/

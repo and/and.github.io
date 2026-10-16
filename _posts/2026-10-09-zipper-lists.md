@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Zipper Lists, Step by Step"
+title: "Zipper lists, step by step"
 date: 2026-10-09 17:30:00 +0530
 categories: [dsa]
 permalink: /dsa/zipper-lists/

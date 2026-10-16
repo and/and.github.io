@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Battery Alert App for Android"
+title: "Battery Alert app for Android"
 date: 2026-10-09 00:30:00 +0530
 categories: [utilities]
 permalink: /utilities/battery-alert/
