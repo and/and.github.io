@@ -4,10 +4,14 @@ title: "Finding Potholes with a Phone"
 date: 2026-09-18 20:00:19 +0530
 categories: [utilities]
 permalink: /utilities/pothole-map/
-excerpt: "A phone app that notices potholes by feel while you drive, and records where each one was and how hard it hit. It is a private build I use myself, and it has only had its first day on the road."
+excerpt: "A phone app that notices potholes while you drive and records where each one was and how hard it hit. A pothole only counts when three phones agree, so the idea is for people in a city to share what their phones feel. It is a private build for now."
 ---
 
-Pothole Map is an app that finds potholes while you drive, without you doing anything. The phone feels the jolt, notes the place and how hard the hit was, and saves it. This is a private build that I use myself, and it is not on any app store.
+Pothole Map is an app that finds potholes while you drive, without you doing anything. The phone feels the jolt, notes the place and how hard the hit was, and saves it.
+
+The idea is for everyone in a city to run it. You ride to work as usual, and the potholes you pass get reported without anyone typing anything in. Put together, the reports make a map of the roads that need fixing.
+
+Right now it is a private build that I use myself, and it is not on any app store.
 
 ## How it works
 
@@ -54,6 +58,20 @@ The app keeps its own battery log. In my first test:
 
 Waiting cost more than recording. Watching for the start of a trip is what makes the app hands-free, so that's where I should look to save power. These are short tests on one phone, so treat them as a first look.
 
+## Why it needs more people
+
+One phone can't tell a pothole from a speed bump. The plan is that a pothole is only confirmed when at least three different phones report a jolt in the same spot. So the map gets more reliable with every person who runs it, and one person alone can't make it work.
+
+## Help me build the map
+
+I'm looking for people in Bangalore who would try it when I open it up for testing, on Android or iPhone. It's built to use little of your data and to keep your trips private:
+
+- **Only potholes are sent, never your trip.** The plan is to upload each pothole's location, speed and impact, and never your route.
+- **No account or phone number.** Each install gets a random ID, so reports aren't tied to you.
+- **You do nothing.** It starts by itself when you get into a vehicle.
+
+If you'd like to try it, get in touch through [my GitHub profile](https://github.com/and). The app isn't available to install yet, but I'll write to you when it is.
+
 ## What isn't done yet
 
 - **Nothing is uploaded.** The reports stay on my phone, and I export them by hand.
@@ -62,4 +80,4 @@ Waiting cost more than recording. Watching for the start of a trip is what makes
 
 ## Next
 
-Drive the same roads again and see which reports repeat. Then let a few other people use it, so reports from different phones can confirm each other.
+Drive the same roads again and see which reports repeat. Then build the server that joins reports, and let a small group of people in the city use it, so reports from different phones can confirm each other.
