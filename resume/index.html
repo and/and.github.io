@@ -219,7 +219,7 @@ a:hover { text-decoration-thickness: 2px; }
       </article>
     </section>
 
-    <section class="sec" data-sec>
+    <section class="sec" id="projects" data-sec>
       <h2 class="sec-h">Projects</h2>
       <article class="job" data-job>
         <ul class="pts" style="margin-top:0">
@@ -276,7 +276,7 @@ a:hover { text-decoration-thickness: 2px; }
     },
     hw: {
       s: "Works on the software and field side of hardware, not as a hardware designer. Field-tested cricket-bat sensors through three product iterations, set up on-ground infrastructure at cricket grounds, and built the software that took the sensor data to live broadcast. Makes physical prototypes outside work.",
-      n: "My role on these projects: tester, systems builder, and software engineer. Spektacom’s hardware team designed and built the sensor. The prototypes under Projects are small personal builds."
+      n: "My role on these projects: tester, systems builder, and software engineer. Spektacom’s hardware team designed and built the sensor. The prototypes under <a href='#projects'>Projects</a> are smaller personal builds."
     },
     des: {
       s: "Builds things to learn from them: a ceramic pet bowl, a Pomodoro availability light, a proposed open toothbrush connector standard, and a dashcam app tested on Indian roads. Most entries note what testing showed.",
@@ -317,7 +317,7 @@ a:hover { text-decoration-thickness: 2px; }
     jobs.forEach(function (j) { j.hidden = !visibleIn(j); });
     secs.forEach(function (s) { s.hidden = !visibleIn(s); });
     sum.textContent = LENS[v].s;
-    note.textContent = LENS[v].n;
+    note.innerHTML = LENS[v].n;
     note.hidden = !LENS[v].n;
     meta.textContent = "";
     if (v === "all") {
@@ -345,6 +345,15 @@ a:hover { text-decoration-thickness: 2px; }
     });
     try { history.replaceState(null, "", v === "all" ? location.pathname + location.search : "#" + v); } catch (e) {}
   }
+
+  note.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a") : null;
+    var target = document.getElementById("projects");
+    if (!a || !target) return;
+    e.preventDefault();
+    var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+  });
 
   tabs.forEach(function (t, i) {
     t.addEventListener("click", function () { apply(t.getAttribute("data-view")); });
