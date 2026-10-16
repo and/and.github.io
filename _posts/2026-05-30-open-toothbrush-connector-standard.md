@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "An Open Connector Standard for Toothbrushes"
-date: 2026-10-16 10:10:00 +0530
+date: 2026-05-30 15:13:00 +0530
 categories: [making]
 permalink: /making/open-toothbrush-connector-standard/
 excerpt: "When the bristles wear out, the whole toothbrush is thrown away. I started by sketching a modular brush, then realised the problem is the connector, and that it needs a standard, not a product."
