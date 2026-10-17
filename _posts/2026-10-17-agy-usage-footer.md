@@ -11,8 +11,7 @@ I kept typing `/usage` in the Antigravity CLI (`agy`) to check how close I was t
 footer shows it all the time:
 
 <style>
-.ccf-term{background:#1c2029;color:#c9cdd6;border-radius:10px;padding:.9rem 1rem;font:13px/1.5 "JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;margin-top:1.25rem;margin-bottom:1.25rem}
-.ccf-term span.ccf-seg{white-space:nowrap}
+.ccf-term{background:#1c2029;color:#c9cdd6;border-radius:10px;padding:.85rem 1rem;font:11.25px/1.5 "JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;white-space:nowrap;overflow-x:auto;margin-top:1.25rem;margin-bottom:1.25rem}
 .ccf-term b{color:#fff}
 .ccf-t{color:#444}.ccf-e{background:#444}
 .ccf-g{color:#bcbcbc}.ccf-y{color:#ffd700}.ccf-o{color:#ff8700}.ccf-r{color:#ff0000}
@@ -26,7 +25,7 @@ footer shows it all the time:
 .ccf-copy:hover{background:rgba(127,127,127,.12)}
 .ccf-copy:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 </style>
-<div class="ccf-term" role="img" aria-label="Footer: Gemini 4 Argon (Medium), Context 10%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30"><span class="ccf-seg">Gemini 4 Argon (Medium)</span> <span class="ccf-seg">| Context: <span class="ccf-g">█</span><span class="ccf-t">█████████</span> <b>10%</b></span> <span class="ccf-seg">| Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30)</span> <span class="ccf-seg">| Weekly: <span class="ccf-o">███████</span><span class="ccf-e ccf-o">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</span></div>
+<div class="ccf-term wide" role="img" aria-label="Footer: Gemini 4 Argon (Medium), Context 10%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30"><span class="ccf-seg">Gemini 4 Argon (Medium)</span> <span class="ccf-seg">| Context: <span class="ccf-g">█</span><span class="ccf-t">█████████</span> <b>10%</b></span> <span class="ccf-seg">| Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30)</span> <span class="ccf-seg">| Weekly: <span class="ccf-o">███████</span><span class="ccf-e ccf-o">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</span></div>
 
 - **Context** is how much of the current conversation's context window is used.
 - **Session** is your rolling 5-hour plan limit for the active model's group, with the time it resets.
