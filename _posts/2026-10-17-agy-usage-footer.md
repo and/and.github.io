@@ -26,16 +26,16 @@ footer shows it all the time:
 .ccf-copy:hover{background:rgba(127,127,127,.12)}
 .ccf-copy:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 </style>
-<div class="ccf-term" role="img" aria-label="Footer: Claude Opus 5.5 (Medium), Context 10%, Session 74% resets 02:37, Weekly 37% resets Sat 21:37"><span class="ccf-seg">Claude Opus 5.5 (Medium)</span> <span class="ccf-seg">| Context: <span class="ccf-g">█</span><span class="ccf-t">█████████</span> <b>10%</b></span> <span class="ccf-seg">| Session: <span class="ccf-o">███████</span><span class="ccf-e ccf-o">▍</span><span class="ccf-t">██</span> <b>74%</b> (resets 02:37)</span> <span class="ccf-seg">| Weekly: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets Sat 21:37)</span></div>
+<div class="ccf-term" role="img" aria-label="Footer: Gemini 4 Argon (Medium), Context 10%, Session 37% resets 11:30, Weekly 72% resets Sat 17:30"><span class="ccf-seg">Gemini 4 Argon (Medium)</span> <span class="ccf-seg">| Context: <span class="ccf-g">█</span><span class="ccf-t">█████████</span> <b>10%</b></span> <span class="ccf-seg">| Session: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets 11:30)</span> <span class="ccf-seg">| Weekly: <span class="ccf-o">███████</span><span class="ccf-e ccf-o">▏</span><span class="ccf-t">██</span> <b>72%</b> (resets Sat 17:30)</span></div>
 
 - **Context** is how much of the current conversation's context window is used.
 - **Session** is your rolling 5-hour plan limit for the active model's group, with the time it resets.
 - **Weekly** is your 7-day plan limit for the active model's group, with the day and time it resets.
 
 When you switch models with `/model`, Session and Weekly automatically switch to the matching quota group:
-- **Claude & GPT models** show `3p-5h` and `3p-weekly`.
 - **Gemini 4 Argon** shows `gemini-5h` and `gemini-argon-wtu-weekly`.
 - **Other Gemini models** show `gemini-5h` and `gemini-weekly`.
+- **Claude & GPT models** show `3p-5h` and `3p-weekly`.
 
 Each bar has 10 blocks of 10%. The filled part changes colour as you use more:
 
@@ -75,7 +75,7 @@ Install a usage footer for my Antigravity CLI (agy) status line. Show me each ch
 2. Write the script below to ~/.config/agy/statusline.sh, exactly as given, and make it executable (chmod +x).
 3. Check that jq is installed. If it is not, tell me the command to install it on my system.
 4. Test the script by piping this sample JSON into it, and show me the output:
-{"model":{"display_name":"Claude Opus 5.5 (Medium)"},"context_window":{"used_percentage":10},"quota":{"3p-5h":{"remaining_fraction":0.26,"reset_in_seconds":16860},"3p-weekly":{"remaining_fraction":0.63,"reset_in_seconds":601200}}}
+{"model":{"display_name":"Gemini 4 Argon (Medium)"},"context_window":{"used_percentage":10},"quota":{"gemini-5h":{"remaining_fraction":0.63,"reset_in_seconds":9300},"gemini-argon-wtu-weekly":{"remaining_fraction":0.28,"reset_in_seconds":601200}}}
 5. Tell me to run `/statusline ~/.config/agy/statusline.sh` inside agy to turn it on.
 
 ```bash
