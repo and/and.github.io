@@ -4,16 +4,16 @@ title: "See your Antigravity usage limits in the agy footer"
 date: 2026-10-17 21:50:00 +0530
 categories: [utilities]
 permalink: /utilities/agy-usage-footer/
-excerpt: "A status line for the Antigravity CLI (agy) that always shows how full your context is and how much of your 5-hour and weekly quota you have used for the active model group, with bars that turn yellow, orange and red as you get close."
+excerpt: "A status line for the Antigravity CLI (agy) that always shows how full your context is and how much of your 5-hour and weekly plan limits you have used, with bars that turn yellow, orange and red as you get close."
 ---
 
-I kept typing `/usage` in the Antigravity CLI (`agy`) to check how close I was to my 5-hour and weekly model limits. Now the footer shows it all the time:
+I kept typing `/usage` in the Antigravity CLI (`agy`) to check how close I was to my plan limits. Now the
+footer shows it all the time:
 
 <style>
 .ccf-term{background:#1c2029;color:#c9cdd6;border-radius:10px;padding:.9rem 1rem;font:13px/1.5 "JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;margin-top:1.25rem;margin-bottom:1.25rem}
 .ccf-term span.ccf-seg{white-space:nowrap}
 .ccf-term b{color:#fff}
-.ccf-d{color:#777e8b}
 .ccf-t{color:#444}.ccf-e{background:#444}
 .ccf-g{color:#bcbcbc}.ccf-y{color:#ffd700}.ccf-o{color:#ff8700}.ccf-r{color:#ff0000}
 .ccf-key{display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;list-style:none;padding:0;margin-top:0;margin-bottom:1.5rem;font-size:.9rem}
@@ -26,13 +26,13 @@ I kept typing `/usage` in the Antigravity CLI (`agy`) to check how close I was t
 .ccf-copy:hover{background:rgba(127,127,127,.12)}
 .ccf-copy:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 </style>
-<div class="ccf-term" role="img" aria-label="Footer: Claude Opus 5.5 (Medium), Ctx 10%, 5h 74% resets in 4h41m, Week 37% resets in 6d23h"><span class="ccf-seg">Claude Opus 5.5 (Medium)</span> <span class="ccf-seg"><span class="ccf-d">|</span> Ctx <span class="ccf-g">█</span><span class="ccf-t">█████████</span> <b>10%</b></span> <span class="ccf-seg"><span class="ccf-d">|</span> 5h <span class="ccf-o">███████</span><span class="ccf-e ccf-o">▍</span><span class="ccf-t">██</span> <b>74%</b> <span class="ccf-d">↻4h41m</span></span> <span class="ccf-seg"><span class="ccf-d">|</span> Week <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> <span class="ccf-d">↻6d23h</span></span></div>
+<div class="ccf-term" role="img" aria-label="Footer: Claude Opus 5.5 (Medium), Context 10%, Session 74% resets 02:37, Weekly 37% resets Sat 21:37"><span class="ccf-seg">Claude Opus 5.5 (Medium)</span> <span class="ccf-seg">| Context: <span class="ccf-g">█</span><span class="ccf-t">█████████</span> <b>10%</b></span> <span class="ccf-seg">| Session: <span class="ccf-o">███████</span><span class="ccf-e ccf-o">▍</span><span class="ccf-t">██</span> <b>74%</b> (resets 02:37)</span> <span class="ccf-seg">| Weekly: <span class="ccf-g">███</span><span class="ccf-e ccf-g">▋</span><span class="ccf-t">██████</span> <b>37%</b> (resets Sat 21:37)</span></div>
 
-- **Ctx** is how much of the current conversation's context window is used.
-- **5h** is the rolling 5-hour quota used for your active model's group, with a countdown (`↻4h41m`) until it refreshes.
-- **Week** is the 7-day quota used for your active model's group, with a countdown (`↻6d23h`) until it refreshes.
+- **Context** is how much of the current conversation's context window is used.
+- **Session** is your rolling 5-hour plan limit for the active model's group, with the time it resets.
+- **Weekly** is your 7-day plan limit for the active model's group, with the day and time it resets.
 
-When you switch models with `/model`, the footer automatically switches to the matching quota pool:
+When you switch models with `/model`, Session and Weekly automatically switch to the matching quota group:
 - **Claude & GPT models** show `3p-5h` and `3p-weekly`.
 - **Gemini 4 Argon** shows `gemini-5h` and `gemini-argon-wtu-weekly`.
 - **Other Gemini models** show `gemini-5h` and `gemini-weekly`.
@@ -48,9 +48,7 @@ Each bar has 10 blocks of 10%. The filled part changes colour as you use more:
 
 ## How it works
 
-`agy` has a built-in `/statusline` command that can run a shell script of your choice to render the footer. On every refresh it pipes a JSON blob to that script on stdin containing `.model.display_name`, `.context_window.used_percentage`, `.terminal_width`, and `.quota` buckets (each with `remaining_fraction` and `reset_in_seconds`).
-
-Because `agy` reports `remaining_fraction` (from `0` to `1`), the script converts that to percentage used (`(1 - remaining_fraction) * 100`) so it reads the same way as the context bar: fuller means closer to the limit. If your terminal window is too narrow for the full bars, it falls back to compact percentages (`5h 74% | Week 37%`) so the line never wraps or clips.
+`agy` has a built-in `/statusline` command that runs a script of your choice to draw the footer. On every refresh it sends that script some JSON about the session, including `.model.display_name`, `.context_window.used_percentage`, and `.quota` buckets (each with a `remaining_fraction` from `0` to `1` and `reset_in_seconds`). The script reads those numbers with `jq`, converts `remaining_fraction` into percentage used (`(1 - remaining_fraction) * 100`), and prints one line.
 
 ## Before you start
 
@@ -58,11 +56,14 @@ Because `agy` reports `remaining_fraction` (from `0` to `1`), the script convert
 
 ## Install
 
-Pick one way. Both write the script to `~/.config/agy/statusline.sh` and back up any existing `~/.config/agy/statusline.sh` to `~/.config/agy/statusline.sh.bak` once so a second install never overwrites your backup.
+Pick one way. Both make the same changes, so you can install one way and uninstall the other.
+Both back up any status line you already have, as `~/.config/agy/statusline.sh.bak` and
+`~/.config/agy/statusline-setting.bak.json`. Installing again never overwrites that backup.
 
 ### Ask `agy`
 
-Paste this prompt into `agy`, then run `/statusline ~/.config/agy/statusline.sh` when it finishes:
+Paste this prompt into `agy`. It shows you each change before making it, checks for `jq`, and
+tests the footer at the end.
 
 <details markdown="1">
 <summary>Show the install prompt</summary>
@@ -71,23 +72,23 @@ Paste this prompt into `agy`, then run `/statusline ~/.config/agy/statusline.sh`
 Install a usage footer for my Antigravity CLI (agy) status line. Show me each change before you make it.
 
 1. If ~/.config/agy/statusline.sh exists and ~/.config/agy/statusline.sh.bak does not, copy statusline.sh to statusline.sh.bak.
-2. Write the script below to ~/.config/agy/statusline.sh and make it executable (chmod +x).
+2. Write the script below to ~/.config/agy/statusline.sh, exactly as given, and make it executable (chmod +x).
 3. Check that jq is installed. If it is not, tell me the command to install it on my system.
 4. Test the script by piping this sample JSON into it, and show me the output:
-{"model":{"display_name":"Claude Opus 5.5 (Medium)"},"context_window":{"used_percentage":10},"terminal_width":160,"quota":{"3p-5h":{"remaining_fraction":0.26,"reset_in_seconds":16860},"3p-weekly":{"remaining_fraction":0.63,"reset_in_seconds":601200}}}
-5. Remind me to run `/statusline ~/.config/agy/statusline.sh` inside agy to activate it.
+{"model":{"display_name":"Claude Opus 5.5 (Medium)"},"context_window":{"used_percentage":10},"quota":{"3p-5h":{"remaining_fraction":0.26,"reset_in_seconds":16860},"3p-weekly":{"remaining_fraction":0.63,"reset_in_seconds":601200}}}
+5. Tell me to run `/statusline ~/.config/agy/statusline.sh` inside agy to turn it on.
 
 ```bash
 #!/bin/bash
-# Antigravity CLI (agy) footer: model | context | quota for the active model's group.
-# Setup inside agy:  /statusline ~/.config/agy/statusline.sh
-# Requires: jq
+# Antigravity CLI (agy) status line: model | Context | 5h Session limit | 7d Weekly limit, each with a bar
 input=$(cat)
 
-B=$'\033[1m'; N=$'\033[22m'; D=$'\033[2m'
-T=$'\033[38;5;238m'; R=$'\033[0m'
+B=$'\033[1m'; N=$'\033[22m'
 
-# 10-block bar (light gray -> yellow >50% -> orange >70% -> red >80%).
+# 10-block bar: filled part on a solid dark gray track, so it reads as progress.
+# Fill is light gray, then yellow above 50%, orange above 70%, red above 80%.
+# Leftover under 10% becomes a partial block (eighths) drawn over the track.
+T=$'\033[38;5;238m'; R=$'\033[39;49m'
 bar() {
   local p=$1 fill='' track='' edge='' i c
   [ "$p" -gt 100 ] && p=100
@@ -104,49 +105,38 @@ bar() {
   printf '%s%s%s%s%s%s%s %s%s%%%s' "$F" "$fill" "$R" "$edge" "$T" "$track" "$R" "$B" "$p" "$N"
 }
 
-# Seconds -> compact duration: 45m, 4h43m, 6d23h
-dur() {
-  local s=${1:-0} d h m
-  d=$((s / 86400)); h=$(((s % 86400) / 3600)); m=$(((s % 3600) / 60))
-  if [ $d -gt 0 ]; then printf '%dd%dh' $d $h
-  elif [ $h -gt 0 ]; then printf '%dh%02dm' $h $m
-  else printf '%dm' $m; fi
-}
+# Epoch seconds to local time; date -r is macOS, date -d @ is Linux
+fmt() { date -r "$1" "$2" 2>/dev/null || date -d "@$1" "$2" 2>/dev/null; }
 
 model=$(echo "$input" | jq -r '.model.display_name // .model.id // "agy"')
 ctx=$(printf '%.0f' "$(echo "$input" | jq -r '.context_window.used_percentage // 0')")
-width=$(echo "$input" | jq -r '.terminal_width // empty')
-[ -z "$width" ] && width=$(tput cols 2>/dev/null || echo 200)
 
-# Pick quota buckets for the active model's group (as shown in /usage).
+# Pick the 5h and 7d quota buckets for the active model's group
 case "$model" in
-  *Claude*|*claude*|*GPT*|*gpt*) keys="3p-5h:5h 3p-weekly:Week" ;;
-  *Argon*|*argon*)               keys="gemini-5h:5h gemini-argon-wtu-weekly:Week" ;;
-  *)                             keys="gemini-5h:5h gemini-weekly:Week" ;;
+  *Claude*|*claude*|*GPT*|*gpt*|*Opus*|*Sonnet*)
+    five_key="3p-5h"; week_key="3p-weekly" ;;
+  *Argon*|*argon*)
+    five_key="gemini-5h"; week_key="gemini-argon-wtu-weekly" ;;
+  *)
+    five_key="gemini-5h"; week_key="gemini-weekly" ;;
 esac
 
-line="$model ${D}|${R} Ctx $(bar "$ctx")"
+now=$(date +%s)
+read -r five_frac five_secs <<< "$(echo "$input" | jq -r --arg k "$five_key" \
+  '.quota[$k] | if . then "\(.remaining_fraction) \(.reset_in_seconds // empty)" else empty end')"
+read -r week_frac week_secs <<< "$(echo "$input" | jq -r --arg k "$week_key" \
+  '.quota[$k] | if . then "\(.remaining_fraction) \(.reset_in_seconds // empty)" else empty end')"
 
-for pair in $keys; do
-  key=${pair%%:*}; label=${pair#*:}
-  read -r frac secs <<< "$(echo "$input" | jq -r --arg k "$key" \
-    '.quota[$k] | if . then "\(.remaining_fraction) \(.reset_in_seconds // 0)" else empty end')"
-  [ -z "$frac" ] && continue
-  used=$(awk -v f="$frac" 'BEGIN { printf "%.0f", (1 - f) * 100 }')
-  line="$line ${D}|${R} $label $(bar "$used") ${D}↻$(dur "$secs")${R}"
-done
-
-# Trim to terminal width (ANSI-aware) so the footer never wraps or clips mid-glyph.
-visible=$(printf '%s' "$line" | sed $'s/\033\\[[0-9;]*m//g')
-if [ ${#visible} -gt "$width" ]; then
-  line="$model ${D}|${R} Ctx $(bar "$ctx")"
-  for pair in $keys; do
-    key=${pair%%:*}; label=${pair#*:}
-    frac=$(echo "$input" | jq -r --arg k "$key" '.quota[$k].remaining_fraction // empty')
-    [ -z "$frac" ] && continue
-    used=$(awk -v f="$frac" 'BEGIN { printf "%.0f", (1 - f) * 100 }')
-    line="$line ${D}|${R} $label ${B}${used}%${N}"
-  done
+line="$model | Context: $(bar "$ctx")"
+if [ -n "$five_frac" ]; then
+  five=$(awk -v f="$five_frac" 'BEGIN { printf "%.0f", (1 - f) * 100 }')
+  line="$line | Session: $(bar "$five")"
+  [ -n "$five_secs" ] && line="$line (resets $(fmt "$((now + five_secs))" +%H:%M))"
+fi
+if [ -n "$week_frac" ]; then
+  week=$(awk -v f="$week_frac" 'BEGIN { printf "%.0f", (1 - f) * 100 }')
+  line="$line | Weekly: $(bar "$week")"
+  [ -n "$week_secs" ] && line="$line (resets $(fmt "$((now + week_secs))" '+%a %H:%M'))"
 fi
 
 printf '%s' "$line"
@@ -157,7 +147,8 @@ printf '%s' "$line"
 
 ### Or paste a terminal command
 
-This writes the script to `~/.config/agy/statusline.sh` and updates `~/.gemini/antigravity-cli/settings.json` directly:
+This writes the script to `~/.config/agy/statusline.sh` and points `statusLine` in
+`~/.gemini/antigravity-cli/settings.json` at it. Your other settings stay as they are.
 
 <details markdown="1">
 <summary>Show the install command</summary>
@@ -165,19 +156,20 @@ This writes the script to `~/.config/agy/statusline.sh` and updates `~/.gemini/a
 ```bash
 mkdir -p ~/.config/agy ~/.gemini/antigravity-cli
 f=~/.gemini/antigravity-cli/settings.json; [ -f "$f" ] || echo '{}' > "$f"
+# Back up your current status line once (a second install will not overwrite the backup)
 [ -f ~/.config/agy/statusline.sh ] && [ ! -f ~/.config/agy/statusline.sh.bak ] && cp ~/.config/agy/statusline.sh ~/.config/agy/statusline.sh.bak
 [ -f ~/.config/agy/statusline-setting.bak.json ] || jq '.statusLine // null' "$f" > ~/.config/agy/statusline-setting.bak.json
 cat > ~/.config/agy/statusline.sh <<'EOF'
 #!/bin/bash
-# Antigravity CLI (agy) footer: model | context | quota for the active model's group.
-# Setup inside agy:  /statusline ~/.config/agy/statusline.sh
-# Requires: jq
+# Antigravity CLI (agy) status line: model | Context | 5h Session limit | 7d Weekly limit, each with a bar
 input=$(cat)
 
-B=$'\033[1m'; N=$'\033[22m'; D=$'\033[2m'
-T=$'\033[38;5;238m'; R=$'\033[0m'
+B=$'\033[1m'; N=$'\033[22m'
 
-# 10-block bar (light gray -> yellow >50% -> orange >70% -> red >80%).
+# 10-block bar: filled part on a solid dark gray track, so it reads as progress.
+# Fill is light gray, then yellow above 50%, orange above 70%, red above 80%.
+# Leftover under 10% becomes a partial block (eighths) drawn over the track.
+T=$'\033[38;5;238m'; R=$'\033[39;49m'
 bar() {
   local p=$1 fill='' track='' edge='' i c
   [ "$p" -gt 100 ] && p=100
@@ -194,49 +186,38 @@ bar() {
   printf '%s%s%s%s%s%s%s %s%s%%%s' "$F" "$fill" "$R" "$edge" "$T" "$track" "$R" "$B" "$p" "$N"
 }
 
-# Seconds -> compact duration: 45m, 4h43m, 6d23h
-dur() {
-  local s=${1:-0} d h m
-  d=$((s / 86400)); h=$(((s % 86400) / 3600)); m=$(((s % 3600) / 60))
-  if [ $d -gt 0 ]; then printf '%dd%dh' $d $h
-  elif [ $h -gt 0 ]; then printf '%dh%02dm' $h $m
-  else printf '%dm' $m; fi
-}
+# Epoch seconds to local time; date -r is macOS, date -d @ is Linux
+fmt() { date -r "$1" "$2" 2>/dev/null || date -d "@$1" "$2" 2>/dev/null; }
 
 model=$(echo "$input" | jq -r '.model.display_name // .model.id // "agy"')
 ctx=$(printf '%.0f' "$(echo "$input" | jq -r '.context_window.used_percentage // 0')")
-width=$(echo "$input" | jq -r '.terminal_width // empty')
-[ -z "$width" ] && width=$(tput cols 2>/dev/null || echo 200)
 
-# Pick quota buckets for the active model's group (as shown in /usage).
+# Pick the 5h and 7d quota buckets for the active model's group
 case "$model" in
-  *Claude*|*claude*|*GPT*|*gpt*) keys="3p-5h:5h 3p-weekly:Week" ;;
-  *Argon*|*argon*)               keys="gemini-5h:5h gemini-argon-wtu-weekly:Week" ;;
-  *)                             keys="gemini-5h:5h gemini-weekly:Week" ;;
+  *Claude*|*claude*|*GPT*|*gpt*|*Opus*|*Sonnet*)
+    five_key="3p-5h"; week_key="3p-weekly" ;;
+  *Argon*|*argon*)
+    five_key="gemini-5h"; week_key="gemini-argon-wtu-weekly" ;;
+  *)
+    five_key="gemini-5h"; week_key="gemini-weekly" ;;
 esac
 
-line="$model ${D}|${R} Ctx $(bar "$ctx")"
+now=$(date +%s)
+read -r five_frac five_secs <<< "$(echo "$input" | jq -r --arg k "$five_key" \
+  '.quota[$k] | if . then "\(.remaining_fraction) \(.reset_in_seconds // empty)" else empty end')"
+read -r week_frac week_secs <<< "$(echo "$input" | jq -r --arg k "$week_key" \
+  '.quota[$k] | if . then "\(.remaining_fraction) \(.reset_in_seconds // empty)" else empty end')"
 
-for pair in $keys; do
-  key=${pair%%:*}; label=${pair#*:}
-  read -r frac secs <<< "$(echo "$input" | jq -r --arg k "$key" \
-    '.quota[$k] | if . then "\(.remaining_fraction) \(.reset_in_seconds // 0)" else empty end')"
-  [ -z "$frac" ] && continue
-  used=$(awk -v f="$frac" 'BEGIN { printf "%.0f", (1 - f) * 100 }')
-  line="$line ${D}|${R} $label $(bar "$used") ${D}↻$(dur "$secs")${R}"
-done
-
-# Trim to terminal width (ANSI-aware) so the footer never wraps or clips mid-glyph.
-visible=$(printf '%s' "$line" | sed $'s/\033\\[[0-9;]*m//g')
-if [ ${#visible} -gt "$width" ]; then
-  line="$model ${D}|${R} Ctx $(bar "$ctx")"
-  for pair in $keys; do
-    key=${pair%%:*}; label=${pair#*:}
-    frac=$(echo "$input" | jq -r --arg k "$key" '.quota[$k].remaining_fraction // empty')
-    [ -z "$frac" ] && continue
-    used=$(awk -v f="$frac" 'BEGIN { printf "%.0f", (1 - f) * 100 }')
-    line="$line ${D}|${R} $label ${B}${used}%${N}"
-  done
+line="$model | Context: $(bar "$ctx")"
+if [ -n "$five_frac" ]; then
+  five=$(awk -v f="$five_frac" 'BEGIN { printf "%.0f", (1 - f) * 100 }')
+  line="$line | Session: $(bar "$five")"
+  [ -n "$five_secs" ] && line="$line (resets $(fmt "$((now + five_secs))" +%H:%M))"
+fi
+if [ -n "$week_frac" ]; then
+  week=$(awk -v f="$week_frac" 'BEGIN { printf "%.0f", (1 - f) * 100 }')
+  line="$line | Weekly: $(bar "$week")"
+  [ -n "$week_secs" ] && line="$line (resets $(fmt "$((now + week_secs))" '+%a %H:%M'))"
 fi
 
 printf '%s' "$line"
@@ -251,17 +232,21 @@ If `agy` is already open, run `/statusline ~/.config/agy/statusline.sh` inside `
 
 ## Uninstall
 
-To revert to `agy`'s built-in default footer at any time, run inside `agy`:
+This puts back the status line you had before, or reverts to `agy`'s built-in default if you had none.
 
-```text
+Inside `agy`, you can run:
+
+~~~~text
 /statusline delete
-```
+~~~~
 
-Or run this in your terminal to restore any previous backup:
+Or run this in your terminal:
 
 ```bash
 f=~/.gemini/antigravity-cli/settings.json; b=~/.config/agy/statusline-setting.bak.json
+# Put back your old script, or remove this one if you had none
 if [ -f ~/.config/agy/statusline.sh.bak ]; then mv ~/.config/agy/statusline.sh.bak ~/.config/agy/statusline.sh; else rm -f ~/.config/agy/statusline.sh; fi
+# Put back your old statusLine setting, or remove it if you had none
 if [ -f "$b" ]; then
   jq --slurpfile p "$b" 'if $p[0] == null then del(.statusLine) else .statusLine = $p[0] end' "$f" > "$f.tmp" && mv "$f.tmp" "$f" && rm "$b"
 else
@@ -271,8 +256,8 @@ fi
 
 ## Good to know
 
-- **Time-zone independent.** Because the countdown uses `reset_in_seconds` directly instead of formatting the UTC `reset_time` string, it works identically on macOS and Linux in any time zone.
-- **Separate from NotebookLM.** Even if your Google AI Pro subscription unlocks both Antigravity and NotebookLM Pro, `agy` token quotas (`gemini-5h`, `3p-5h`, etc.) and NotebookLM notebook limits are tracked in separate pools.
+- **It works on macOS and Linux.** Reset times are calculated from `reset_in_seconds` using your computer's local time zone.
+- **Separate from NotebookLM.** Even if your Google AI Pro subscription unlocks both Antigravity and NotebookLM, `agy` model limits and NotebookLM notebook limits are tracked in separate pools.
 
 <script>
 // A copy button above every prompt and command. Blocks inside a collapsed
