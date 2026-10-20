@@ -1,0 +1,102 @@
+---
+layout: null
+permalink: /halo/get/
+# The page that Halo's invite links open. Standalone, like /halo/: not in the post lists, feed or sitemap.
+sitemap: false
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Halo</title>
+  <meta name="description" content="Halo shows the people close to you when you're driving or busy, right on your contact card, so they know before they call.">
+  <!-- Link previews in WhatsApp, iMessage and others -->
+  <meta property="og:title" content="You're invited to Halo">
+  <meta property="og:description" content="Let your contacts know you're busy before they call.">
+  <meta property="og:image" content="{{ '/halo/img/og.png' | absolute_url }}">
+  <meta property="og:url" content="{{ '/halo/get/' | absolute_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="{{ '/halo/img/icon.png' | relative_url }}">
+  <link rel="apple-touch-icon" href="{{ '/halo/img/icon.png' | relative_url }}">
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --text: #0F172A;
+      --muted: #64748B;
+      --border: #E2E8F0;
+      --accent: #4F46E5;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0B1120;
+        --card: #111827;
+        --text: #F1F5F9;
+        --muted: #94A3B8;
+        --border: #1F2937;
+        --accent: #818CF8;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    /* The iOS app icon, with the same rounded-square mask */
+    .app-icon { width: 96px; height: 96px; border-radius: 22.5%; margin-bottom: 16px; }
+    h1 { font-size: 26px; margin: 0 0 8px; }
+    p { color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0 0 24px; }
+    .button {
+      display: block;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .button.soon { background: transparent; color: var(--muted); border: 1px solid var(--border); font-weight: 500; }
+    .steps { text-align: left; font-size: 14px; color: var(--muted); margin: 20px 0 0; padding-left: 20px; }
+    .steps li { margin-bottom: 6px; }
+    .more { display: inline-block; margin-top: 20px; font-size: 14px; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <img class="app-icon" src="{{ '/halo/img/icon.png' | relative_url }}" alt="Halo app icon" width="96" height="96">
+    <h1>You're invited to Halo</h1>
+    <p>Halo shows the people close to you when you're driving or busy, right on your contact card, so they know before they call.</p>
+
+    <!-- Android: Play internal testing opt-in, which works only for Google accounts on the testers list.
+         iPhone: replace the span with a link once the TestFlight public link exists. -->
+    <a class="button" href="https://play.google.com/apps/internaltest/4701711812677846403">Get it for Android</a>
+    <span class="button soon">iPhone: ask the person who invited you for a TestFlight invite</span>
+
+    <ol class="steps">
+      <li>Install Halo and verify your phone number.</li>
+      <li>Your invite appears right away. Tap Accept.</li>
+      <li>You'll both see each other's status.</li>
+    </ol>
+
+    <a class="more" href="{{ '/halo/' | relative_url }}">What is Halo?</a>
+  </main>
+</body>
+</html>
