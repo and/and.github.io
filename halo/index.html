@@ -50,21 +50,82 @@ sitemap: false
 
 <p><img class="halo-icon" src="{{ '/halo/img/icon.png' | relative_url }}" alt="The Halo app icon: a glowing ring with a green dot" width="88" height="88"></p>
 
-<p>You call someone and it rings out. Later you find out they were driving. Or it's the other way round: you're in a meeting, your phone buzzes on the table, and you cut the call and hope they don't worry.</p>
+<p>You call a friend and it rings out. Later you find out they were driving. Or you're in a meeting, your phone buzzes on the table, and you cut the call and hope they don't worry.</p>
 
 <p>Nobody did anything wrong. The caller just couldn't tell.</p>
 
-<p><strong>Halo</strong> is a small app for Android and iPhone that fixes this. It lets your contacts know you're busy before they call.</p>
+<p><strong>Halo</strong> is an app for Android and iPhone that fixes this. It lets your contacts know you're busy before they call.</p>
 
-<h2>What it does</h2>
+<h2>Halo in 30 seconds</h2>
 
-<p>Halo shows your status where people already look: your name in their phone's contacts.</p>
+<ul>
+  <li><strong>You set a status</strong>, like 🚗 Driving or 📅 In a Meeting. One tap in the app or on the home-screen widget.</li>
+  <li><strong>It appears next to your name on their phone.</strong> If your friend has you saved as <strong>Jane Doe</strong>, they now see <strong>Jane Doe 🚗 Driving</strong>.</li>
+  <li><strong>They see it wherever your name shows up:</strong> recent calls, the incoming call screen, and WhatsApp.</li>
+  <li><strong>When you're free again</strong>, your name goes back to just <strong>Jane Doe</strong>.</li>
+</ul>
 
-<p>When Priya starts driving, her name on your phone changes from <strong>Priya Sharma</strong> to <strong>Priya Sharma 🚗 Driving</strong>. You see it in your phone app, in your recent calls, on the incoming call screen, and in WhatsApp, which uses the names from your contacts. When she's free again, her name goes back to just <strong>Priya Sharma</strong>.</p>
+<p>Nobody has to open Halo to check. They were about to call you anyway, and now they can see you're on the road.</p>
 
-<p>There's nothing new to open and nothing to check. You were about to call her anyway, and now you can see she's on the road.</p>
+<h2>What it looks like</h2>
 
-<p>These are the statuses you can pick:</p>
+<p>Here's a phone where a few contacts use Halo. These are drawings with made-up names, but each name is written exactly the way Halo writes it.</p>
+
+<div class="halo-row wide">
+  <figure>
+    <div class="halo-phone" role="img" aria-label="Illustration of a recent calls list: Jane Doe 🚗 Driving, John Smith 🔴 Busy, Mom, and Emily Clark 📅 In a Meeting">
+      <div class="halo-screen" aria-hidden="true">
+        <div class="halo-bar"><span>10:45</span><span>●●●</span></div>
+        <div class="halo-title">Recents</div>
+        <ul class="halo-list">
+          <li><span class="halo-av" style="background:#6e56cf">J</span><span class="halo-main"><span class="halo-name" style="display:block">Jane Doe 🚗 Driving</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">10:42</span></li>
+          <li><span class="halo-av" style="background:#0d74ce">J</span><span class="halo-main"><span class="halo-name" style="display:block">John Smith 🔴 Busy</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">9:15</span></li>
+          <li><span class="halo-av" style="background:#d6409f">M</span><span class="halo-main"><span class="halo-name" style="display:block">Mom</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">Yesterday</span></li>
+          <li><span class="halo-av" style="background:#12a594">E</span><span class="halo-main"><span class="halo-name" style="display:block">Emily Clark 📅 In a Meeting</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">Yesterday</span></li>
+          <li><span class="halo-av" style="background:#ca8a04">M</span><span class="halo-main"><span class="halo-name" style="display:block">Mike Brown</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">Mon</span></li>
+        </ul>
+      </div>
+    </div>
+    <figcaption>Recent calls. Mom and Mike have no status set, so their names look normal.</figcaption>
+  </figure>
+  <figure>
+    <div class="halo-phone" role="img" aria-label="Illustration of an incoming call from Jane Doe 🚗 Driving">
+      <div class="halo-screen" aria-hidden="true">
+        <div class="halo-call">
+          <div class="label">Incoming call</div>
+          <span class="halo-av" style="background:#6e56cf">J</span>
+          <div class="who">Jane Doe 🚗 Driving</div>
+          <div class="num">Mobile</div>
+          <div class="btns"><span class="no"></span><span class="yes"></span></div>
+        </div>
+      </div>
+    </div>
+    <figcaption>The incoming call screen shows the status too.</figcaption>
+  </figure>
+</div>
+
+<div class="halo-row wide">
+  <figure>
+    <div class="halo-phone" role="img" aria-label="Illustration of a chat list: Jane Doe 🚗 Driving, John Smith 🔴 Busy, Mom, and Emily Clark 🏋️ At the Gym">
+      <div class="halo-screen" aria-hidden="true">
+        <div class="halo-bar"><span>10:45</span><span>●●●</span></div>
+        <div class="halo-title">Chats</div>
+        <div class="halo-tabs"><span>All</span><span>Unread</span><span>Groups</span></div>
+        <ul class="halo-list">
+          <li><span class="halo-av" style="background:#6e56cf">J</span><span class="halo-main"><span class="halo-name" style="display:block">Jane Doe 🚗 Driving</span><span class="halo-sub" style="display:block">Leaving now, see you at 7</span></span><span class="halo-time">10:40</span></li>
+          <li><span class="halo-av" style="background:#0d74ce">J</span><span class="halo-main"><span class="halo-name" style="display:block">John Smith 🔴 Busy</span><span class="halo-sub" style="display:block">Can we move the call to 4?</span></span><span class="halo-time">9:58</span></li>
+          <li><span class="halo-av" style="background:#d6409f">M</span><span class="halo-main"><span class="halo-name" style="display:block">Mom</span><span class="halo-sub" style="display:block">Did you eat?</span></span><span class="halo-time">9:30</span></li>
+          <li><span class="halo-av" style="background:#12a594">E</span><span class="halo-main"><span class="halo-name" style="display:block">Emily Clark 🏋️ At the Gym</span><span class="halo-sub" style="display:block">Sent the tickets</span></span><span class="halo-time">8:12</span></li>
+        </ul>
+      </div>
+    </div>
+    <figcaption>WhatsApp uses the names saved in your contacts, so the status shows there too.</figcaption>
+  </figure>
+</div>
+
+<p>John is a work contact, so you only ever see <strong>🔴 Busy</strong> for him, whatever he's actually doing. More on that below.</p>
+
+<h2>The statuses</h2>
 
 <ul class="halo-statuses">
   <li>🟢 Available</li>
@@ -74,128 +135,77 @@ sitemap: false
   <li>🏋️ At the Gym</li>
 </ul>
 
-<p>Halo can also set some of them for you. Under <strong>Auto-set</strong> you can turn on Driving, Calendar meetings and Low battery, and Halo switches your status when it notices one of those. Each one is a switch, so you choose which ones run.</p>
+<p>You can set them yourself, or let Halo do it. Under <strong>Auto-set</strong>, turn on Driving, Calendar meetings or Low battery, and Halo changes your status when it notices one of those. Each one has its own switch.</p>
 
-<h2>How it looks</h2>
+<h2>Getting started</h2>
 
-<p>Here's what your phone shows when a few of your contacts use Halo. These are illustrations, with made-up names, but the names are written exactly the way Halo writes them.</p>
+<p>Halo only works between people who both have it, so setting up takes two people. It takes about a minute.</p>
 
-<div class="halo-row wide">
-  <figure>
-    <div class="halo-phone" role="img" aria-label="Illustration of a recent calls list: Priya Sharma 🚗 Driving, Rahul Mehta 🔴 Busy, Mom, and Ananya Iyer 📅 In a Meeting">
-      <div class="halo-screen" aria-hidden="true">
-        <div class="halo-bar"><span>10:45</span><span>●●●</span></div>
-        <div class="halo-title">Recents</div>
-        <ul class="halo-list">
-          <li><span class="halo-av" style="background:#6e56cf">P</span><span class="halo-main"><span class="halo-name" style="display:block">Priya Sharma 🚗 Driving</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">10:42</span></li>
-          <li><span class="halo-av" style="background:#0d74ce">R</span><span class="halo-main"><span class="halo-name" style="display:block">Rahul Mehta 🔴 Busy</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">9:15</span></li>
-          <li><span class="halo-av" style="background:#d6409f">M</span><span class="halo-main"><span class="halo-name" style="display:block">Mom</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">Yesterday</span></li>
-          <li><span class="halo-av" style="background:#12a594">A</span><span class="halo-main"><span class="halo-name" style="display:block">Ananya Iyer 📅 In a Meeting</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">Yesterday</span></li>
-          <li><span class="halo-av" style="background:#ca8a04">K</span><span class="halo-main"><span class="halo-name" style="display:block">Karan Shah</span><span class="halo-sub" style="display:block">Mobile</span></span><span class="halo-time">Mon</span></li>
-        </ul>
-      </div>
-    </div>
-    <figcaption>Illustration: how your contacts look in your phone app. Mom and Karan have no status showing, so their names are unchanged.</figcaption>
-  </figure>
-  <figure>
-    <div class="halo-phone" role="img" aria-label="Illustration of an incoming call from Priya Sharma 🚗 Driving, +91 98765 43210">
-      <div class="halo-screen" aria-hidden="true">
-        <div class="halo-call">
-          <div class="label">Incoming call</div>
-          <span class="halo-av" style="background:#6e56cf">P</span>
-          <div class="who">Priya Sharma 🚗 Driving</div>
-          <div class="num">Mobile · +91 98765 43210</div>
-          <div class="btns"><span class="no"></span><span class="yes"></span></div>
-        </div>
-      </div>
-    </div>
-    <figcaption>Illustration: the incoming call screen shows the status too.</figcaption>
-  </figure>
-</div>
-
-<div class="halo-row wide">
-  <figure>
-    <div class="halo-phone" role="img" aria-label="Illustration of a chat list: Priya Sharma 🚗 Driving, Rahul Mehta 🔴 Busy, Mom, and Ananya Iyer 🏋️ At the Gym">
-      <div class="halo-screen" aria-hidden="true">
-        <div class="halo-bar"><span>10:45</span><span>●●●</span></div>
-        <div class="halo-title">Chats</div>
-        <div class="halo-tabs"><span>All</span><span>Unread</span><span>Groups</span></div>
-        <ul class="halo-list">
-          <li><span class="halo-av" style="background:#6e56cf">P</span><span class="halo-main"><span class="halo-name" style="display:block">Priya Sharma 🚗 Driving</span><span class="halo-sub" style="display:block">Leaving now, see you at 7</span></span><span class="halo-time">10:40</span></li>
-          <li><span class="halo-av" style="background:#0d74ce">R</span><span class="halo-main"><span class="halo-name" style="display:block">Rahul Mehta 🔴 Busy</span><span class="halo-sub" style="display:block">Can we move the call to 4?</span></span><span class="halo-time">9:58</span></li>
-          <li><span class="halo-av" style="background:#d6409f">M</span><span class="halo-main"><span class="halo-name" style="display:block">Mom</span><span class="halo-sub" style="display:block">Did you eat?</span></span><span class="halo-time">9:30</span></li>
-          <li><span class="halo-av" style="background:#12a594">A</span><span class="halo-main"><span class="halo-name" style="display:block">Ananya Iyer 🏋️ At the Gym</span><span class="halo-sub" style="display:block">Sent the tickets</span></span><span class="halo-time">8:12</span></li>
-        </ul>
-      </div>
-    </div>
-    <figcaption>Illustration: the same names in WhatsApp's chat list. WhatsApp shows the names saved in your contacts, so the status comes along.</figcaption>
-  </figure>
-</div>
-
-<p>Rahul is a work contact, so you only ever see <strong>🔴 Busy</strong> for him, whatever he's actually doing. More on that below.</p>
-
-<h2>The app</h2>
-
-<p>You sign in with your phone number and a verification code. There's no username, password or profile to fill in.</p>
-
-<p>After that it's one screen. At the top is your status. Below it is who sees it, split into Family and Work.</p>
+<ol>
+  <li><strong>Install Halo</strong> from the link at the end of this page.</li>
+  <li><strong>Sign in with your phone number.</strong> You get a code by SMS. There's no username, password or profile to fill in.</li>
+  <li><strong>Allow access to your contacts.</strong> Halo needs this to find the people you invite and to add their status to their name on your phone.</li>
+  <li><strong>Invite someone.</strong> Tap <strong>+ Invite</strong> under Family or Work and pick them from your contacts. Halo opens your share sheet with a link, so you can send it by WhatsApp, SMS or anything else.</li>
+  <li><strong>They install Halo and tap Accept.</strong> The invite is waiting for them when they sign in. From then on, you each see the other's status.</li>
+</ol>
 
 <div class="halo-row wide">
   <figure class="shot login">
-    <img class="halo-shot" src="{{ '/halo/img/login.png' | relative_url }}" alt="Halo's sign-in screen on iPhone: the app icon, the line 'Let your contacts know you're busy before they call', a phone number field with +91, and a Get Verification Code button" width="368" height="800" loading="lazy">
+    <img class="halo-shot" src="{{ '/halo/img/login.png' | relative_url }}" alt="Halo's sign-in screen on iPhone: the app icon, the line 'Let your contacts know you're busy before they call', a phone number field, and a Get Verification Code button" width="368" height="800" loading="lazy">
     <figcaption>Sign in with your phone number.</figcaption>
   </figure>
   <figure class="shot main">
     <img class="halo-shot" src="{{ '/halo/img/main.png' | relative_url }}" alt="Halo's main screen on iPhone: MY STATUS set to Available, an Auto-set row showing Driving and Low Battery, and WHO SEES MY STATUS with Family (sees your full status) and Work (sees only 🔴 Busy), each with an Invite button" width="449" height="800" loading="lazy">
-    <figcaption>Your status, and who sees it.</figcaption>
+    <figcaption>The whole app is one screen: your status, and who sees it.</figcaption>
   </figure>
 </div>
 
-<h2>How sharing works</h2>
-
-<p>Nobody sees your status unless you've both said yes.</p>
-
-<ol>
-  <li><strong>Invite someone.</strong> Tap <strong>+ Invite</strong> under Family or Work and pick them from your contacts. Halo opens your share sheet with a link, so you can send it however you like.</li>
-  <li><strong>They install Halo</strong> and sign in with the same number you picked.</li>
-  <li><strong>They accept.</strong> Your invite is waiting for them, with your name as it's saved in their contacts. They tap <strong>Accept</strong> and choose Family or Work for you.</li>
-  <li><strong>That's it.</strong> From then on, you each see the other's status on your own phones.</li>
-</ol>
-
-<p>If they tap <strong>Ignore</strong>, the invite is deleted. You aren't told.</p>
-
 <figure class="halo-fig">
-  <img class="halo-wide-shot" src="{{ '/halo/img/invite.png' | relative_url }}" alt="An invite card at the top of Halo on Android: 'Priya Sharma (+91 98765 43210) invited you to share statuses', with Ignore and Accept buttons" width="358" height="196" loading="lazy">
-  <figcaption>An invite, as it appears for the person you invited. The name and number here are made up.</figcaption>
+  <img class="halo-wide-shot" src="{{ '/halo/img/invite.png' | relative_url }}" alt="An invite card at the top of Halo on Android: 'Jane Doe (+91 98765 43210) invited you to share statuses', with Ignore and Accept buttons" width="358" height="196" loading="lazy">
+  <figcaption>What the person you invite sees. Halo shows your name as it's saved in their contacts. The name and number here are made up.</figcaption>
 </figure>
 
-<h3>Family and Work</h3>
+<p>If they tap <strong>Ignore</strong>, the invite is deleted and you aren't told.</p>
+
+<h2>Family and Work</h2>
 
 <p>Not everyone needs to know you're at the gym.</p>
 
 <ul>
   <li><strong>Family</strong> sees your full status: 🚗 Driving, 📅 In a Meeting, 🏋️ At the Gym and so on.</li>
-  <li><strong>Work</strong> sees only <strong>🔴 Busy</strong>. Your colleague learns it's not a good time, and nothing more.</li>
+  <li><strong>Work</strong> sees only <strong>🔴 Busy</strong>. A colleague learns it's not a good time, and nothing more.</li>
 </ul>
 
-<p>You can move someone between the two at any time.</p>
+<p>You can move someone from one group to the other at any time.</p>
 
-<h2>Privacy</h2>
+<h2>Common questions</h2>
 
-<p>Halo is built to know as little about you as it can.</p>
+<h3>Do the people I call need Halo too?</h3>
+<p>Yes. You see the status of people who use Halo and have accepted your invite, and they see yours. Everyone else in your contacts stays exactly as it is.</p>
 
+<h3>Does it work between Android and iPhone?</h3>
+<p>Yes. An iPhone user and an Android user can share statuses with each other.</p>
+
+<h3>Will it mess up my contacts?</h3>
+<p>No. Halo adds the status to the end of a contact's name and keeps the original name. When the person is available again, it puts the original name back. Only people you share statuses with are changed.</p>
+
+<h3>How fast does a status change show up?</h3>
+<p>Usually within a few seconds. On iPhone it can sometimes take longer, because iOS decides when background apps get to run.</p>
+
+<h3>What does Halo know about me?</h3>
+<p>As little as it can:</p>
 <ul>
-  <li><strong>No names on the server.</strong> Names come from the contacts already on each phone. Halo's server never gets your contact list.</li>
-  <li><strong>Your number isn't your ID.</strong> Your status is filed under a one-way hash of your phone number, not the number itself. An invite does carry your number, so the other person's phone can find you in their contacts.</li>
-  <li><strong>Only people you've accepted.</strong> Your status can be read only by the people who've accepted an invite with you. Someone with a pending invite sees nothing yet.</li>
-  <li><strong>Very little to share.</strong> What goes up is your current status, like 🚗 Driving, the time you set it, and a few app settings.</li>
-  <li><strong>Your contacts are put back.</strong> To show a status, Halo edits the contact's name on your phone, so it asks for permission to edit contacts. It keeps the original name on your phone and restores it when the person is available again.</li>
+  <li><strong>No names, no contact list.</strong> Names come from the contacts already on each phone. Your address book never leaves your phone.</li>
+  <li><strong>Only your current status.</strong> Halo's server stores your status (like 🚗 Driving), when you set it, and a few app settings. Your status is filed under a scrambled code made from your phone number, not the number itself.</li>
+  <li><strong>Only people you've accepted.</strong> Nobody else can read your status, including people whose invite is still pending.</li>
+  <li><strong>No ads and no tracking.</strong></li>
 </ul>
+<p>You can delete your account and its data from the app at any time. The <a href="https://halo-status-sync.web.app/privacy">privacy policy</a> has the details.</p>
 
-<h2>Where it's at</h2>
+<h2>Try it</h2>
 
-<p>Halo is in testing on Android and iPhone. If you'd like to try it, you can get it here:</p>
+<p>Halo is in testing on Android and iPhone. Get it here:</p>
 
 <p><a class="halo-get" href="https://halo-status-sync.web.app/get">Get Halo</a></p>
 
-<p>It works best when the people you call most use it too, so invite one or two of them when you start.</p>
+<p>Halo is most useful when the people you call most use it too, so invite one or two of them when you start.</p>
