@@ -60,9 +60,10 @@ a:hover { text-decoration-thickness: 2px; }
 .contact { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 18px 0 0; padding: 0; list-style: none; font-size: 0.9375rem; }
 .contact li { min-width: 0; overflow-wrap: anywhere; }
 .contact { align-items: center; }
-.contact a.ico { display: inline-flex; align-items: center; padding: 5px 8px; color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; text-decoration: none; }
-.contact a.ico:hover { border-color: var(--accent); color: var(--text); }
-.contact a.ico svg { width: 16px; height: 16px; display: block; }
+.contact a.ico { display: inline-flex; align-items: center; gap: 6px; color: inherit; text-decoration: none; }
+.contact a.ico svg { width: 15px; height: 15px; display: block; flex: none; color: var(--muted); }
+.contact a.ico:hover { color: var(--accent); }
+.contact a.ico:hover .ico-text { text-decoration: underline; text-underline-offset: 3px; }
 .contact a[href^="mailto:"] { color: inherit; text-decoration: none; }
 .contact a[href^="mailto:"]:hover { color: var(--accent); text-decoration: underline; }
 .mode { font: inherit; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; color: var(--muted); background: transparent; border: 1px solid var(--rule); border-radius: 999px; cursor: pointer; }
@@ -72,11 +73,9 @@ a:hover { text-decoration-thickness: 2px; }
 .mode span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media print {
   .mode, .views-bar, #projects .sort, #proj-meta, .theme-note, .foot { display: none !important; }
-  .contact a.ico { border: 0; padding: 0; color: var(--text); }
   .contact a.ico svg { display: none; }
   .pts li.dated { grid-template-columns: minmax(0, 1fr) auto !important; min-height: 0 !important; margin-top: 8px !important; align-items: first baseline !important; }
   .pts li.dated .art { display: none !important; }
-  .contact a.ico::after { content: attr(data-print); font-size: 0.9375rem; }
 }
 
 /* View switcher */
@@ -189,6 +188,10 @@ a:hover { text-decoration-thickness: 2px; }
   .side { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 16px; }
   .art { width: 8.5rem; }
   .contact { column-gap: 10px; }
+  .contact a.ico { padding: 5px 8px; color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; }
+  .contact a.ico:hover { border-color: var(--accent); color: var(--text); }
+  .contact a.ico svg { width: 16px; height: 16px; color: inherit; }
+  .contact a.ico .ico-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .dates { white-space: normal; }
   .pts li.dated { margin-top: 0; min-height: 0; }
   .skills > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
@@ -205,8 +208,8 @@ a:hover { text-decoration-thickness: 2px; }
     <p class="tag">Engineering leader and hands-on builder · Bangalore, India</p>
     <ul class="contact">
       <li><a href="mailto:anands.email.id@gmail.com">anands.email.id@gmail.com</a></li>
-      <li><a class="ico" data-print="linkedin.com/in/anandhms" href="https://www.linkedin.com/in/anandhms/" target="_blank" rel="noopener" aria-label="LinkedIn profile" title="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V16M8 7.8v.01M12 16v-5.5M12 13a2.5 2.5 0 0 1 5 0v3"/></svg></a></li>
-      <li><a class="ico" data-print="and.github.io" href="https://and.github.io/" target="_blank" rel="noopener" aria-label="Blog and projects, and.github.io" title="and.github.io"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"/></svg></a></li>
+      <li><a class="ico" href="https://www.linkedin.com/in/anandhms/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V16M8 7.8v.01M12 16v-5.5M12 13a2.5 2.5 0 0 1 5 0v3"/></svg><span class="ico-text">linkedin.com/in/anandhms</span></a></li>
+      <li><a class="ico" href="https://and.github.io/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"/></svg><span class="ico-text">and.github.io</span></a></li>
       <li><button type="button" class="mode" id="mode-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span>Dark mode</span></button></li>
     </ul>
   </header>
