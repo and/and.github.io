@@ -74,6 +74,8 @@ a:hover { text-decoration-thickness: 2px; }
   .mode, .views-bar, #projects .sort, #proj-meta, .theme-note, .foot { display: none !important; }
   .contact a.ico { border: 0; padding: 0; color: var(--text); }
   .contact a.ico svg { display: none; }
+  .pts li.dated { grid-template-columns: minmax(0, 1fr) auto !important; min-height: 0 !important; margin-top: 8px !important; align-items: first baseline !important; }
+  .pts li.dated .art { display: none !important; }
   .contact a.ico::after { content: attr(data-print); font-size: 0.9375rem; }
 }
 
@@ -243,7 +245,7 @@ a:hover { text-decoration-thickness: 2px; }
           <li data-v="lead sw"><b>Enterprise delivery:</b> Primary technical contact for Flipkart, Metro, and Axis Bank integrations. Led the technical response to Amazon’s penetration-testing requirements, including hands-on AWS and code-level fixes.</li>
           <li data-v="lead sw"><b>Executive adviser:</b> Advised the co-founder, Head of Business, and Head of Customer Success on technical questions. Helped them build and deploy their own AI-powered internal apps on AWS/GCP using Cursor, Claude Code, and Lovable.</li>
           <li data-v="lead sw"><b>Brand Compliance AI:</b> Built a hackathon <a href="https://compliance.rocketiumlabs.com/?platform=default" target="_blank" rel="noopener">prototype</a>, which was used in enterprise customer <a href="https://www.linkedin.com/posts/satejs_sharing-something-cool-that-most-folks-do-ugcPost-7398822516238016512-QJTD/" target="_blank" rel="noopener">demos</a>. Wrote the <a href="https://rocketium.ai/academy/all/how-rocketium-achieves-90-brand-compliance-accuracy" target="_blank" rel="noopener">whitepaper</a> documenting the production architecture (OCR, ML classification, NLP, SIFT feature matching).</li>
-          <li data-v="lead sw"><b>Labs:</b> Built AI-powered tools outside the core roadmap and owned their go-to-market, targeting the first 1,000 external users. Built agentic chatbot proofs of concept on Google ADK, connected to Google Maps and Databricks.</li>
+          <li data-v="lead sw"><b>Labs:</b> Built AI-powered tools outside the core roadmap and owned their go-to-market for external users. Built agentic chatbot proofs of concept on Google ADK, connected to Google Maps and Databricks.</li>
           <li data-v="lead"><b>Security:</b> Acted as CISO and Privacy Officer for SOC 2, ISO 27001, and GDPR compliance.</li>
         </ul>
       </article>
@@ -277,9 +279,9 @@ a:hover { text-decoration-thickness: 2px; }
           <p class="dates">MAR 2014 – JUL 2018</p>
         </div>
         <ul class="pts">
-          <li data-v="lead sw">Built the tool for Microsoft Accelerator; recruited and scaled the technical team from scratch.</li>
-          <li data-v="sw">Designed distributed system improvements (Redis, Elasticsearch, Azure Search) for higher data loads and concurrent multi-team access.</li>
-          <li data-v="lead">Reported to managers in the US and Israel; half the team was Israel-based. Sustained cross-time-zone collaboration across a 4-year engagement.</li>
+          <li data-v="lead sw"><b>Product and team:</b> Built the tool for Microsoft Accelerator; recruited and scaled the technical team from scratch.</li>
+          <li data-v="sw"><b>Scaling:</b> Designed distributed system improvements (Redis, Elasticsearch, Azure Search) for higher data loads and concurrent multi-team access.</li>
+          <li data-v="lead"><b>Distributed team:</b> Reported to managers in the US and Israel; half the team was Israel-based. Sustained cross-time-zone collaboration across a 4-year engagement.</li>
         </ul>
       </article>
 
@@ -310,7 +312,7 @@ a:hover { text-decoration-thickness: 2px; }
       <p class="lens-meta" id="proj-meta" hidden style="margin:-6px 0 18px"></p>
       <article class="job" data-job>
         <ul class="pts" style="margin-top:0">
-          <li class="dated" data-theme="productivity" data-v="sw des" data-date="2026-10-15"><div class="pt"><b>Anchor:</b> Mac menu bar <a href="https://and.github.io/utilities/anchor/" target="_blank" rel="noopener">app</a> with iPhone and Android companions. Compares where your attention goes with what you planned and nudges you when they diverge. Native apps for Mac (SwiftUI) and Android (Kotlin).</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a Mac menu bar with a small blue anchor icon and a panel dropping down from it, comparing a planned bar with a shorter actual bar, next to a phone showing the same comparison">
+          <li class="dated" data-theme="productivity" data-v="sw des" data-date="2026-10-15"><div class="pt"><b><a href="/utilities/anchor/">Anchor</a>:</b> Mac menu bar app with iPhone and Android companions. Compares where your attention goes with what you planned and nudges you when they diverge. Native apps for Mac (SwiftUI) and Android (Kotlin).</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a Mac menu bar with a small blue anchor icon and a panel dropping down from it, comparing a planned bar with a shorter actual bar, next to a phone showing the same comparison">
               <rect class="body" x="6" y="19" width="102" height="12" rx="3"/>
               <path class="ln thin" d="M13 25 H22 M28 25 H35 M41 25 H48" opacity=".6"/>
               <circle class="water thin" cx="94" cy="22.6" r="1.3"/>
@@ -329,7 +331,7 @@ a:hover { text-decoration-thickness: 2px; }
               <rect class="tint-strong" x="127" y="67" width="9" height="6" rx="2"/>
               <rect class="water thin" x="127" y="67" width="9" height="6" rx="2"/>
             </svg></figure></div></li>
-          <li class="dated" data-theme="productivity" data-v="sw des" data-date="2026-09-27"><div class="pt"><b>Sand Timer:</b> A free <a href="/utilities/sand-timer/">hourglass for your Mac’s desktop</a> that sits above your other windows, so you see how much time is left without reading a number. Keeps a daily target, projects, and session statistics.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of an hourglass with blue sand, part of it in the top bulb, a thin stream through the neck, and a pile in the bottom bulb">
+          <li class="dated" data-theme="productivity" data-v="sw des" data-date="2026-09-27"><div class="pt"><b><a href="/utilities/sand-timer/">Sand Timer</a>:</b> A free hourglass for your Mac’s desktop that sits above your other windows, so you see how much time is left without reading a number. Keeps a daily target, projects, and session statistics.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of an hourglass with blue sand, part of it in the top bulb, a thin stream through the neck, and a pile in the bottom bulb">
               <path class="body" d="M64 24 C64 40 78 44 78 54 C78 64 64 68 64 84 H96 C96 68 82 64 82 54 C82 44 96 40 96 24 Z"/>
               <path class="tint-strong" d="M70 32 H90 C88 38 83 43 81.5 50 H78.5 C77 43 72 38 70 32 Z"/>
               <path class="tint-strong" d="M68 84 C71 76 77 72 80 70 C83 72 89 76 92 84 Z"/>
@@ -338,7 +340,7 @@ a:hover { text-decoration-thickness: 2px; }
               <rect class="body" x="58" y="20" width="44" height="4" rx="1.5"/>
               <rect class="body" x="58" y="84" width="44" height="4" rx="1.5"/>
             </svg></figure></div></li>
-          <li class="dated" data-theme="road" data-v="sw des" data-date="2026-06-29"><div class="pt"><b><a href="/utilities/driver-safety-ai/">Driver Safety AI</a>:</b> Browser-based <a href="https://and.github.io/dashcam/" target="_blank" rel="noopener">advanced driver-assistance system (ADAS)</a> that turns a phone camera into a dashcam with collision, lane-departure, and drowsiness alerts, all on the phone. Tested on Indian roads: the phone overheated and shut down in under 10 minutes, and false alerts made drivers stop trusting it. Next: lighter models and smarter alert filtering.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a phone held upright on a dashboard mount. On its screen a road runs ahead with lane lines, and a blue box marks the car in front">
+          <li class="dated" data-theme="road" data-v="sw des" data-date="2026-06-29"><div class="pt"><b><a href="/utilities/driver-safety-ai/">Driver Safety AI</a>:</b> Browser-based <a href="https://and.github.io/dashcam/" target="_blank" rel="noopener">advanced driver-assistance system (ADAS)</a> that turns a phone camera into a dashcam with collision, lane-departure, and drowsiness alerts, all on the phone. Tested on Indian roads: the phone overheated and shut down in under 10 minutes, and false alerts made me stop trusting it. Next: lighter models and smarter alert filtering.</div><div class="side"><p class="dates">2026</p><figure class="art"><svg viewBox="0 18 160 72" role="img" aria-label="Line drawing of a phone held upright on a dashboard mount. On its screen a road runs ahead with lane lines, and a blue box marks the car in front">
               <rect class="body" x="62" y="20" width="36" height="52" rx="6"/>
               <path class="ln thin" d="M75 24.5 H85"/>
               <path class="ln thin" d="M68 68 L76 42 M92 68 L84 42"/>
