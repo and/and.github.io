@@ -82,32 +82,29 @@ a:hover { text-decoration-thickness: 2px; }
 /* View switcher */
 .views-bar { position: sticky; top: 0; z-index: 10; background: var(--bg); margin-top: 28px; padding: 10px 0; border-bottom: 1px solid transparent; display: flex; align-items: center; gap: 12px; }
 .views-bar::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 16px; pointer-events: none; opacity: 0; background: linear-gradient(to bottom, var(--bg), transparent); }
-.views-bar.stuck { background: var(--bg); }
-@supports (background: color-mix(in srgb, red 50%, blue)) {
-  .views-bar.stuck { background: color-mix(in srgb, var(--bg) 80%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
-}
+.views-bar.stuck { background: var(--bg); border-bottom-color: var(--rule); }
 .views-bar.stuck::after { opacity: .85; }
 .views-bar.stuck .views-label { opacity: .55; }
 .views-bar.stuck .views button:not([aria-selected="true"]) { opacity: .55; }
 .views-bar.stuck .views button[aria-selected="true"] { opacity: .7; }
 .views-bar.stuck:hover .views-label, .views-bar.stuck:hover .views button { opacity: 1; }
 .views-bar.stuck .views button:focus-visible { opacity: 1; }
-.views-bar.stuck .views button:not([aria-selected="true"]) { background: color-mix(in srgb, var(--surface) 70%, transparent); border-color: color-mix(in srgb, var(--rule) 60%, transparent); }
 .sec { scroll-margin-top: 64px; }
 .views-label { margin: 0; flex: none; font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
-.views { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; min-width: 0; }
+.views { display: flex; flex-wrap: wrap; gap: 4px 22px; flex: 1; min-width: 0; }
 .views button {
-  font: inherit; font-weight: 600; font-size: 0.9375rem;
-  display: inline-flex; align-items: baseline; gap: 8px;
-  padding: 9px 14px; min-height: 40px;
-  color: var(--text); background: var(--surface);
-  border: 1px solid var(--rule); border-radius: 999px; cursor: pointer;
+  font: inherit; font-weight: 500; font-size: 0.9375rem;
+  display: inline-flex; align-items: baseline; gap: 4px;
+  padding: 8px 0 6px; min-height: 40px;
+  color: var(--muted); background: none;
+  border: 0; border-bottom: 2px solid transparent; border-radius: 0; cursor: pointer;
 }
-.views button:hover { border-color: var(--accent); }
-.views button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.views .n { font-weight: 400; font-size: 0.8125rem; opacity: 0.8; }
+.views button:hover { color: var(--text); }
+.views button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.views button[aria-selected="true"] { color: var(--text); font-weight: 600; border-bottom-color: var(--accent); }
+.views .n { font-weight: 400; font-size: 0.75rem; opacity: 0.75; }
 
-.lens { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.lens { margin-top: 6px; padding-top: 22px; border-top: 1px solid var(--rule); }
 .lens-summary { margin: 0; font-size: 1.1875rem; line-height: 1.5; max-width: 62ch; text-wrap: pretty; }
 .lens-note { margin: 12px 0 0; max-width: 62ch; color: var(--muted); font-size: 0.9375rem; }
 .lens-meta { margin: 14px 0 0; font-size: 0.9375rem; color: var(--text); }
@@ -181,6 +178,10 @@ a:hover { text-decoration-thickness: 2px; }
   .views { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .views::-webkit-scrollbar { display: none; }
   .views button { flex: none; white-space: nowrap; }
+  .views-label { display: none; }
+  .views-bar { padding: 4px 0 0; margin-top: 20px; }
+  .views { gap: 18px; }
+  .lens { margin-top: 0; }
   body { padding-block: 32px 56px; }
   .job-h, .edu > div { grid-template-columns: minmax(0, 1fr); }
   .pts li.dated { grid-template-columns: minmax(0, 1fr); gap: 6px; align-items: start; }
@@ -193,7 +194,7 @@ a:hover { text-decoration-thickness: 2px; }
   .skills > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .views button { transition: background-color .15s, border-color .15s, color .15s; }
+  .views button { transition: border-color .15s, color .15s; }
 }
 </style>
 </head>
