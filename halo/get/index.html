@@ -21,14 +21,13 @@ sitemap: false
   <link rel="apple-touch-icon" href="{{ '/halo/img/icon.png' | relative_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     /* The site's own type and colours (see _layouts/default.html), so the page reads as part of and.github.io */
     :root {
       --bg: #FAFBFC; --surface: #FFFFFF; --text: #0B0C0F; --muted: #545B66; --rule: #E3E6EB;
       --accent: #0047FF; --busy: #C2410C;
       --font: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
-      --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -62,7 +61,7 @@ sitemap: false
     .who small.busy { color: var(--busy); }
     .caption { font-size: 13px; color: var(--muted); }
 
-    h2 { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 44px 0 12px; }
+    h2 { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 44px 0 12px; }
 
     .platform { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 16px 0; border-top: 1px solid var(--rule); }
     .platform + .platform { border-bottom: 1px solid var(--rule); }
@@ -73,7 +72,7 @@ sitemap: false
 
     ol { list-style: none; counter-reset: step; }
     ol li { counter-increment: step; display: flex; gap: 14px; padding: 6px 0; }
-    ol li::before { content: counter(step, decimal-leading-zero); font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
+    ol li::before { content: counter(step); flex: 0 0 1ch; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--muted); }
 
     footer { margin-top: 44px; font-size: 15px; }
     footer a { color: var(--accent); text-underline-offset: 3px; }
