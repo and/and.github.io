@@ -39,6 +39,16 @@ sitemap: false
 .halo-call .btns span{width:58px;height:58px;border-radius:50%;display:block}
 .halo-call .no{background:#e5484d}.halo-call .yes{background:#30a46c}
 .halo-tabs{display:flex;gap:8px;padding:0 16px 10px}
+.halo-contact{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 16px 0}
+.halo-contact .nav{align-self:stretch;display:flex;justify-content:space-between;font-size:14px;color:#0a84ff;padding:4px 0 14px}
+.halo-contact .halo-av{width:84px;height:84px;flex-basis:auto;font-size:32px;margin-bottom:12px}
+.halo-contact .who{font-size:21px;font-weight:600;line-height:1.2}
+.halo-contact .title{font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.01em}
+.halo-contact .acts{display:flex;gap:8px;margin:16px 0 14px;align-self:stretch}
+.halo-contact .acts span{flex:1;background:var(--subtle);border-radius:10px;padding:8px 0 6px;font-size:10px;color:#0a84ff}
+.halo-contact .acts span::before{content:"";display:block;width:14px;height:14px;margin:0 auto 4px;border-radius:50%;background:#0a84ff}
+.halo-contact .field{align-self:stretch;text-align:left;background:var(--subtle);border-radius:10px;padding:8px 12px;font-size:13px}
+.halo-contact .field small{display:block;font-size:11px;color:var(--muted)}
 .halo-tabs span{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--subtle);color:var(--muted)}
 .halo-tabs span:first-child{background:var(--text);color:var(--surface)}
 .post-content .halo-shot{display:block;width:100%;height:auto;border-radius:22px;border:1px solid var(--rule)}
@@ -125,6 +135,22 @@ sitemap: false
       </div>
     </div>
     <figcaption>WhatsApp uses the names saved in your contacts, so the status shows there too.</figcaption>
+  </figure>
+  <figure>
+    <div class="halo-phone" role="img" aria-label="Illustration of Jane Doe's contact page: Jane Doe 🚗 Driving, with the line 🚗 DRIVING until 6:30 PM under her name">
+      <div class="halo-screen" aria-hidden="true">
+        <div class="halo-bar"><span>10:45</span><span><svg viewBox="0 0 64 14" aria-hidden="true"><rect x="0" y="9" width="3" height="5" rx="1"/><rect x="5" y="6" width="3" height="8" rx="1"/><rect x="10" y="3" width="3" height="11" rx="1"/><rect x="15" y="0" width="3" height="14" rx="1"/><path d="M31 3.5a12 12 0 0 1 9 3.6l-1.6 1.7a9.6 9.6 0 0 0-14.8 0L22 7.1a12 12 0 0 1 9-3.6zm0 4.4a7.5 7.5 0 0 1 5.6 2.4L31 14l-5.6-3.7A7.5 7.5 0 0 1 31 7.9z"/><rect x="42.5" y="1.5" width="18" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="44.5" y="3.5" width="12" height="7" rx="1.5"/><rect x="61.5" y="5" width="1.8" height="4" rx=".9"/></svg></span></div>
+        <div class="halo-contact">
+          <div class="nav"><span>‹ Contacts</span><span>Edit</span></div>
+          <span class="halo-av" style="background:#6e56cf">J</span>
+          <div class="who">Jane Doe 🚗 Driving</div>
+          <div class="title">🚗 DRIVING until 6:30 PM • Halo</div>
+          <div class="acts"><span>message</span><span>call</span><span>video</span><span>mail</span></div>
+          <div class="field"><small>mobile</small>+44 7700 900123</div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Open her contact and you also see when the status ends.</figcaption>
   </figure>
 </div>
 
