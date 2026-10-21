@@ -1,0 +1,4 @@
+{
+  "android": { "version": "2.8.1", "build": 31 },
+  "ios": { "version": "2.8", "build": 29, "url": "itms-beta://" }
+}
