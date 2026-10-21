@@ -19,84 +19,115 @@ sitemap: false
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="{{ '/halo/img/icon.png' | relative_url }}">
   <link rel="apple-touch-icon" href="{{ '/halo/img/icon.png' | relative_url }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
+    /* The site's own type and colours (see _layouts/default.html), so the page reads as part of and.github.io */
     :root {
-      --bg: #F8FAFC;
-      --card: #FFFFFF;
-      --text: #0F172A;
-      --muted: #64748B;
-      --border: #E2E8F0;
-      --accent: #4F46E5;
+      --bg: #FAFBFC; --surface: #FFFFFF; --text: #0B0C0F; --muted: #545B66; --rule: #E3E6EB;
+      --accent: #0047FF; --busy: #C2410C;
+      --font: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0B1120;
-        --card: #111827;
-        --text: #F1F5F9;
-        --muted: #94A3B8;
-        --border: #1F2937;
-        --accent: #818CF8;
+        --bg: #0B0C0F; --surface: #13151A; --text: #EDEEF2; --muted: #A3A9B6; --rule: #262932;
+        --accent: #7A9CFF; --busy: #FB923C;
       }
     }
-    * { box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg); color: var(--text); font-family: var(--font);
+      font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased;
     }
-    .card {
-      width: 100%;
-      max-width: 420px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px 24px;
-      text-align: center;
-    }
-    /* The iOS app icon, with the same rounded-square mask */
-    .app-icon { width: 96px; height: 96px; border-radius: 22.5%; margin-bottom: 16px; }
-    h1 { font-size: 26px; margin: 0 0 8px; }
-    p { color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0 0 24px; }
-    .button {
-      display: block;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      border-radius: 14px;
-      background: var(--accent);
-      color: #FFFFFF;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .button.soon { background: transparent; color: var(--muted); border: 1px solid var(--border); font-weight: 500; }
-    .steps { text-align: left; font-size: 14px; color: var(--muted); margin: 20px 0 0; padding-left: 20px; }
-    .steps li { margin-bottom: 6px; }
-    .more { display: inline-block; margin-top: 20px; font-size: 14px; color: var(--accent); }
+    main { max-width: 34rem; margin: 0 auto; padding: 28px 20px 56px; }
+    a { color: inherit; }
+
+    .mast { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid var(--text); }
+    .mast img { width: 28px; height: 28px; border-radius: 22.5%; }
+    .mast span { font-weight: 800; font-size: 20px; letter-spacing: -.02em; }
+
+    h1 { font-size: clamp(34px, 9vw, 46px); line-height: 1.05; letter-spacing: -.035em; font-weight: 800; margin: 40px 0 16px; }
+    .lede { color: var(--muted); }
+
+    /* What the invitee will see: a slice of their own contacts list */
+    .contacts { margin: 32px 0 8px; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
+    .contacts li { list-style: none; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--rule); }
+    .contacts li:first-child { border-top: 0; }
+    .av { flex: 0 0 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 700; color: #fff; }
+    .who { flex: 1; min-width: 0; }
+    .who b { display: block; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .who small { display: block; font-size: 13px; color: var(--muted); }
+    .who small.busy { color: var(--busy); }
+    .caption { font-size: 13px; color: var(--muted); }
+
+    h2 { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 44px 0 12px; }
+
+    .platform { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 16px 0; border-top: 1px solid var(--rule); }
+    .platform + .platform { border-bottom: 1px solid var(--rule); }
+    .platform strong { font-weight: 700; }
+    .platform p { flex-basis: 100%; font-size: 15px; color: var(--muted); }
+    .get { display: inline-block; background: var(--text); color: var(--bg); text-decoration: none; font-weight: 500; font-size: 15px; padding: 9px 16px; border-radius: 999px; }
+    .get:hover { background: var(--accent); color: #fff; }
+
+    ol { list-style: none; counter-reset: step; }
+    ol li { counter-increment: step; display: flex; gap: 14px; padding: 6px 0; }
+    ol li::before { content: counter(step, decimal-leading-zero); font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
+
+    footer { margin-top: 44px; font-size: 15px; }
+    footer a { color: var(--accent); text-underline-offset: 3px; }
   </style>
 </head>
 <body>
-  <main class="card">
-    <img class="app-icon" src="{{ '/halo/img/icon.png' | relative_url }}" alt="Halo app icon" width="96" height="96">
-    <h1>You're invited to Halo</h1>
-    <p>Halo shows the people close to you when you're driving or busy, right on your contact card, so they know before they call.</p>
+  <main>
+    <div class="mast">
+      <img src="{{ '/halo/img/icon.png' | relative_url }}" alt="" width="28" height="28">
+      <span>Halo</span>
+    </div>
 
+    <h1>Someone wants you to know when they're busy.</h1>
+    <p class="lede">You've been invited to Halo. Once you accept, their status shows next to their name in your contacts. You'll see they're driving or in a meeting before you call.</p>
+
+    <ul class="contacts" aria-label="Example: your contacts with Halo">
+      <li>
+        <span class="av" style="background:#0047FF">JD</span>
+        <span class="who"><b>Jane Doe 🚗 Driving</b><small class="busy">Until 6:30 PM</small></span>
+      </li>
+      <li>
+        <span class="av" style="background:#0F766E">JS</span>
+        <span class="who"><b>John Smith 📅 In a Meeting</b><small class="busy">Until 4:00 PM</small></span>
+      </li>
+      <li>
+        <span class="av" style="background:#7C3AED">EC</span>
+        <span class="who"><b>Emily Clark</b><small>Available</small></span>
+      </li>
+    </ul>
+    <p class="caption">Your contacts, with Halo. Names are examples.</p>
+
+    <h2>Install</h2>
     <!-- Android: Play internal testing opt-in, which works only for Google accounts on the testers list.
-         iPhone: replace the span with a link once the TestFlight public link exists. -->
-    <a class="button" href="https://play.google.com/apps/internaltest/4701711812677846403">Get it for Android</a>
-    <span class="button soon">iPhone: ask the person who invited you for a TestFlight invite</span>
+         iPhone: replace the paragraph with a link once the TestFlight public link exists. -->
+    <div class="platform">
+      <strong>Android</strong>
+      <a class="get" href="https://play.google.com/apps/internaltest/4701711812677846403">Get it on Google Play</a>
+      <p>Halo is in testing. Open the link with the Google account the person who invited you added.</p>
+    </div>
+    <div class="platform">
+      <strong>iPhone</strong>
+      <p>Through TestFlight, by invite for now. Ask the person who sent you this link to add you.</p>
+    </div>
 
-    <ol class="steps">
-      <li>Install Halo and verify your phone number.</li>
-      <li>Your invite appears right away. Tap Accept.</li>
-      <li>You'll both see each other's status.</li>
+    <h2>Then</h2>
+    <ol>
+      <li>Open Halo and verify your phone number.</li>
+      <li>Your invite is already waiting. Tap Accept.</li>
+      <li>Choose what they see of your status: all of it, or only Busy.</li>
     </ol>
 
-    <a class="more" href="{{ '/halo/' | relative_url }}">What is Halo?</a>
+    <footer>
+      <a href="{{ '/halo/' | relative_url }}">What is Halo?</a>
+    </footer>
   </main>
 </body>
 </html>
