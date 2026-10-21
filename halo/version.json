@@ -1,4 +1,4 @@
 {
-  "android": { "version": "2.8.2", "build": 32 },
-  "ios": { "version": "2.8.2", "build": 31, "url": "itms-beta://" }
+  "android": { "version": "2.8.3", "build": 33 },
+  "ios": { "version": "2.8.3", "build": 32, "url": "itms-beta://" }
 }
