@@ -1,0 +1,111 @@
+---
+layout: null
+permalink: /halo/privacy/
+# Copy of the page on halo-status-sync.web.app/privacy; keep both in step. Standalone, not in lists or the sitemap.
+sitemap: false
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halo Privacy Policy</title>
+  <meta name="description" content="How Halo handles your phone number, status and contacts.">
+  <link rel="icon" type="image/png" href="/halo/img/icon.png">
+  <link rel="apple-touch-icon" href="/halo/img/icon.png">
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --text: #0F172A;
+      --muted: #475569;
+      --border: #E2E8F0;
+      --accent: #4F46E5;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0B1120;
+        --card: #111827;
+        --text: #F1F5F9;
+        --muted: #CBD5E1;
+        --border: #1F2937;
+        --accent: #818CF8;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px 16px 48px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+    }
+    .app-icon { width: 56px; height: 56px; border-radius: 22.5%; }
+    h1 { font-size: 26px; margin: 12px 0 4px; line-height: 1.25; }
+    h2 { font-size: 18px; margin: 28px 0 8px; }
+    p, li { color: var(--muted); font-size: 15px; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+    a { color: var(--accent); }
+    .updated { font-size: 13px; margin-top: 0; }
+    strong { color: var(--text); }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="app-icon" src="/img/halo-icon-256.png" alt="Halo app icon">
+    <h1>Halo Privacy Policy</h1>
+    <p class="updated">Last updated: 23 October 2026</p>
+
+    <p>Halo lets the people you choose see when you're busy (for example 🚗 Driving or 📅 In a Meeting) before they call you. It shows your status next to your name in their phone's contacts. This policy explains what Halo stores, why, and how to delete it.</p>
+
+    <h2>What Halo stores on its servers</h2>
+    <ul>
+      <li><strong>Your phone number.</strong> You sign in with your mobile number and a one-time SMS code (Firebase Authentication). Your number is your Halo account.</li>
+      <li><strong>Your status.</strong> The status you set (an emoji and a short label such as "Driving"), when you set it, your phone's model, and a random device ID. It is stored under a one-way fingerprint (SHA-256 hash) of your number, not under the number itself.</li>
+      <li><strong>Who may see your status.</strong> The fingerprints of the numbers you invited and who accepted. Only those people can read your status.</li>
+      <li><strong>Invites.</strong> When you invite someone, Halo stores your number and a fingerprint of theirs so their app can show your invite. Invites are deleted when declined, and after 30 days if not answered.</li>
+      <li><strong>Push notification tokens.</strong> A token per device, so Halo can deliver status changes and invites to your phone.</li>
+      <li><strong>Optional messages you send us.</strong> If you send feedback or ask for more contact slots, Halo stores your message or request with your number, phone platform, model and app version.</li>
+    </ul>
+
+    <h2>What stays on your phone</h2>
+    <ul>
+      <li><strong>Your contacts.</strong> Halo reads your address book on your phone to let you pick people and to add their status to their contact name. Names and your contact list are never uploaded. Only the numbers you invite are sent, as fingerprints (the server needs them to deliver the invite and to know who may see your status).</li>
+      <li><strong>Calendar.</strong> If you turn on Auto-set → Calendar meetings, Halo reads your calendar on your phone and uploads only the <em>start and end times</em> of your busy meetings in the next 24 hours, so the server can set 📅 In a Meeting on time. Titles, attendees, locations and notes are never uploaded. Only you can read these times; they are replaced on each sync and deleted with your account.</li>
+      <li><strong>Driving, Focus and (on Android) Bluetooth and Do Not Disturb.</strong> If you turn on Auto-set → Driving, Halo uses your car's Bluetooth connection (Android) or your iPhone's Driving Focus to set 🚗 Driving. Only the resulting status is sent, never the devices you connect to. Halo does not use your location.</li>
+      <li><strong>Incoming calls (Android).</strong> While a busy status is on, Halo can quiet the ringer for the first few seconds of an incoming call, so urgent callers who hold on still get through. This happens on your phone; caller numbers are not stored or sent anywhere.</li>
+    </ul>
+
+    <h2>How the data is used</h2>
+    <p>Only to run Halo: to sign you in, show your status to the people you've accepted, deliver invites, and stop abuse. Halo has no ads, does not sell or share your data, and does not use analytics or tracking SDKs.</p>
+
+    <h2>Services Halo uses</h2>
+    <ul>
+      <li><strong>Google Firebase</strong> (Authentication, Cloud Firestore, Cloud Functions, Cloud Messaging, App Check), which stores and processes the data above on Google Cloud.</li>
+      <li><strong>Apple Push Notification service</strong> on iPhone, and <strong>Google Play Integrity</strong> / <strong>Apple App Attest</strong> to check that requests come from the real app.</li>
+    </ul>
+
+    <h2>Security</h2>
+    <p>All traffic uses HTTPS. Database rules let each person write only their own status and read only the statuses of people who accepted them.</p>
+
+    <h2>Keeping and deleting your data</h2>
+    <p>Your data stays while you use Halo. Delete your account in the app (<strong>Profile → Delete &amp; Clear My Account Data</strong>) and Halo deletes your status, sign-in account, invites and push tokens from its servers straight away. See <a href="/halo/delete-account/">Delete your Halo account</a> for other ways and details.</p>
+
+    <h2>Children</h2>
+    <p>Halo is not meant for children under 13.</p>
+
+    <h2>Changes and contact</h2>
+    <p>If this policy changes, the date above changes too. Questions or requests: <a href="mailto:anands.www.email@gmail.com">anands.www.email@gmail.com</a>.</p>
+  </main>
+</body>
+</html>
