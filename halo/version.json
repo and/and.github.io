@@ -1,4 +1,13 @@
 {
-  "android": { "version": "2.8.5", "build": 35 },
-  "ios": { "version": "2.8.5", "build": 34, "url": "itms-beta://" }
+  "android": {
+    "version": "2.8.6",
+    "build": 36,
+    "notes": "Calendar meetings set your status on time. See each person's full status. Pick emoji for custom statuses."
+  },
+  "ios": {
+    "version": "2.8.6",
+    "build": 35,
+    "url": "itms-beta://",
+    "notes": "Calendar meetings set your status on time. See each person's full status. Pick emoji for custom statuses."
+  }
 }
