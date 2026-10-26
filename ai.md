@@ -48,7 +48,7 @@ sitemap: false
 .post-content .ath-in{margin:0;font-size:.95rem}
 </style>
 
-For the past two and a half years I've been inside the kind of shift AI enablement roles exist to drive. It happened at Rocketium, a company of 50+ people, not a large organization.
+For almost three years I've been inside the kind of shift AI enablement roles exist to drive. It happened at Rocketium, a company of 50+ people, not a large organization.
 
 ## Before and after
 
@@ -119,7 +119,7 @@ Looking back, here's what I'd do differently:
 
 ## What I bring
 
-In an AI enablement role, I'd be a guide, but I'd also get my hands dirty, build alongside each team, and slowly remove the need for me. I come in, help everyone adopt AI, and move on. I believe people are talented and creative, and with more capable tools, everyone can amplify their talent and creativity.
+In an AI enablement role, I'd be a guide, but I'd also get my hands dirty, build alongside each team, and slowly remove the need for me. I come in, help each team adopt AI, and move on to the next. I believe people are talented and creative, and with more capable tools, everyone can amplify their talent and creativity.
 
 I'd welcome a conversation about what that could look like at your company.
 
