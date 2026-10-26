@@ -87,7 +87,7 @@ For almost three years I've been inside the kind of shift AI enablement roles ex
 
 ## How it started
 
-I was the Engineering Manager responsible for cloud infra, compliance (ISO, SOC 2) and quality. Around late 2023, the engineering team started adopting AI more, and we found it empowering. So at our 2024 hackathon, we brought in the People Ops and Product teams to build working tools too. There was fear and reluctance, but by day 3 almost everyone had a working project. A year earlier, non-tech teams would have presented an idea on a PPT or a wireframe.
+I was the Senior Engineering Manager responsible for cloud infra, compliance and quality. I was also the CISO and Privacy Officer for SOC 2, ISO 27001 and GDPR compliance. Around late 2023, the engineering team started adopting AI more, and we found it empowering. So at our 2024 hackathon, we brought in the People Ops and Product teams to build working tools too. There was fear and reluctance, but by day 3 almost everyone had a working project. A year earlier, non-tech teams would have presented an idea on a PPT or a wireframe.
 
 That summer, with Claude 3.5 Sonnet and GPT-4o, we started realising LLMs could write good code. They went from a nice-to-have for generating snippets to helping write full features.
 
@@ -105,7 +105,7 @@ Engineering was shipping more than the roadmap planned, so our co-founders start
 
 ## Security and compliance
 
-Through all of it I played several roles at once: manager, infra owner, the person accountable for ISO and SOC 2, and coach to peers on non-tech teams. One of the biggest challenges was bringing a sense of security and privacy to the non-tech teams. They were elated to see their ideas come to life, but every tool still had to be checked for security and privacy. At first I did those checks myself. Over time we put a structure in place: recommended tools, automated code scanning, code review and device protection tools.
+Through all of it I played several roles at once: manager, infra owner, CISO and Privacy Officer, and coach to peers on non-tech teams. One of the biggest challenges was bringing a sense of security and privacy to the non-tech teams. They were elated to see their ideas come to life, but every tool still had to be checked for security and privacy. At first I did those checks myself. Over time we put a structure in place: recommended tools, automated code scanning, code review and device protection tools.
 
 ## Looking back
 
