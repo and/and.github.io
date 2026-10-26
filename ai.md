@@ -60,7 +60,7 @@ For the past two and a half years I've been inside the kind of shift AI enableme
 <tr><th scope="row">Image analysis build</th><td class="ath-before" data-label="Before">3+ months, 1,000+ training images</td><td class="ath-after" data-label="After">Over a weekend</td></tr>
 <tr><th scope="row">Taking a tool company-wide</th><td class="ath-before" data-label="Before">Engineering set up hosting and cloud</td><td class="ath-after" data-label="After">Non-developers ship end to end with Lovable</td></tr>
 <tr><th scope="row">Internal tools</th><td class="ath-before" data-label="Before">Bought SaaS, like a ~$1k/month task management tool</td><td class="ath-after" data-label="After">Teams build their own, and several SaaS tools were dropped</td></tr>
-<tr><th scope="row">Security checks</th><td class="ath-before" data-label="Before">I checked each tool by hand</td><td class="ath-after" data-label="After">Recommended tools, automated code scanning, code review, device protection</td></tr>
+<tr><th scope="row">Security checks</th><td class="ath-before" data-label="Before">I checked each tool manually</td><td class="ath-after" data-label="After">Recommended tools, automated code scanning, code review, device protection</td></tr>
 </tbody>
 </table>
 
