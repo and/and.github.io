@@ -44,7 +44,7 @@ sitemap: false
   .ath-ev p{grid-column:2}
 }
 .post-content .ath-sign{margin-top:28px}
-.post-content .ath-sig{font-family:"Mrs Saint Delafield",cursive;font-size:3.4rem;line-height:1;margin:0 0 6px;color:var(--text);transform:rotate(-4deg);transform-origin:left bottom;display:inline-block}
+.post-content .ath-sig{font-family:"Oooh Baby",cursive;font-size:2.8rem;line-height:1;margin:0 0 6px;color:var(--text);transform:rotate(-4deg);transform-origin:left bottom;display:inline-block}
 .post-content .ath-in{margin:0;font-size:.95rem}
 </style>
 
@@ -125,7 +125,7 @@ I'd welcome a conversation about what that could look like at your company.
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oooh+Baby&display=swap" rel="stylesheet">
 <div class="ath-sign">
 <p class="ath-sig" aria-label="Anand">Anand</p>
 <p class="ath-in"><a href="https://www.linkedin.com/in/anandhms/">linkedin.com/in/anandhms</a></p>
