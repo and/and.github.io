@@ -2,7 +2,7 @@
 layout: post
 title: "AI Adoption at Rocketium"
 date: 2026-10-26 14:30:00 +0530
-permalink: /ather/
+permalink: /ai/
 sitemap: false
 ---
 
