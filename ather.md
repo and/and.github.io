@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "AI Adoption at Rocketium – Note for Ather"
+title: "AI Adoption at Rocketium"
 date: 2026-10-26 14:30:00 +0530
 permalink: /ather/
 sitemap: false
@@ -45,9 +45,7 @@ sitemap: false
 }
 </style>
 
-Hi,
-
-I came across the AI Enablement Lead role at Ather on LinkedIn. For the past two and a half years I've been inside the kind of shift this role exists to drive. It happened at Rocketium, a company of 50+ people, not a large organization.
+For the past two and a half years I've been inside the kind of shift AI enablement roles exist to drive. It happened at Rocketium, a company of 50+ people, not a large organization.
 
 ## Before and after
 
@@ -115,11 +113,11 @@ Looking back, here's what I'd do differently:
 - Hold build sessions and hackathons more often.
 - Hold office hours where people can drop in for help.
 
-## What I'd bring to Ather
+## What I bring
 
-In this role, I'd be a guide, but I'd also get my hands dirty, build alongside each team, and slowly remove the need for me. I come in, help everyone adopt AI, and move on. I believe people are talented and creative, and with more capable tools, everyone can amplify their talent and creativity.
+In an AI enablement role, I'd be a guide, but I'd also get my hands dirty, build alongside each team, and slowly remove the need for me. I come in, help everyone adopt AI, and move on. I believe people are talented and creative, and with more capable tools, everyone can amplify their talent and creativity.
 
-I'd welcome a conversation about what that could look like at Ather.
+I'd welcome a conversation about what that could look like at your company.
 
 ānand  
 [linkedin.com/in/anandhms](https://www.linkedin.com/in/anandhms/)
