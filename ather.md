@@ -67,6 +67,7 @@ For the past two and a half years I've been inside the kind of shift AI enableme
 <ol>
 <li class="ath-year" aria-hidden="true"><span>2023</span></li>
 <li class="ath-ev"><span class="ath-when"></span><span class="ath-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg></span><p>Non-tech teams pitch ideas on PPTs and wireframes.</p></li>
+<li class="ath-ev"><span class="ath-when">Late 2023</span><span class="ath-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15v4M17 17h4"/></svg></span><p>The engineering team starts adopting AI more, and finds it empowering.</p></li>
 <li class="ath-year" aria-hidden="true"><span>2024</span></li>
 <li class="ath-ev"><span class="ath-when"></span><span class="ath-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><p>Yearly hackathon. People Ops and Product build working tools, and almost everyone has a project by day 3.</p></li>
 <li class="ath-ev"><span class="ath-when">Summer 2024</span><span class="ath-dot"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span><p>Claude 3.5 Sonnet and GPT-4o. We start realising LLMs can write good code.</p></li>
@@ -83,7 +84,7 @@ For the past two and a half years I've been inside the kind of shift AI enableme
 
 ## How it started
 
-I was the Engineering Manager responsible for cloud infra, compliance (ISO, SOC 2) and quality. At our 2024 hackathon, we brought in the People Ops and Product teams to build working tools too. There was fear and reluctance, but by day 3 almost everyone had a working project. A year earlier, non-tech teams would have presented an idea on a PPT or a wireframe.
+I was the Engineering Manager responsible for cloud infra, compliance (ISO, SOC 2) and quality. Around late 2023, the engineering team started adopting AI more, and we found it empowering. So at our 2024 hackathon, we brought in the People Ops and Product teams to build working tools too. There was fear and reluctance, but by day 3 almost everyone had a working project. A year earlier, non-tech teams would have presented an idea on a PPT or a wireframe.
 
 That summer, with Claude 3.5 Sonnet and GPT-4o, we started realising LLMs could write good code. They went from a nice-to-have for generating snippets to helping write full features.
 
