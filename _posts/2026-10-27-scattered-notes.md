@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Scattered Notes: capture first, let the dashboard organise"
-date: 2026-10-27 15:30:00 +0530
+date: 2026-10-27 14:00:00 +0530
 categories: [utilities]
 permalink: /utilities/scattered-notes/
 excerpt: "A macOS app for notes that end up everywhere. Capture a thought in seconds from any app, then see every to-do and every line that mentions a day in one dashboard that builds itself."
