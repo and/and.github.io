@@ -79,9 +79,9 @@ sitemap: false
     main { position: relative; z-index: 2; }
     .story { position: relative; }
     .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
-    #intro { height: 210vh; }
-    #capture { height: 260vh; }
-    #unify { height: 478vh; }
+    #intro { height: 210vh; height: 210svh; }
+    #capture { height: 260vh; height: 260svh; }
+    #unify { height: 478vh; height: 478svh; }
     /* Resting points in Unify: the whole dashboard, then each feature. A scroll that ends near one settles on it,
        so every feature takes the same scroll however big each wheel step or swipe is */
     html.snapping { scroll-snap-type: y proximity; }
@@ -167,6 +167,9 @@ sitemap: false
     /* What each feature switches on: f<n> while it is the one being read, after<n> from then on */
     .dash.f1 .hl-bank, .dash.after2 .done-show, .dash.after3 .side-more, .dash.f3 .ov-tags,
     .dash.f4 .ov-project, .dash.f5 .ov-search, .dash.f6 .ov-sync { opacity: 1; }
+    .dash .tab-dash { fill: var(--accent); }
+    .dash.f3 .tab-dash, .dash.f4 .tab-dash, .dash.f5 .tab-dash { fill: var(--muted); font-weight: 400; }
+    .dash.f3 .tab-notes, .dash.f4 .tab-notes, .dash.f5 .tab-notes { fill: var(--accent); font-weight: 700; }
     /* A phone gets a phone-shaped dashboard, like the iPhone app, so its text stays readable */
     .dash.phone { display: none; }
     @media (max-width: 760px) {
@@ -186,7 +189,7 @@ sitemap: false
     /* Download */
     /* The downloads hold the screen, centred below the top bar, while a little more scrolling fades in the
        sign-off, the heart and then its words; then the footer follows */
-    .download { position: relative; z-index: 2; background: var(--bg); height: 160vh; }
+    .download { position: relative; z-index: 2; background: var(--bg); height: 160vh; height: 160svh; }
     .download .dl-stage { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; align-items: center;
       padding: 50px 24px 0; }
     .download .inner { width: 100%; }
@@ -222,10 +225,26 @@ sitemap: false
       .stack.unify .dash-wrap { width: min(100%, (100vh - 330px) * .71); width: min(100%, (100svh - 330px) * .71); }
       .stack.unify .captions { min-height: 170px; }
       .panel-body { min-height: 140px; }
-      .platforms { grid-template-columns: 1fr 1fr; }
+      .platforms { grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+      .platform { padding: 14px 12px; }
+      .platform em { padding-top: 10px; }
+      .more { margin-top: 18px; }
+      .signoff { margin-top: 20px; }
       .badges { display: none; }
       .panel-foot { justify-content: flex-end; }
       .only-wide { display: none; }
+    }
+    @media (max-width: 760px) and (max-height: 640px) {
+      h1 { font-size: clamp(2.4rem, 8vw, 3.5rem); }
+      .lead { font-size: 1.1rem; margin-top: 16px; }
+      .lead.big { font-size: 1.25rem; }
+      .stack { gap: 16px; padding-top: 60px; }
+      .panel-body { min-height: 100px; padding: 14px 16px; }
+    }
+    @media (max-height: 640px) {
+      .download { height: auto; }
+      .download .dl-stage { position: relative; height: auto; padding: 72px 24px 32px; }
+      .signoff span, .signoff .heart { opacity: 1 !important; }
     }
     @media (min-width: 761px) { .only-narrow { display: none; } }
 
@@ -346,7 +365,7 @@ sitemap: false
                 <g class="row" id="r-bill" data-row="r-bill">
                   <circle class="tick" cx="186" cy="183" r="6.5"/><path class="tickmark" d="M183 183 l2.2 2.3 l4 -4.4"/>
                   <text x="200" y="187" font-size="11" class="t-muted">pay the electricity bill today</text>
-                  <line class="strike" x1="200" y1="183.5" x2="336" y2="183.5"/>
+                  <line class="strike" x1="200" y1="183.5" x2="322" y2="183.5"/>
                 </g>
                 <!-- Next days -->
                 <text x="176" y="218" font-size="12" class="t-head">Next 14 Days</text>
@@ -400,7 +419,8 @@ sitemap: false
 
               <!-- 6. Plain files, synced to every device -->
               <g id="ov-sync" class="ov-sync overlay">
-                <rect class="dim" x="1.5" y="1.5" width="637" height="424" rx="13"/>
+                <rect x="1.5" y="1.5" width="637" height="424" rx="13" style="fill:var(--surface)"/>
+                <circle cx="20" cy="18" r="4.5" fill="#FF5F57"/><circle cx="34" cy="18" r="4.5" fill="#FEBC2E"/><circle cx="48" cy="18" r="4.5" fill="#28C840"/>
                 <!-- Centred in the window: the folder above, four devices evenly spaced below -->
                 <g fill="none" stroke="currentColor" stroke-width="1.4">
                   <path d="M290 120 h22 l8 9 h30 v54 h-60z" style="fill:var(--surface)"/>
@@ -435,12 +455,12 @@ sitemap: false
                 <circle class="box done-hide" cx="28" cy="161" r="6.5"/>
                 <g class="done-show reveal"><circle class="tick" cx="28" cy="161" r="7"/><path class="tickmark" d="M24.8 161 l2.3 2.4 l4.3 -4.6"/></g>
                 <text x="44" y="165" font-size="12.5">water the plants today</text>
-                <line class="strike done-show reveal" x1="44" y1="161" x2="176" y2="161"/>
+                <line class="strike done-show reveal" x1="44" y1="161" x2="163" y2="161"/>
               </g>
               <g class="row" data-row="r-bill">
                 <circle class="tick" cx="28" cy="185" r="7"/><path class="tickmark" d="M24.8 185 l2.3 2.4 l4.3 -4.6"/>
                 <text x="44" y="189" font-size="12.5" class="t-muted">pay the electricity bill today</text>
-                <line class="strike" x1="44" y1="185" x2="214" y2="185"/>
+                <line class="strike" x1="44" y1="185" x2="196" y2="185"/>
               </g>
               <!-- Next days -->
               <text x="20" y="218" class="t-cap">NEXT 14 DAYS</text>
@@ -455,8 +475,8 @@ sitemap: false
               <g class="row" data-row="r-ana"><circle class="box" cx="28" cy="381" r="6.5"/><text x="44" y="385" font-size="12.5">ask @ana about the deck</text></g>
               <g class="row" data-row="r-hero"><circle class="box" cx="28" cy="404" r="6.5"/><text x="44" y="408" font-size="12.5">write the hero copy</text><text x="300" y="408" font-size="10" text-anchor="end" class="t-muted">Website</text></g>
               <line class="line" x1="1.5" y1="420" x2="318.5" y2="420"/>
-              <text x="70" y="439" font-size="10" text-anchor="middle" class="t-head" style="fill:var(--accent)">Dashboard</text>
-              <text x="160" y="439" font-size="10" text-anchor="middle" class="t-muted">Notes</text>
+              <text x="70" y="439" font-size="10" text-anchor="middle" class="t-head tab-dash">Dashboard</text>
+              <text x="160" y="439" font-size="10" text-anchor="middle" class="t-muted tab-notes">Notes</text>
               <text x="250" y="439" font-size="10" text-anchor="middle" class="t-muted">Settings</text>
 
               <!-- 3. Projects, people and tags -->
@@ -508,7 +528,7 @@ sitemap: false
 
               <!-- 6. Plain files, synced: the folder above, four devices in a row below -->
               <g class="ov-sync overlay">
-                <rect class="dim" x="1.5" y="1.5" width="317" height="447" rx="27"/>
+                <rect x="1.5" y="1.5" width="317" height="418" rx="27" style="fill:var(--surface)"/>
                 <text x="160" y="118" font-size="12" text-anchor="middle" class="t-head">Scattered Notes folder</text>
                 <g fill="none" stroke="currentColor" stroke-width="1.4">
                   <path d="M130 134 h22 l8 9 h30 v54 h-60z" style="fill:var(--surface)"/>
@@ -554,7 +574,7 @@ sitemap: false
             <div class="caption" data-slot="5">
               <span class="num">05</span>
               <h2>Find anything.</h2>
-              <p><kbd>⌘ K</kbd> searches every note, and <kbd>⌥ F</kbd> does it from any app. Pick a result and the cursor lands on the match.</p>
+              <p><span class="only-wide"><kbd>⌘ K</kbd> searches every note, and <kbd>⌥ F</kbd> does it from any app.</span><span class="only-narrow">Search every note from the top of the list, or press <kbd>⌥ F</kbd> on a Mac from any app.</span> Pick a result and the cursor lands on the match.</p>
             </div>
             <div class="caption" data-slot="6">
               <span class="num">06</span>
@@ -597,12 +617,12 @@ sitemap: false
       { t: 'plan for next week:\n- book the venue', x: 4, y: 47, m: [86, 79], r: 4, c: 4, row: 'r-venue' },
       { t: '#idea dark mode for the app', x: 31, y: 9, m: [70, 7], r: -2, c: 3 },
       { t: 'ask @ana about the deck', x: 60, y: 87, m: [58, 85], r: 6, c: 1, row: 'r-ana' },
-      { t: 'write the hero copy +website', x: 15, y: 76, m: [-6, 70], r: -5, c: 2, row: 'r-hero' },
-      { t: '- [ ] water the plants today', x: 50, y: 13, m: [8, 15], r: 3, c: 4, row: 'r-plants' },
-      { t: 'dentist oct 30 at 4pm', x: 82, y: 76, m: [30, 74], r: -6, c: 3, row: 'r-dentist' },
-      { t: '- [x] pay the electricity bill today', x: 81, y: 25, m: [48, 14], r: 4, c: 2, row: 'r-bill', done: 1 },
-      { t: 'buy oat milk', x: 13, y: 30, m: [86, 15], r: 7, c: 1 },
-      { t: 'what if the dashboard\nhad a calendar?', x: 76, y: 57, m: [70, 69.5], r: -4, c: 4 }
+      { t: 'write the hero copy +website', x: 15, y: 76, m: [-6, 73], r: -5, c: 2, row: 'r-hero' },
+      { t: '- [ ] water the plants today', x: 50, y: 13, m: [8, 13], r: 3, c: 4, row: 'r-plants' },
+      { t: 'dentist oct 30 at 4pm', x: 82, y: 76, m: [30, 75], r: -6, c: 3, row: 'r-dentist' },
+      { t: '- [x] pay the electricity bill today', x: 81, y: 25, m: [48, 12], r: 4, c: 2, row: 'r-bill', done: 1 },
+      { t: 'buy oat milk', x: 13, y: 30, m: [86, 13], r: 7, c: 1 },
+      { t: 'what if the dashboard\nhad a calendar?', x: 76, y: 57, m: [70, 72.5], r: -4, c: 4 }
     ];
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var layer = document.getElementById('notes');
@@ -640,8 +660,10 @@ sitemap: false
       sections.unify.appendChild(el);
       return { el: el, p: p };
     });
+    var unifyStage = sections.unify.querySelector('.stage');
     function placeSnaps() {
-      var span = sections.unify.offsetHeight - window.innerHeight;
+      var vh = unifyStage ? unifyStage.offsetHeight : window.innerHeight;
+      var span = sections.unify.offsetHeight - vh;
       snapEls.forEach(function (s) { s.el.style.top = Math.round(s.p * span) + 'px'; });
     }
 
@@ -689,7 +711,7 @@ sitemap: false
       return { el: el, sec: el.closest('.story'), a: range[0], b: range[1] };
     });
     function measure() {
-      var vw = window.innerWidth, vh = window.innerHeight;
+      var vw = window.innerWidth, vh = unifyStage ? unifyStage.offsetHeight : window.innerHeight;
       function span(el) { return { top: el.offsetTop, span: el.offsetHeight - vh }; }
       var wrap = dash.parentNode;
       // Inside the pinned Unify stage, which fills the screen, layout offsets are screen positions
@@ -698,6 +720,7 @@ sitemap: false
         return { l: l, r: l + el.offsetWidth, t: t, b: t + el.offsetHeight };
       });
       layout = {
+        vw: vw,
         vh: vh,
         sections: { intro: span(sections.intro), capture: span(sections.capture), unify: span(sections.unify), download: span(download) },
         mouthX: wrap.offsetLeft + wrap.offsetWidth * .55,
@@ -706,14 +729,14 @@ sitemap: false
       cards.forEach(function (c) {
         var at = narrow.matches && c.n.m ? c.n.m : [c.n.x, c.n.y];
         c.el.style.left = at[0] + 'vw';
-        c.el.style.top = at[1] + 'vh';
+        c.el.style.top = (at[1] / 100 * vh).toFixed(1) + 'px';
         c.shown = c.el.offsetParent !== null;
         var w = c.el.offsetWidth, h = c.el.offsetHeight;
         c.sx = at[0] / 100 * vw + w / 2;
         c.sy = at[1] / 100 * vh + h / 2;
         var l = c.sx - w / 2, t = c.sy - h / 2;
         // In Unify, a note that touches nothing where it rests flies over the dashboard; the others slip under it
-        c.clear = parts.every(function (p) { return l + w < p.l || l > p.r || t + h < p.t || t > p.b; });
+        c.clear = !narrow.matches && parts.every(function (p) { return l + w < p.l || l > p.r || t + h < p.t || t > p.b; });
       });
       placeSnaps();
     }
@@ -758,7 +781,11 @@ sitemap: false
       if (!running) { running = true; requestAnimationFrame(frame); }
     }
     window.addEventListener('scroll', request, { passive: true });
-    window.addEventListener('resize', function () { measure(); shown = targets(); render(shown); });
+    window.addEventListener('resize', function () {
+      var stageVh = unifyStage ? unifyStage.offsetHeight : window.innerHeight;
+      if (layout && window.innerWidth === layout.vw && Math.abs(stageVh - layout.vh) < 2) return;
+      measure(); shown = targets(); render(shown);
+    });
 
     function render(p) {
       var pi = p.intro, pc = p.capture, pu = p.unify;
@@ -786,16 +813,19 @@ sitemap: false
       var g = clamp(pu / GATHER);
       var mouthX = layout.mouthX, mouthY = layout.mouthY, vh = layout.vh;
       var landed = {};
+      var restOp = narrow.matches ? .08 : .15;
 
       cards.forEach(function (c) {
         if (!c.shown) return;
         var el = c.el;
         var dx = 0, dy = 0, rot = c.n.r, scale = 1, op = 1;
+        var over = c.clear;
         if (pu > 0) {
-          // Back into view, then each note follows a curve into the dashboard, a little after the one before
-          var back = clamp(g / .25);
           // Staggered so the last note lands just before the gathering ends (.3 + 11 × .025 + .375 = .95)
           var t = ease(clamp((g - .3 - c.i * .025) / .375));
+          // Notes clear of the text brighten right away; notes sitting behind the heading or caption stay
+          // faint until they lift off into the dashboard
+          var back = c.clear ? clamp(g / .25) : clamp(t / .22);
           // Notes stay where they were put, like paper on a desk, until they're gathered
           var x0 = c.sx, y0 = c.sy;
           var cx = (x0 + mouthX) / 2, cy = Math.min(y0, mouthY) - vh * .15;
@@ -804,16 +834,17 @@ sitemap: false
           dx = x - c.sx; dy = y - c.sy;
           rot = c.n.r * (1 - t);
           scale = 1 - .75 * t;
-          op = (.15 + .85 * back) * (1 - clamp((t - .75) / .25));
+          op = (restOp + (1 - restOp) * back) * (1 - clamp((t - .75) / .25));
+          if (t > .12) over = true;
           if (c.n.row && t > .9) landed[c.n.row] = true;
         } else if (pc > 0) {
           // Behind Capture: in place, faded so the window has the focus
-          op = .4 - .25 * clamp(pc / .2);
+          op = .4 - (.4 - restOp) * clamp(pc / .2);
         } else {
           // Scattered: still, and dimmed once the story moves on
           op = 1 - .6 * clamp((pi - .3) / .3);
         }
-        var parent = pu > 0 && c.clear ? overLayer : layer;
+        var parent = pu > 0 && over ? overLayer : layer;
         if (el.parentNode !== parent) parent.appendChild(el);
         el.style.opacity = op.toFixed(3);
         el.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
