@@ -4,14 +4,17 @@ title: "Scattered Notes: capture first, let the dashboard organise"
 date: 2026-10-27 14:00:00 +0530
 categories: [utilities]
 permalink: /utilities/scattered-notes/
-excerpt: "A macOS app for notes that end up everywhere. Capture a thought in seconds from any app, then see every to-do and every line that mentions a day in one dashboard that builds itself."
+excerpt: "An app for Mac and Windows, with iPhone and Android companions, for notes that end up everywhere. Capture a thought in seconds from any app, then see every to-do and every line that mentions a day in one dashboard that builds itself."
 ---
+
+*Prefer to see it? [Scroll through the story](/scattered-notes/).*
 
 Notes get scattered. A to-do sits in one note, "call the bank tomorrow" sits in another, and
 a plan for next week is in a third. Nothing connects them, so the only way to know what needs
 doing is to reread everything.
 
-[Scattered Notes](https://github.com/and/scattered-notes) is a Mac app built around two steps:
+[Scattered Notes](https://github.com/and/scattered-notes) is an app for Mac and Windows, with iPhone and
+Android companions, built around two steps:
 
 1. **Capture.** Get the thought down in seconds, without deciding where it goes.
 2. **Unify.** A dashboard collects everything that needs action from all your notes, with

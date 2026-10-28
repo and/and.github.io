@@ -1,4 +1,7 @@
 # Things to try, shown at the top of the home page. Each card links straight to the tool.
+- name: Scattered Notes
+  line: Capture first, let the dashboard organise.
+  url: /scattered-notes/
 - name: Anchor
   line: See where your attention really goes.
   url: /utilities/anchor/

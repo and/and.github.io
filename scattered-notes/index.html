@@ -1,0 +1,730 @@
+---
+layout: null
+permalink: /scattered-notes/
+# The Scattered Notes story page: one long page that scrolls through the app's idea. Standalone, like /halo/:
+# not in the post lists, feed or sitemap. The write-up is the post at /utilities/scattered-notes/.
+sitemap: false
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scattered Notes: capture first, let the dashboard organise</title>
+  <meta name="description" content="Notes get scattered. Scattered Notes captures a thought in seconds and collects every to-do and every dated line from all your notes into one dashboard. For Mac and Windows, with iPhone and Android companions.">
+  <meta property="og:title" content="Scattered Notes">
+  <meta property="og:description" content="Capture a thought in seconds. A dashboard collects everything that needs doing from all your notes.">
+  <meta property="og:image" content="{{ '/scattered-notes/og.png' | absolute_url }}">
+  <meta property="og:url" content="{{ '/scattered-notes/' | absolute_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
+  <link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ '/apple-touch-icon.png' | relative_url }}">
+  <script>
+    // The light or dark choice made elsewhere on the site
+    try{var m=localStorage.getItem('siteMode');if(m==='light'||m==='dark')document.documentElement.setAttribute('data-theme',m);}catch(e){}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oooh+Baby&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* The site's own type and colours (see _layouts/default.html), so the page reads as part of and.github.io */
+    :root {
+      --bg: #FAFBFC; --surface: #FFFFFF; --text: #0B0C0F; --muted: #545B66; --faint: #5F6672; --rule: #E3E6EB; --subtle: #F1F3F6;
+      --accent: #0047FF; --accent-soft: rgba(0, 71, 255, .12); --green: #15803D; --orange: #C2410C; --purple: #6D28D9;
+      --note-1: #FFF1A8; --note-2: #FFD9E2; --note-3: #D7E8FF; --note-4: #D8F3D0; --note-ink: #2A2A22;
+      --font: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0B0C0F; --surface: #13151A; --text: #EDEEF2; --muted: #A3A9B6; --faint: #8D94A2; --rule: #262932; --subtle: #1A1D24;
+        --accent: #7A9CFF; --accent-soft: rgba(122, 156, 255, .16); --green: #4ADE80; --orange: #FB923C; --purple: #C4B5FD;
+        --note-1: #4A4322; --note-2: #4D2E36; --note-3: #263A57; --note-4: #2C4528; --note-ink: #F2F0E6;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0B0C0F; --surface: #13151A; --text: #EDEEF2; --muted: #A3A9B6; --faint: #8D94A2; --rule: #262932; --subtle: #1A1D24;
+      --accent: #7A9CFF; --accent-soft: rgba(122, 156, 255, .16); --green: #4ADE80; --orange: #FB923C; --purple: #C4B5FD;
+      --note-1: #4A4322; --note-2: #4D2E36; --note-3: #263A57; --note-4: #2C4528; --note-ink: #F2F0E6;
+      color-scheme: dark;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+
+    /* Top bar */
+    .bar { position: fixed; inset: 0 0 auto 0; z-index: 20; display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 22px; font-size: .95rem; background: linear-gradient(var(--bg) 60%, transparent); }
+    .bar a { text-decoration: none; color: var(--muted); }
+    .bar a:hover { color: var(--text); }
+    .bar .name { font-weight: 700; color: var(--text); }
+
+    /* The sticky notes live in one fixed layer behind the story, so the same notes scatter and later gather */
+    .notes { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+    /* In Unify, notes clear of the heading, dashboard and words fly in over the dashboard */
+    .notes.over { z-index: 3; }
+    .note { position: absolute; width: clamp(140px, 15vw, 200px); padding: 14px 14px 18px; border-radius: 3px;
+      font-size: clamp(.8rem, 1vw, .95rem); line-height: 1.35; color: var(--note-ink); white-space: pre-line;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.08); will-change: transform, opacity; }
+    .note::before { content: ""; position: absolute; top: -7px; left: 50%; width: 46px; height: 14px; margin-left: -23px;
+      background: rgba(255,255,255,.45); transform: rotate(-2deg); }
+    .note.done { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+    .note.c1 { background: var(--note-1); } .note.c2 { background: var(--note-2); }
+    .note.c3 { background: var(--note-3); } .note.c4 { background: var(--note-4); }
+
+    /* Story sections: each pins a full-screen stage while it scrolls past */
+    main { position: relative; z-index: 2; }
+    .story { position: relative; }
+    .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+    #intro { height: 210vh; }
+    #capture { height: 260vh; }
+    #unify { height: 478vh; }
+    /* Resting points in Unify: the whole dashboard, then each feature. A scroll that ends near one settles on it,
+       so every feature takes the same scroll however big each wheel step or swipe is */
+    html.snapping { scroll-snap-type: y proximity; }
+    .snap { position: absolute; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none; }
+
+    .center { position: absolute; inset: 0; display: grid; place-items: center; padding: 80px 24px; text-align: center; }
+    .center > div { max-width: 40rem; }
+    .fade { opacity: 0; will-change: opacity, transform; }
+    h1 { font-size: clamp(3rem, 9vw, 6.5rem); font-weight: 800; letter-spacing: -.035em; line-height: .95; }
+    .lead { font-size: clamp(1.25rem, 2.4vw, 1.75rem); line-height: 1.4; color: var(--text); margin-top: 26px; }
+    .lead.big { font-size: clamp(1.5rem, 3.4vw, 2.5rem); font-weight: 500; letter-spacing: -.01em; }
+    .muted { color: var(--muted); }
+    .scroll-hint { position: absolute; bottom: 28px; left: 0; right: 0; text-align: center; font-size: .85rem; color: var(--faint); }
+
+    /* Two-column stages: words on one side, a wireframe on the other */
+    .split { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px;
+      align-items: center; max-width: 1200px; margin: 0 auto; padding: 90px 40px 40px; }
+    .split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+    .kicker { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+    .words p { font-size: clamp(1.05rem, 1.6vw, 1.3rem); margin-top: 18px; max-width: 30rem; }
+    .words .small { font-size: .95rem; color: var(--muted); }
+    /* Read out, but shown only as the text typed into the wireframe */
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    kbd { font-family: var(--font); font-weight: 600; font-size: .85em; padding: 1px 6px; border: 1px solid var(--rule); border-bottom-width: 2px;
+      border-radius: 5px; background: var(--surface); }
+
+    /* Capture: the heading centred, the Quick Note window under it */
+    .stack { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 28px; padding: 80px 24px 40px; text-align: center; }
+    .stack .kicker { font-size: clamp(2.8rem, 7vw, 5rem); }
+    .stack .panel { text-align: left; }
+    .stack .small { font-size: .95rem; color: var(--muted); max-width: 36rem; }
+    /* Unify: the heading, the dashboard under it, and each feature's words under the dashboard */
+    .stack.unify { gap: 18px; padding-top: 64px; }
+    .stack.unify .kicker { font-size: clamp(2.4rem, 6vw, 4.2rem); }
+    .stack.unify .dash-wrap { width: min(700px, 100%, 56vh * 1.5); max-width: none; }
+    .stack.unify .captions { width: min(40rem, 100%); min-height: 150px; }
+    .stack.unify .caption { text-align: center; }
+    .stack.unify .caption h2 { font-size: clamp(1.25rem, 2.2vw, 1.6rem); display: inline; }
+    .stack.unify .caption .num { display: inline; margin: 0 8px 0 0; }
+    .stack.unify .caption p { margin: 8px auto 0; max-width: 36rem; font-size: clamp(.98rem, 1.4vw, 1.1rem); }
+    .stack.unify .caption .intro-line { font-size: clamp(1.05rem, 1.7vw, 1.3rem); margin-top: 4px; }
+
+    /* Quick Note wireframe */
+    .panel { background: var(--surface); border: 1.5px solid var(--text); border-radius: 16px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.12); max-width: 620px; width: 100%; justify-self: center; }
+    .panel-head, .panel-foot { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; gap: 10px; }
+    .panel-head { border-bottom: 1px solid var(--rule); }
+    .panel-foot { border-top: 1px solid var(--rule); font-size: .8rem; color: var(--muted); }
+    .pill { font-size: .85rem; font-weight: 700; color: var(--orange); border: 1px solid currentColor; border-radius: 8px; padding: 3px 10px; }
+    .close { width: 18px; height: 18px; border-radius: 50%; background: var(--rule); }
+    .panel-body { min-height: 200px; padding: 18px 20px; font-size: clamp(1.05rem, 1.8vw, 1.35rem); line-height: 1.5; }
+    .typed::after { content: ""; display: inline-block; width: 2px; height: 1.1em; margin-left: 1px; vertical-align: -.15em;
+      background: var(--accent); animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .placeholder { color: var(--faint); }
+    .badges { display: flex; gap: 10px; flex-wrap: wrap; }
+    .badges span { font-size: .78rem; }
+    .status { font-weight: 600; white-space: nowrap; }
+    .status.saved { color: var(--green); }
+
+    /* Dashboard wireframe */
+    .dash-wrap { position: relative; width: 100%; max-width: 720px; justify-self: center; }
+    .dash { width: 100%; height: auto; display: block; color: var(--text); overflow: visible; }
+    .dash .frame { fill: var(--surface); stroke: var(--text); stroke-width: 1.5; }
+    .dash .side { fill: var(--subtle); }
+    .dash .line { stroke: var(--rule); stroke-width: 1; }
+    .dash text { font-family: var(--font); fill: var(--text); }
+    .dash .t-muted { fill: var(--muted); }
+    .dash .t-head { font-weight: 700; }
+    .dash .t-cap { font-size: 9px; font-weight: 700; letter-spacing: .08em; fill: var(--faint); }
+    .dash .chip { fill: var(--subtle); }
+    .dash .box { fill: none; stroke: var(--muted); stroke-width: 1.4; }
+    .dash .accent { fill: var(--accent); }
+    .dash .hl { fill: var(--accent-soft); }
+    .dash .row, .dash .reveal, .dash .overlay { transition: opacity .5s ease, transform .5s ease; }
+    .dash .row { opacity: 0; }
+    .dash .overlay, .dash .reveal { opacity: 0; }
+    .dash .dim { fill: var(--bg); opacity: .9; }
+    .dash .tick { fill: var(--green); }
+    .dash .tickmark { fill: none; stroke: var(--surface); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .dash .strike { stroke: var(--muted); stroke-width: 1.2; }
+    /* What each feature switches on: f<n> while it is the one being read, after<n> from then on */
+    .dash.f1 #hl-bank, .dash.after2 .done-show, .dash.after3 #side-more,
+    .dash.f4 #ov-project, .dash.f5 #ov-search, .dash.f6 #ov-sync { opacity: 1; }
+    .dash .done-hide { transition: opacity .5s ease; }
+    .dash.after2 .done-hide { opacity: 0; }
+
+    .captions { position: relative; min-height: 260px; }
+    .caption { position: absolute; inset: 0 0 auto 0; transition: opacity .5s ease, transform .5s cubic-bezier(.2, .7, .2, 1); }
+    .caption h2 { font-size: clamp(1.5rem, 2.8vw, 2.2rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+    .caption .kicker + p, .caption h2 + p { margin-top: 14px; }
+    .caption p { font-size: clamp(1rem, 1.5vw, 1.2rem); max-width: 28rem; }
+    .caption .num { font-size: .85rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--faint); display: block; margin-bottom: 10px; }
+
+    /* Download */
+    /* The downloads hold the screen, centred below the top bar, while a little more scrolling fades in the
+       sign-off, the heart and then its words; then the footer follows */
+    .download { position: relative; z-index: 2; background: var(--bg); height: 160vh; }
+    .download .dl-stage { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; align-items: center;
+      padding: 50px 24px 0; }
+    .download .inner { width: 100%; }
+    .signoff span, .signoff .heart { opacity: 0; }
+    .download .inner { max-width: 960px; margin: 0 auto; text-align: center; }
+    .download h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; }
+    .download .intro { font-size: 1.2rem; color: var(--muted); margin: 12px auto 0; max-width: 36rem; }
+    .platforms { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 36px; }
+    /* A column, so each card's download link sits at the same height whatever the text above it */
+    .platform { display: flex; flex-direction: column; align-items: center; border: 1.5px solid var(--text); border-radius: 14px; padding: 18px; text-decoration: none; background: var(--surface);
+      transition: transform .15s ease, box-shadow .15s ease; }
+    a.platform:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.1); }
+    .platform strong { display: block; font-size: 1.15rem; }
+    .platform span { display: block; font-size: .9rem; color: var(--muted); margin-top: 4px; }
+    .platform em { display: inline-block; font-style: normal; font-weight: 600; font-size: .9rem; margin-top: auto; padding-top: 14px; color: var(--accent); }
+    .platform.soon { border-style: dashed; border-color: var(--rule); }
+    .platform.soon em { color: var(--faint); }
+    .more { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; font-size: 1rem; }
+    .more a { color: var(--accent); }
+    .signoff { margin-top: 36px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    /* The heart on its own line above the words. Only the words are handwritten; the heart is drawn */
+    .signoff span { font-family: "Oooh Baby", cursive; font-size: clamp(1.4rem, 2.4vw, 1.8rem); line-height: 1.2; color: var(--text); }
+    .signoff .heart { width: 20px; height: 18px; fill: #E5484D; flex: none; }
+    footer { position: relative; z-index: 2; background: var(--bg); }
+    footer div { display: flex; justify-content: space-between; gap: 16px; max-width: 960px; margin: 0 auto; padding: 14px 24px 24px; border-top: 1px solid var(--rule); color: var(--faint); }
+
+    @media (max-width: 760px) {
+      .note.desk { display: none; }
+      .note { width: 132px; padding: 10px 10px 14px; font-size: .78rem; }
+      .split, .split.flip { grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: 18px; align-items: start; padding: 76px 18px 18px; }
+      .stack.unify { gap: 12px; padding-top: 60px; }
+      .stack.unify .captions { min-height: 170px; }
+      .panel-body { min-height: 140px; }
+      .platforms { grid-template-columns: 1fr 1fr; }
+      .only-wide { display: none; }
+    }
+    @media (min-width: 761px) { .only-narrow { display: none; } }
+
+    /* Without motion, the story is a plain long page: nothing pins, every step shows its last frame */
+    @media (prefers-reduced-motion: reduce) {
+      #intro, #capture, #unify { height: auto; }
+      .stage { position: relative; height: auto; overflow: visible; }
+      .center, .split, .stack { position: relative; }
+      .center { padding: 100px 24px 40px; }
+      .fade, .caption { opacity: 1 !important; transform: none !important; }
+      .captions { min-height: 0; }
+      .caption { position: relative; margin-bottom: 28px; }
+      .notes { display: none; }
+      .download { height: auto; }
+      .download .dl-stage { position: relative; height: auto; padding: 100px 24px 40px; }
+      .signoff span, .signoff .heart { opacity: 1 !important; }
+      html.snapping { scroll-snap-type: none; }
+      .snap { display: none; }
+      .typed::after { display: none; }
+      .scroll-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="bar" aria-label="Site">
+    <a href="{{ '/' | relative_url }}">← and.github.io</a>
+    <a class="name" href="#download">Download</a>
+  </nav>
+
+  <div class="notes" id="notes" aria-hidden="true"></div>
+  <div class="notes over" id="notes-over" aria-hidden="true"></div>
+
+  <main>
+    <!-- 1. The notes are scattered -->
+    <section class="story" id="intro">
+      <div class="stage">
+        <div class="center"><div class="fade" data-show="-1 .26">
+          <h1>Scattered Notes</h1>
+          <p class="lead">Notes get scattered. A to-do sits in one note, “call the bank tomorrow” sits in another, and a plan for next week is in a third.</p>
+        </div></div>
+        <div class="center"><div class="fade" data-show=".36 .6">
+          <p class="lead big">Nothing connects them, so the only way to know what needs doing is to reread everything.</p>
+        </div></div>
+        <div class="center"><div class="fade" data-show=".7 2">
+          <p class="lead big">Scattered Notes is an app for Mac and Windows, with iPhone and Android companions, built around two steps:</p>
+        </div></div>
+        <p class="scroll-hint fade" data-show="-1 .08">Scroll ↓</p>
+      </div>
+    </section>
+
+    <!-- 2. Capture -->
+    <section class="story" id="capture">
+      <div class="stage">
+        <div class="stack">
+          <h2 class="kicker">1. Capture.</h2>
+          <p class="sr">Get the thought down in seconds, without deciding where it goes.</p>
+          <div class="panel" aria-hidden="true">
+            <div class="panel-head"><span class="pill">▣ Inbox ▾</span><span class="close"></span></div>
+            <div class="panel-body"><span class="typed" id="typed"></span><span class="placeholder" id="placeholder">Type a quick note, thought, or checklist…</span></div>
+            <div class="panel-foot">
+              <div class="badges"><span>Esc Done</span><span>+project File</span><span>#tag Tag</span></div>
+              <span class="status" id="status">Saves as you type</span>
+            </div>
+          </div>
+          <p class="small fade" data-show=".72 2">
+            <span class="only-wide"><kbd>⌥ N</kbd> on a Mac or <kbd>Ctrl Alt N</kbd> on Windows opens Quick Note over whatever you're doing. It saves as you type; press <kbd>Esc</kbd> when you're done.</span>
+            <span class="only-narrow">On a Mac it's <kbd>⌥ N</kbd> from any app; on a phone, the Capture button. It saves as you type.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Unify, then the features, all on one pinned dashboard -->
+    <section class="story" id="unify">
+      <div class="stage">
+        <div class="stack unify">
+          <h2 class="kicker">2. Unify.</h2>
+          <div class="dash-wrap" aria-hidden="true">
+            <svg class="dash" id="dash" viewBox="0 0 640 427" role="img">
+              <rect class="frame" x="0.75" y="0.75" width="638.5" height="425.5" rx="14"/>
+              <path class="side" d="M1.5 14 a12.5 12.5 0 0 1 12.5 -12.5 H150 V425.5 H14 a12.5 12.5 0 0 1 -12.5 -12.5z"/>
+              <line class="line" x1="150" y1="1.5" x2="150" y2="425.5"/>
+              <circle cx="20" cy="18" r="4.5" fill="#FF5F57"/><circle cx="34" cy="18" r="4.5" fill="#FEBC2E"/><circle cx="48" cy="18" r="4.5" fill="#28C840"/>
+              <!-- Sidebar -->
+              <rect class="hl" x="10" y="38" width="130" height="22" rx="6"/>
+              <text x="20" y="53" font-size="11" class="t-head">Dashboard</text>
+              <text x="20" y="77" font-size="11">All Notes</text>
+              <text x="20" y="99" font-size="11">Inbox</text>
+              <g id="side-more" class="reveal">
+                <text x="20" y="130" class="t-cap">PROJECTS</text>
+                <text x="20" y="150" font-size="11">Website</text>
+                <text x="20" y="170" font-size="11">Garden</text>
+                <text x="20" y="200" class="t-cap">PEOPLE</text>
+                <text x="20" y="220" font-size="11">ana</text>
+                <text x="20" y="250" class="t-cap">TAGS</text>
+                <text x="20" y="270" font-size="11">idea</text>
+              </g>
+              <!-- Header and chips -->
+              <g id="dash-main">
+                <text x="176" y="44" font-size="11" class="t-muted">Wednesday</text>
+                <text x="176" y="72" font-size="24" class="t-head">28 October</text>
+                <g id="chips">
+                  <rect class="chip" x="176" y="88" width="72" height="22" rx="11"/><text x="186" y="103" font-size="10"><tspan class="t-head" fill="currentColor">0</tspan> overdue</text>
+                  <rect class="chip" x="254" y="88" width="62" height="22" rx="11"/>
+                  <text x="264" y="103" font-size="10" class="done-hide"><tspan class="t-head">1</tspan> today</text>
+                  <text x="264" y="103" font-size="10" class="done-show reveal">☀️ today</text>
+                  <rect class="chip" x="322" y="88" width="80" height="22" rx="11"/><text x="332" y="103" font-size="10"><tspan class="t-head">3</tspan> upcoming</text>
+                  <rect class="chip" x="408" y="88" width="88" height="22" rx="11"/><text x="418" y="103" font-size="10"><tspan class="t-head">4</tspan> open to-dos</text>
+                </g>
+                <!-- Today -->
+                <text x="176" y="142" font-size="12" class="t-head">Today</text>
+                <g class="row" id="r-plants">
+                  <circle class="box done-hide" cx="186" cy="161" r="6"/>
+                  <g class="done-show reveal"><circle class="tick" cx="186" cy="161" r="6.5"/><path class="tickmark" d="M183 161 l2.2 2.3 l4 -4.4"/></g>
+                  <text x="200" y="165" font-size="11">water the plants today</text>
+                  <line class="strike done-show reveal" x1="200" y1="161.5" x2="304" y2="161.5"/>
+                </g>
+                <g class="row" id="r-bill">
+                  <circle class="tick" cx="186" cy="183" r="6.5"/><path class="tickmark" d="M183 183 l2.2 2.3 l4 -4.4"/>
+                  <text x="200" y="187" font-size="11" class="t-muted">pay the electricity bill today</text>
+                  <line class="strike" x1="200" y1="183.5" x2="336" y2="183.5"/>
+                </g>
+                <!-- Next days -->
+                <text x="176" y="218" font-size="12" class="t-head">Next 14 Days</text>
+                <rect id="hl-bank" class="hl reveal" x="170" y="225" width="300" height="22" rx="6"/>
+                <g class="row" id="r-bank"><text x="176" y="240" font-size="9" class="t-cap">TOMORROW</text><text x="246" y="240" font-size="11">call the bank tomorrow</text></g>
+                <g class="row" id="r-dinner"><text x="176" y="262" font-size="9" class="t-cap">FRI 30</text><text x="246" y="262" font-size="11">team dinner on friday</text></g>
+                <g class="row" id="r-dentist"><text x="176" y="284" font-size="9" class="t-cap">FRI 30</text><text x="246" y="284" font-size="11">dentist oct 30 at 4pm</text></g>
+                <!-- To-do -->
+                <text x="176" y="318" font-size="12" class="t-head">To-do</text>
+                <g class="row" id="r-passport"><circle class="box" cx="186" cy="335" r="6"/><text x="200" y="339" font-size="11">renew passport</text></g>
+                <g class="row" id="r-venue"><circle class="box" cx="186" cy="357" r="6"/><text x="200" y="361" font-size="11">book the venue</text></g>
+                <g class="row" id="r-ana"><circle class="box" cx="186" cy="379" r="6"/><text x="200" y="383" font-size="11">ask @ana about the deck</text></g>
+                <g class="row" id="r-hero"><circle class="box" cx="186" cy="401" r="6"/><text x="200" y="405" font-size="11">write the hero copy</text><text x="318" y="405" font-size="9" class="t-muted">Website</text></g>
+              </g>
+
+              <!-- 4. A project's own dashboard, with its notes one after another -->
+              <g id="ov-project" class="overlay">
+                <rect x="10" y="38" width="130" height="22" style="fill:var(--subtle)"/>
+                <rect class="hl" x="10" y="135" width="130" height="22" rx="6"/>
+                <rect x="151" y="2" width="487" height="423" style="fill:var(--surface)"/>
+                <text x="176" y="44" font-size="11" class="t-muted">Wednesday, 28 October</text>
+                <text x="176" y="72" font-size="24" class="t-head">Website</text>
+                <text x="176" y="106" font-size="12" class="t-head">To-do</text>
+                <circle class="box" cx="186" cy="123" r="6"/><text x="200" y="127" font-size="11">write the hero copy</text>
+                <text x="176" y="164" font-size="12" class="t-head">Notes</text>
+                <text x="176" y="188" class="t-cap">WEDNESDAY, 28 OCTOBER 2026</text>
+                <text x="176" y="206" font-size="11">write the hero copy</text>
+                <text x="176" y="222" font-size="11" class="t-muted">short, and say what it does in one line</text>
+                <line class="line" x1="176" y1="236" x2="610" y2="236"/>
+                <text x="176" y="258" class="t-cap">MONDAY, 26 OCTOBER 2026</text>
+                <text x="176" y="276" font-size="11">launch checklist</text>
+                <text x="176" y="292" font-size="11" class="t-muted">- [x] buy the domain</text>
+                <text x="176" y="308" font-size="11" class="t-muted">- [x] pick the fonts</text>
+                <line class="line" x1="176" y1="322" x2="610" y2="322"/>
+                <text x="176" y="344" class="t-cap">FRIDAY, 23 OCTOBER 2026</text>
+                <text x="176" y="362" font-size="11">kickoff with @ana</text>
+              </g>
+
+              <!-- 5. Search -->
+              <g id="ov-search" class="overlay">
+                <rect class="dim" x="1.5" y="1.5" width="637" height="424" rx="13"/>
+                <rect x="140" y="70" width="360" height="150" rx="12" style="fill:var(--surface)" stroke="currentColor" stroke-width="1.2"/>
+                <text x="160" y="100" font-size="14">🔍 bank</text>
+                <line class="line" x1="140" y1="114" x2="500" y2="114"/>
+                <rect class="hl" x="148" y="122" width="344" height="40" rx="8"/>
+                <text x="160" y="139" font-size="11" class="t-head">Errands</text>
+                <text x="160" y="154" font-size="10">call the <tspan class="accent" font-weight="700">bank</tspan> tomorrow</text>
+                <text x="160" y="184" font-size="11" class="t-head">Money</text>
+                <text x="160" y="199" font-size="10" class="t-muted">move savings to the new <tspan font-weight="700">bank</tspan> account</text>
+              </g>
+
+              <!-- 6. Plain files, synced to every device -->
+              <g id="ov-sync" class="overlay">
+                <rect class="dim" x="1.5" y="1.5" width="637" height="424" rx="13"/>
+                <!-- Centred in the window: the folder above, four devices evenly spaced below -->
+                <g fill="none" stroke="currentColor" stroke-width="1.4">
+                  <path d="M290 120 h22 l8 9 h30 v54 h-60z" style="fill:var(--surface)"/>
+                  <path d="M320 183 L140 275 M320 183 L260 275 M320 183 L380 275 M320 183 L500 275" stroke-dasharray="3 4" style="stroke:var(--accent)"/>
+                  <rect x="102" y="275" width="76" height="50" rx="4" style="fill:var(--surface)"/><path d="M94 331 h92"/>
+                  <rect x="222" y="275" width="76" height="52" rx="3" style="fill:var(--surface)"/><path d="M252 327 v8 h16 v-8"/>
+                  <rect x="364" y="271" width="32" height="60" rx="7" style="fill:var(--surface)"/>
+                  <rect x="483" y="271" width="34" height="60" rx="5" style="fill:var(--surface)"/>
+                </g>
+                <text x="320" y="105" font-size="11" text-anchor="middle" class="t-head">Scattered Notes folder</text>
+                <text x="320" y="158" font-size="10" text-anchor="middle" font-weight="600">.md</text>
+                <text x="140" y="351" font-size="10" text-anchor="middle">Mac</text>
+                <text x="260" y="351" font-size="10" text-anchor="middle">Windows</text>
+                <text x="380" y="351" font-size="10" text-anchor="middle">iPhone</text>
+                <text x="500" y="351" font-size="10" text-anchor="middle">Android</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="captions" id="captions">
+            <div class="caption" data-slot="0">
+              <p class="intro-line">A dashboard collects everything that needs action from all your notes, with nothing to set up.</p>
+            </div>
+            <div class="caption" data-slot="1">
+              <span class="num">01</span>
+              <h2>It reads dates.</h2>
+              <p>Write “call the bank tomorrow” and it shows up under Tomorrow. “Tomorrow” stays the day after you wrote it, however much the note changes later. Weekdays, “next week” and “oct 30” work too.</p>
+            </div>
+            <div class="caption" data-slot="2">
+              <span class="num">02</span>
+              <h2>Tick things off.</h2>
+              <p>Tick a to-do on the dashboard and it's ticked in the note. When everything for today is done, the count turns into a sun.</p>
+            </div>
+            <div class="caption" data-slot="3">
+              <span class="num">03</span>
+              <h2>+project, #tag, @person.</h2>
+              <p>Type <strong>+website</strong> to file a note in a project, <strong>#idea</strong> to tag it and <strong>@ana</strong> to mention someone. Each one gets its own list.</p>
+            </div>
+            <div class="caption" data-slot="4">
+              <span class="num">04</span>
+              <h2>Every project has a dashboard.</h2>
+              <p>Open a project to see its to-dos, then all its notes one after another, newest first, like a logbook.</p>
+            </div>
+            <div class="caption" data-slot="5">
+              <span class="num">05</span>
+              <h2>Find anything.</h2>
+              <p><kbd>⌘ K</kbd> searches every note, and <kbd>⌥ F</kbd> does it from any app. Pick a result and the cursor lands on the match.</p>
+            </div>
+            <div class="caption" data-slot="6">
+              <span class="num">06</span>
+              <h2>Plain files, on every device.</h2>
+              <p>Notes are Markdown files in a folder you own. Keep it in iCloud Drive or any synced folder, and the Mac, Windows, iPhone and Android apps all work from it.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="download" id="download">
+    <div class="dl-stage"><div class="inner">
+      <h2>Try it.</h2>
+      <p class="intro">Free.</p>
+      <div class="platforms">
+        <a class="platform" href="https://github.com/and/scattered-notes/releases/latest"><strong>Mac</strong><span>macOS 14 or later, Apple silicon and Intel.</span><em>.zip ↓</em></a>
+        <a class="platform" href="https://github.com/and/scattered-notes/releases/latest"><strong>Windows</strong><span>Windows 11, Intel, AMD and Arm PCs.</span><em>.exe ↓</em></a>
+        <a class="platform" href="https://github.com/and/scattered-notes/releases/latest"><strong>Android</strong><span>Android 8 or later. Google Play is on its way.</span><em>.apk ↓</em></a>
+        <div class="platform soon"><strong>iPhone and iPad</strong><span>In testing on TestFlight.</span><em>Coming soon</em></div>
+      </div>
+      <p class="more">
+        <a href="{{ '/utilities/scattered-notes/' | relative_url }}">The longer write-up</a>
+      </p>
+      <p class="signoff"><svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21.6 10.3 20C4.3 14.6.5 11.1.5 6.8.5 3.3 3.2.5 6.7.5c2 0 3.9.9 5.3 2.4C13.4 1.4 15.3.5 17.3.5c3.5 0 6.2 2.8 6.2 6.3 0 4.3-3.8 7.8-9.8 13.2z"/></svg><span>The Scattered Notes team</span></p>
+    </div></div>
+  </section>
+
+  <footer><div><span>A log book by <a href="{{ '/' | relative_url }}">ānand</a></span><span>2026</span></div></footer>
+
+  <script>
+  (function () {
+    // The notes on the first screen. Each later lands in the dashboard row named by `row`.
+    // `desk` notes are left out on narrow screens.
+    var NOTES = [
+      { t: '- [ ] renew passport', x: 5, y: 13, r: -6, c: 1, row: 'r-passport' },
+      { t: 'call the bank tomorrow', x: 72, y: 11, r: 5, c: 2, row: 'r-bank' },
+      { t: 'team dinner on friday', x: 79, y: 42, r: -3, c: 3, row: 'r-dinner', desk: 1 },
+      { t: 'plan for next week:\n- book the venue', x: 4, y: 47, r: 4, c: 4, row: 'r-venue', desk: 1 },
+      { t: '#idea dark mode for the app', x: 31, y: 9, r: -2, c: 3, desk: 1 },
+      { t: 'ask @ana about the deck', x: 60, y: 87, r: 6, c: 1, row: 'r-ana' },
+      { t: 'write the hero copy +website', x: 15, y: 76, r: -5, c: 2, row: 'r-hero' },
+      { t: '- [ ] water the plants today', x: 50, y: 13, r: 3, c: 4, row: 'r-plants', desk: 1 },
+      { t: 'dentist oct 30 at 4pm', x: 82, y: 76, r: -6, c: 3, row: 'r-dentist' },
+      { t: '- [x] pay the electricity bill today', x: 81, y: 25, r: 4, c: 2, row: 'r-bill', done: 1, desk: 1 },
+      { t: 'buy oat milk', x: 13, y: 30, r: 7, c: 1, desk: 1 },
+      { t: 'what if the dashboard\nhad a calendar?', x: 76, y: 57, r: -4, c: 4, desk: 1 }
+    ];
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var layer = document.getElementById('notes');
+    var overLayer = document.getElementById('notes-over');
+    var unifyParts = ['#unify .kicker', '#unify .dash-wrap', '#unify .captions'].map(function (q) { return document.querySelector(q); });
+    var dash = document.getElementById('dash');
+    var typed = document.getElementById('typed');
+    var placeholder = document.getElementById('placeholder');
+    var status = document.getElementById('status');
+    var captions = Array.prototype.slice.call(document.querySelectorAll('#captions .caption'));
+    var fades = Array.prototype.slice.call(document.querySelectorAll('.fade[data-show]'));
+    var sections = { intro: document.getElementById('intro'), capture: document.getElementById('capture'), unify: document.getElementById('unify') };
+    var download = document.getElementById('download');
+    var signoffHeart = document.querySelector('.signoff .heart');
+    var signoffWords = document.querySelector('.signoff span');
+    var TEXT = 'Get the thought down in seconds, without deciding where it goes.';
+    // How the unify section's scroll is shared out: the notes gather into the dashboard (about 1.6 screens),
+    // the finished dashboard stays with its first line a while (about 0.4 screen), then the six features
+    // follow, about a third of a screen each
+    var GATHER = 0.41;
+    var START = 0.52;
+    var FEATURES = 6;
+
+    // A resting point in the middle of each feature's stretch. None during the gathering, so the notes
+    // always follow the scroll there
+    var snaps = [];
+    for (var k = 1; k <= FEATURES; k++) snaps.push(START + (k - .5) * (1 - START) / FEATURES);
+    var snapEls = snaps.map(function (p) {
+      var el = document.createElement('div');
+      el.className = 'snap';
+      el.setAttribute('aria-hidden', 'true');
+      sections.unify.appendChild(el);
+      return { el: el, p: p };
+    });
+    function placeSnaps() {
+      var span = sections.unify.offsetHeight - window.innerHeight;
+      snapEls.forEach(function (s) { s.el.style.top = Math.round(s.p * span) + 'px'; });
+    }
+
+    var cards = NOTES.map(function (n, i) {
+      var el = document.createElement('div');
+      el.className = 'note c' + n.c + (n.desk ? ' desk' : '') + (n.done ? ' done' : '');
+      el.textContent = n.t;
+      el.style.left = n.x + 'vw';
+      el.style.top = n.y + 'vh';
+      layer.appendChild(el);
+      return { el: el, n: n, i: i };
+    });
+
+    function clamp(v, a, b) { return Math.min(b === undefined ? 1 : b, Math.max(a || 0, v)); }
+    function ease(t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function progress(sec) {
+      var r = sec.getBoundingClientRect();
+      var span = r.height - window.innerHeight;
+      return span > 0 ? clamp(-r.top / span) : (r.top < 0 ? 1 : 0);
+    }
+    // Opacity for something shown between a and b, fading over f at each end
+    function windowed(p, a, b, f) {
+      f = f || 0.06;
+      return Math.min(clamp((p - a + f) / f), clamp((b + f - p) / f));
+    }
+
+    if (reduce) {
+      // Last frame of every step, with no motion
+      typed.textContent = TEXT; placeholder.textContent = ''; status.textContent = '✓ Saved to Inbox'; status.className = 'status saved';
+      Array.prototype.forEach.call(dash.querySelectorAll('.row'), function (r) { r.style.opacity = 1; });
+      dash.classList.add('after2', 'after3');
+      return;
+    }
+
+
+    // Everything that needs measuring is measured once, on load and on resize, so a frame only reads
+    // the scroll position and writes styles, and never makes the browser lay the page out mid-frame
+    var layout = null;
+    var rows = Array.prototype.slice.call(dash.querySelectorAll('.row')).map(function (row) {
+      return { el: row, card: cards.filter(function (c) { return c.n.row === row.id; })[0] };
+    });
+    var fadeInfo = fades.map(function (el) {
+      var range = el.getAttribute('data-show').split(' ').map(Number);
+      return { el: el, sec: el.closest('.story'), a: range[0], b: range[1] };
+    });
+    function measure() {
+      var vw = window.innerWidth, vh = window.innerHeight;
+      function span(el) { return { top: el.offsetTop, span: el.offsetHeight - vh }; }
+      var wrap = dash.parentNode;
+      // Inside the pinned Unify stage, which fills the screen, layout offsets are screen positions
+      var parts = unifyParts.map(function (el) {
+        var l = el.offsetLeft, t = el.offsetTop;
+        return { l: l, r: l + el.offsetWidth, t: t, b: t + el.offsetHeight };
+      });
+      layout = {
+        vh: vh,
+        sections: { intro: span(sections.intro), capture: span(sections.capture), unify: span(sections.unify), download: span(download) },
+        mouthX: wrap.offsetLeft + wrap.offsetWidth * .55,
+        mouthY: wrap.offsetTop + wrap.offsetHeight * .45
+      };
+      cards.forEach(function (c) {
+        c.shown = c.el.offsetParent !== null;
+        var w = c.el.offsetWidth, h = c.el.offsetHeight;
+        c.sx = c.n.x / 100 * vw + w / 2;
+        c.sy = c.n.y / 100 * vh + h / 2;
+        var l = c.sx - w / 2, t = c.sy - h / 2;
+        // In Unify, a note that touches nothing where it rests flies over the dashboard; the others slip under it
+        c.clear = parts.every(function (p) { return l + w < p.l || l > p.r || t + h < p.t || t > p.b; });
+      });
+      placeSnaps();
+    }
+
+    // Progress through each section, from the scroll position alone
+    function rawProgress(name) {
+      var s = layout.sections[name];
+      var y = window.scrollY - s.top;
+      return s.span > 0 ? clamp(y / s.span) : (y > 0 ? 1 : 0);
+    }
+
+    // The animations follow the scroll a moment behind, easing to it, so a mouse wheel's steps become
+    // glides. The scrolling itself is left alone
+    var shown = null;
+    var running = false, last = 0;
+    var SETTLE = 0.11;   // seconds for the animations to cover about two-thirds of the way to the scroll
+    function targets() {
+      return { intro: rawProgress('intro'), capture: rawProgress('capture'), unify: rawProgress('unify'), download: rawProgress('download') };
+    }
+    function frame(now) {
+      var goal = targets();
+      var dt = last ? Math.min(.05, (now - last) / 1000) : .016;
+      last = now;
+      var k = 1 - Math.exp(-dt / SETTLE);
+      var moving = false;
+      Object.keys(goal).forEach(function (name) {
+        var d = goal[name] - shown[name];
+        // Far jumps, such as the Download link, go straight there instead of gliding through everything
+        if (Math.abs(d) > .5) { shown[name] = goal[name]; return; }
+        if (Math.abs(d) < .0004) { shown[name] = goal[name]; return; }
+        shown[name] += d * k;
+        moving = true;
+      });
+      // Resting points follow the real scroll, not the eased one
+      var pu = goal.unify;
+      document.documentElement.classList.toggle('snapping', pu > START - (1 - START) / FEATURES / 2 && pu < 1);
+      render(shown);
+      if (moving) requestAnimationFrame(frame); else { running = false; last = 0; }
+    }
+    function request() {
+      if (!layout) return;
+      if (!running) { running = true; requestAnimationFrame(frame); }
+    }
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', function () { measure(); shown = targets(); render(shown); });
+
+    function render(p) {
+      var pi = p.intro, pc = p.capture, pu = p.unify;
+
+      // Text that fades in and out within its section
+      fadeInfo.forEach(function (f) {
+        var o = windowed(p[f.sec.id], f.a, f.b);
+        f.el.style.opacity = o;
+        f.el.style.transform = 'translateY(' + ((1 - o) * 14).toFixed(1) + 'px)';
+      });
+
+      // Hidden when the downloads arrive. Keep scrolling and the heart fades in, then the words under it
+      signoffHeart.style.opacity = clamp((p.download - .1) / .25);
+      signoffWords.style.opacity = clamp((p.download - .4) / .35);
+
+      // Capture: the sentence types itself as you scroll, and un-types going back
+      var chars = Math.round(TEXT.length * clamp((pc - .12) / .55));
+      typed.textContent = TEXT.slice(0, chars);
+      placeholder.textContent = chars ? '' : 'Type a quick note, thought, or checklist…';
+      var saved = pc > .7;
+      status.textContent = saved ? '✓ Saved to Inbox' : (chars ? 'Saving…' : 'Saves as you type');
+      status.className = 'status' + (saved ? ' saved' : '');
+
+      // Unify: the notes slip into the middle of the dashboard
+      var g = clamp(pu / GATHER);
+      var mouthX = layout.mouthX, mouthY = layout.mouthY, vh = layout.vh;
+      var landed = {};
+
+      cards.forEach(function (c) {
+        if (!c.shown) return;
+        var el = c.el;
+        var dx = 0, dy = 0, rot = c.n.r, scale = 1, op = 1;
+        if (pu > 0) {
+          // Back into view, then each note follows a curve into the dashboard, a little after the one before
+          var back = clamp(g / .25);
+          // Staggered so the last note lands just before the gathering ends (.3 + 11 × .025 + .375 = .95)
+          var t = ease(clamp((g - .3 - c.i * .025) / .375));
+          // Notes stay where they were put, like paper on a desk, until they're gathered
+          var x0 = c.sx, y0 = c.sy;
+          var cx = (x0 + mouthX) / 2, cy = Math.min(y0, mouthY) - vh * .15;
+          var x = (1 - t) * (1 - t) * x0 + 2 * (1 - t) * t * cx + t * t * mouthX;
+          var y = (1 - t) * (1 - t) * y0 + 2 * (1 - t) * t * cy + t * t * mouthY;
+          dx = x - c.sx; dy = y - c.sy;
+          rot = c.n.r * (1 - t);
+          scale = 1 - .75 * t;
+          op = (.15 + .85 * back) * (1 - clamp((t - .75) / .25));
+          if (c.n.row && t > .9) landed[c.n.row] = true;
+        } else if (pc > 0) {
+          // Behind Capture: in place, faded so the window has the focus
+          op = .4 - .25 * clamp(pc / .2);
+        } else {
+          // Scattered: still, and dimmed once the story moves on
+          op = 1 - .6 * clamp((pi - .3) / .3);
+        }
+        var parent = pu > 0 && c.clear ? overLayer : layer;
+        if (el.parentNode !== parent) parent.appendChild(el);
+        el.style.opacity = op.toFixed(3);
+        el.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+      });
+
+      // Rows appear as their notes arrive. Rows of notes not shown on narrow screens arrive with the rest
+      rows.forEach(function (r) {
+        var arrived = r.card && r.card.shown ? landed[r.el.id] : g > .8;
+        r.el.style.opacity = (pu > 0 && arrived) || pu >= GATHER ? 1 : 0;
+      });
+      var dashIn = clamp((g - .05) / .25);
+      dash.parentNode.style.opacity = dashIn.toFixed(3);
+      dash.parentNode.style.transform = 'translateY(' + ((1 - dashIn) * 40).toFixed(1) + 'px)';
+
+      // Features: one at a time, each lighting up its part of the dashboard
+      var slot = pu < START ? 0 : Math.min(FEATURES, 1 + Math.floor((pu - START) / ((1 - START) / FEATURES)));
+      captions.forEach(function (cap) {
+        var s = Number(cap.getAttribute('data-slot'));
+        var on = s === slot;
+        cap.style.opacity = on ? (slot === 0 ? clamp(g / .1) : 1) : 0;
+        cap.style.transform = 'translateY(' + (on ? 0 : (s < slot ? -12 : 12)) + 'px)';
+        cap.setAttribute('aria-hidden', on ? 'false' : 'true');
+      });
+      for (var f = 1; f <= FEATURES; f++) {
+        dash.classList.toggle('f' + f, slot === f);
+        dash.classList.toggle('after' + f, slot >= f);
+      }
+    }
+
+    function start() { measure(); shown = targets(); render(shown); }
+    start();
+    window.addEventListener('load', start);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
+  })();
+  </script>
+  {% include analytics.html %}
+</body>
+</html>
