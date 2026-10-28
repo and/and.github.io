@@ -165,8 +165,14 @@ sitemap: false
     .dash .tickmark { fill: none; stroke: var(--surface); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .dash .strike { stroke: var(--muted); stroke-width: 1.2; }
     /* What each feature switches on: f<n> while it is the one being read, after<n> from then on */
-    .dash.f1 #hl-bank, .dash.after2 .done-show, .dash.after3 #side-more,
-    .dash.f4 #ov-project, .dash.f5 #ov-search, .dash.f6 #ov-sync { opacity: 1; }
+    .dash.f1 .hl-bank, .dash.after2 .done-show, .dash.after3 .side-more, .dash.f3 .ov-tags,
+    .dash.f4 .ov-project, .dash.f5 .ov-search, .dash.f6 .ov-sync { opacity: 1; }
+    /* A phone gets a phone-shaped dashboard, like the iPhone app, so its text stays readable */
+    .dash.phone { display: none; }
+    @media (max-width: 760px) {
+      .dash.desk-dash { display: none; }
+      .dash.phone { display: block; }
+    }
     .dash .done-hide { transition: opacity .5s ease; }
     .dash.after2 .done-hide { opacity: 0; }
 
@@ -212,9 +218,13 @@ sitemap: false
       .note { width: 132px; padding: 10px 10px 14px; font-size: .78rem; }
       .split, .split.flip { grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: 18px; align-items: start; padding: 76px 18px 18px; }
       .stack.unify { gap: 12px; padding-top: 60px; }
+      /* The phone drawing is tall: fit it to the height left after the heading and the words under it */
+      .stack.unify .dash-wrap { width: min(100%, (100vh - 330px) * .71); width: min(100%, (100svh - 330px) * .71); }
       .stack.unify .captions { min-height: 170px; }
       .panel-body { min-height: 140px; }
       .platforms { grid-template-columns: 1fr 1fr; }
+      .badges { display: none; }
+      .panel-foot { justify-content: flex-end; }
       .only-wide { display: none; }
     }
     @media (min-width: 761px) { .only-narrow { display: none; } }
@@ -294,7 +304,7 @@ sitemap: false
         <div class="stack unify">
           <h2 class="kicker">2. Unify.</h2>
           <div class="dash-wrap" aria-hidden="true">
-            <svg class="dash" id="dash" viewBox="0 0 640 427" role="img">
+            <svg class="dash desk-dash" id="dash" viewBox="0 0 640 427" role="img">
               <rect class="frame" x="0.75" y="0.75" width="638.5" height="425.5" rx="14"/>
               <path class="side" d="M1.5 14 a12.5 12.5 0 0 1 12.5 -12.5 H150 V425.5 H14 a12.5 12.5 0 0 1 -12.5 -12.5z"/>
               <line class="line" x1="150" y1="1.5" x2="150" y2="425.5"/>
@@ -304,7 +314,7 @@ sitemap: false
               <text x="20" y="53" font-size="11" class="t-head">Dashboard</text>
               <text x="20" y="77" font-size="11">All Notes</text>
               <text x="20" y="99" font-size="11">Inbox</text>
-              <g id="side-more" class="reveal">
+              <g id="side-more" class="side-more reveal">
                 <text x="20" y="130" class="t-cap">PROJECTS</text>
                 <text x="20" y="150" font-size="11">Website</text>
                 <text x="20" y="170" font-size="11">Garden</text>
@@ -327,33 +337,33 @@ sitemap: false
                 </g>
                 <!-- Today -->
                 <text x="176" y="142" font-size="12" class="t-head">Today</text>
-                <g class="row" id="r-plants">
+                <g class="row" id="r-plants" data-row="r-plants">
                   <circle class="box done-hide" cx="186" cy="161" r="6"/>
                   <g class="done-show reveal"><circle class="tick" cx="186" cy="161" r="6.5"/><path class="tickmark" d="M183 161 l2.2 2.3 l4 -4.4"/></g>
                   <text x="200" y="165" font-size="11">water the plants today</text>
                   <line class="strike done-show reveal" x1="200" y1="161.5" x2="304" y2="161.5"/>
                 </g>
-                <g class="row" id="r-bill">
+                <g class="row" id="r-bill" data-row="r-bill">
                   <circle class="tick" cx="186" cy="183" r="6.5"/><path class="tickmark" d="M183 183 l2.2 2.3 l4 -4.4"/>
                   <text x="200" y="187" font-size="11" class="t-muted">pay the electricity bill today</text>
                   <line class="strike" x1="200" y1="183.5" x2="336" y2="183.5"/>
                 </g>
                 <!-- Next days -->
                 <text x="176" y="218" font-size="12" class="t-head">Next 14 Days</text>
-                <rect id="hl-bank" class="hl reveal" x="170" y="225" width="300" height="22" rx="6"/>
-                <g class="row" id="r-bank"><text x="176" y="240" font-size="9" class="t-cap">TOMORROW</text><text x="246" y="240" font-size="11">call the bank tomorrow</text></g>
-                <g class="row" id="r-dinner"><text x="176" y="262" font-size="9" class="t-cap">FRI 30</text><text x="246" y="262" font-size="11">team dinner on friday</text></g>
-                <g class="row" id="r-dentist"><text x="176" y="284" font-size="9" class="t-cap">FRI 30</text><text x="246" y="284" font-size="11">dentist oct 30 at 4pm</text></g>
+                <rect id="hl-bank" class="hl-bank hl reveal" x="170" y="225" width="300" height="22" rx="6"/>
+                <g class="row" id="r-bank" data-row="r-bank"><text x="176" y="240" font-size="9" class="t-cap">TOMORROW</text><text x="246" y="240" font-size="11">call the bank tomorrow</text></g>
+                <g class="row" id="r-dinner" data-row="r-dinner"><text x="176" y="262" font-size="9" class="t-cap">FRI 30</text><text x="246" y="262" font-size="11">team dinner on friday</text></g>
+                <g class="row" id="r-dentist" data-row="r-dentist"><text x="176" y="284" font-size="9" class="t-cap">FRI 30</text><text x="246" y="284" font-size="11">dentist oct 30 at 4pm</text></g>
                 <!-- To-do -->
                 <text x="176" y="318" font-size="12" class="t-head">To-do</text>
-                <g class="row" id="r-passport"><circle class="box" cx="186" cy="335" r="6"/><text x="200" y="339" font-size="11">renew passport</text></g>
-                <g class="row" id="r-venue"><circle class="box" cx="186" cy="357" r="6"/><text x="200" y="361" font-size="11">book the venue</text></g>
-                <g class="row" id="r-ana"><circle class="box" cx="186" cy="379" r="6"/><text x="200" y="383" font-size="11">ask @ana about the deck</text></g>
-                <g class="row" id="r-hero"><circle class="box" cx="186" cy="401" r="6"/><text x="200" y="405" font-size="11">write the hero copy</text><text x="318" y="405" font-size="9" class="t-muted">Website</text></g>
+                <g class="row" id="r-passport" data-row="r-passport"><circle class="box" cx="186" cy="335" r="6"/><text x="200" y="339" font-size="11">renew passport</text></g>
+                <g class="row" id="r-venue" data-row="r-venue"><circle class="box" cx="186" cy="357" r="6"/><text x="200" y="361" font-size="11">book the venue</text></g>
+                <g class="row" id="r-ana" data-row="r-ana"><circle class="box" cx="186" cy="379" r="6"/><text x="200" y="383" font-size="11">ask @ana about the deck</text></g>
+                <g class="row" id="r-hero" data-row="r-hero"><circle class="box" cx="186" cy="401" r="6"/><text x="200" y="405" font-size="11">write the hero copy</text><text x="318" y="405" font-size="9" class="t-muted">Website</text></g>
               </g>
 
               <!-- 4. A project's own dashboard, with its notes one after another -->
-              <g id="ov-project" class="overlay">
+              <g id="ov-project" class="ov-project overlay">
                 <rect x="10" y="38" width="130" height="22" style="fill:var(--subtle)"/>
                 <rect class="hl" x="10" y="135" width="130" height="22" rx="6"/>
                 <rect x="151" y="2" width="487" height="423" style="fill:var(--surface)"/>
@@ -376,7 +386,7 @@ sitemap: false
               </g>
 
               <!-- 5. Search -->
-              <g id="ov-search" class="overlay">
+              <g id="ov-search" class="ov-search overlay">
                 <rect class="dim" x="1.5" y="1.5" width="637" height="424" rx="13"/>
                 <rect x="140" y="70" width="360" height="150" rx="12" style="fill:var(--surface)" stroke="currentColor" stroke-width="1.2"/>
                 <text x="160" y="100" font-size="14">🔍 bank</text>
@@ -389,7 +399,7 @@ sitemap: false
               </g>
 
               <!-- 6. Plain files, synced to every device -->
-              <g id="ov-sync" class="overlay">
+              <g id="ov-sync" class="ov-sync overlay">
                 <rect class="dim" x="1.5" y="1.5" width="637" height="424" rx="13"/>
                 <!-- Centred in the window: the folder above, four devices evenly spaced below -->
                 <g fill="none" stroke="currentColor" stroke-width="1.4">
@@ -406,6 +416,113 @@ sitemap: false
                 <text x="260" y="351" font-size="10" text-anchor="middle">Windows</text>
                 <text x="380" y="351" font-size="10" text-anchor="middle">iPhone</text>
                 <text x="500" y="351" font-size="10" text-anchor="middle">Android</text>
+              </g>
+            </svg>
+            <svg class="dash phone" id="dash-phone" viewBox="0 0 320 450" role="img">
+              <rect class="frame" x="0.75" y="0.75" width="318.5" height="448.5" rx="28"/>
+              <text x="20" y="34" font-size="11" class="t-muted">Wednesday, 28 October</text>
+              <text x="20" y="60" font-size="24" class="t-head">Dashboard</text>
+              <!-- Counters, as in the iPhone app -->
+              <rect class="chip" x="16" y="74" width="66" height="44" rx="10"/><text x="49" y="95" font-size="15" text-anchor="middle" class="t-head">0</text><text x="49" y="110" font-size="9" text-anchor="middle" class="t-muted">Overdue</text>
+              <rect class="chip" x="88" y="74" width="66" height="44" rx="10"/>
+              <text x="121" y="95" font-size="15" text-anchor="middle" class="t-head done-hide">1</text><text x="121" y="96" font-size="15" text-anchor="middle" class="done-show reveal">☀️</text>
+              <text x="121" y="110" font-size="9" text-anchor="middle" class="t-muted">Today</text>
+              <rect class="chip" x="160" y="74" width="70" height="44" rx="10"/><text x="195" y="95" font-size="15" text-anchor="middle" class="t-head">3</text><text x="195" y="110" font-size="9" text-anchor="middle" class="t-muted">Upcoming</text>
+              <rect class="chip" x="236" y="74" width="68" height="44" rx="10"/><text x="270" y="95" font-size="15" text-anchor="middle" class="t-head">4</text><text x="270" y="110" font-size="9" text-anchor="middle" class="t-muted">To-dos</text>
+              <!-- Today -->
+              <text x="20" y="144" class="t-cap">TODAY</text>
+              <g class="row" data-row="r-plants">
+                <circle class="box done-hide" cx="28" cy="161" r="6.5"/>
+                <g class="done-show reveal"><circle class="tick" cx="28" cy="161" r="7"/><path class="tickmark" d="M24.8 161 l2.3 2.4 l4.3 -4.6"/></g>
+                <text x="44" y="165" font-size="12.5">water the plants today</text>
+                <line class="strike done-show reveal" x1="44" y1="161" x2="176" y2="161"/>
+              </g>
+              <g class="row" data-row="r-bill">
+                <circle class="tick" cx="28" cy="185" r="7"/><path class="tickmark" d="M24.8 185 l2.3 2.4 l4.3 -4.6"/>
+                <text x="44" y="189" font-size="12.5" class="t-muted">pay the electricity bill today</text>
+                <line class="strike" x1="44" y1="185" x2="214" y2="185"/>
+              </g>
+              <!-- Next days -->
+              <text x="20" y="218" class="t-cap">NEXT 14 DAYS</text>
+              <rect class="hl-bank hl reveal" x="12" y="225" width="296" height="22" rx="7"/>
+              <g class="row" data-row="r-bank"><text x="20" y="240" font-size="9" class="t-cap">TOMORROW</text><text x="98" y="240" font-size="12.5">call the bank tomorrow</text></g>
+              <g class="row" data-row="r-dinner"><text x="20" y="263" font-size="9" class="t-cap">FRI 30</text><text x="98" y="263" font-size="12.5">team dinner on friday</text></g>
+              <g class="row" data-row="r-dentist"><text x="20" y="286" font-size="9" class="t-cap">FRI 30</text><text x="98" y="286" font-size="12.5">dentist oct 30 at 4pm</text></g>
+              <!-- To-do -->
+              <text x="20" y="318" class="t-cap">TO-DO</text>
+              <g class="row" data-row="r-passport"><circle class="box" cx="28" cy="335" r="6.5"/><text x="44" y="339" font-size="12.5">renew passport</text></g>
+              <g class="row" data-row="r-venue"><circle class="box" cx="28" cy="358" r="6.5"/><text x="44" y="362" font-size="12.5">book the venue</text></g>
+              <g class="row" data-row="r-ana"><circle class="box" cx="28" cy="381" r="6.5"/><text x="44" y="385" font-size="12.5">ask @ana about the deck</text></g>
+              <g class="row" data-row="r-hero"><circle class="box" cx="28" cy="404" r="6.5"/><text x="44" y="408" font-size="12.5">write the hero copy</text><text x="300" y="408" font-size="10" text-anchor="end" class="t-muted">Website</text></g>
+              <line class="line" x1="1.5" y1="420" x2="318.5" y2="420"/>
+              <text x="70" y="439" font-size="10" text-anchor="middle" class="t-head" style="fill:var(--accent)">Dashboard</text>
+              <text x="160" y="439" font-size="10" text-anchor="middle" class="t-muted">Notes</text>
+              <text x="250" y="439" font-size="10" text-anchor="middle" class="t-muted">Settings</text>
+
+              <!-- 3. Projects, people and tags -->
+              <g class="ov-tags overlay">
+                <rect x="1.5" y="1.5" width="317" height="418" rx="27" style="fill:var(--surface)"/>
+                <text x="20" y="60" font-size="24" class="t-head">Notes</text>
+                <text x="20" y="98" class="t-cap">PROJECTS</text>
+                <text x="20" y="122" font-size="13">+ Website</text><text x="300" y="122" font-size="11" text-anchor="end" class="t-muted">3</text>
+                <text x="20" y="146" font-size="13">+ Garden</text><text x="300" y="146" font-size="11" text-anchor="end" class="t-muted">2</text>
+                <text x="20" y="184" class="t-cap">PEOPLE</text>
+                <text x="20" y="208" font-size="13">@ ana</text><text x="300" y="208" font-size="11" text-anchor="end" class="t-muted">2</text>
+                <text x="20" y="246" class="t-cap">TAGS</text>
+                <text x="20" y="270" font-size="13"># idea</text><text x="300" y="270" font-size="11" text-anchor="end" class="t-muted">1</text>
+              </g>
+
+              <!-- 4. A project's own dashboard -->
+              <g class="ov-project overlay">
+                <rect x="1.5" y="1.5" width="317" height="418" rx="27" style="fill:var(--surface)"/>
+                <text x="20" y="34" font-size="11" style="fill:var(--accent)">‹ Notes</text>
+                <text x="20" y="60" font-size="24" class="t-head">Website</text>
+                <text x="20" y="92" class="t-cap">TO-DO</text>
+                <circle class="box" cx="28" cy="109" r="6.5"/><text x="44" y="113" font-size="12.5">write the hero copy</text>
+                <text x="20" y="146" class="t-cap">NOTES</text>
+                <text x="20" y="170" class="t-cap">WED, 28 OCT</text>
+                <text x="20" y="188" font-size="12.5">write the hero copy</text>
+                <text x="20" y="205" font-size="11" class="t-muted">short, and say what it does in one line</text>
+                <line class="line" x1="20" y1="220" x2="300" y2="220"/>
+                <text x="20" y="242" class="t-cap">MON, 26 OCT</text>
+                <text x="20" y="260" font-size="12.5">launch checklist</text>
+                <text x="20" y="277" font-size="11" class="t-muted">- [x] buy the domain</text>
+                <text x="20" y="293" font-size="11" class="t-muted">- [x] pick the fonts</text>
+                <line class="line" x1="20" y1="308" x2="300" y2="308"/>
+                <text x="20" y="330" class="t-cap">FRI, 23 OCT</text>
+                <text x="20" y="348" font-size="12.5">kickoff with @ana</text>
+              </g>
+
+              <!-- 5. Search -->
+              <g class="ov-search overlay">
+                <rect x="1.5" y="1.5" width="317" height="418" rx="27" style="fill:var(--surface)"/>
+                <text x="20" y="60" font-size="24" class="t-head">Notes</text>
+                <rect x="16" y="76" width="288" height="32" rx="10" class="chip"/>
+                <text x="28" y="97" font-size="13">🔍 bank</text>
+                <rect class="hl" x="12" y="120" width="296" height="48" rx="10"/>
+                <text x="22" y="140" font-size="12.5" class="t-head">Errands</text>
+                <text x="22" y="158" font-size="11.5">call the <tspan class="accent" font-weight="700">bank</tspan> tomorrow</text>
+                <text x="22" y="194" font-size="12.5" class="t-head">Money</text>
+                <text x="22" y="212" font-size="11.5" class="t-muted">move savings to the new <tspan font-weight="700">bank</tspan> account</text>
+              </g>
+
+              <!-- 6. Plain files, synced: the folder above, four devices in a row below -->
+              <g class="ov-sync overlay">
+                <rect class="dim" x="1.5" y="1.5" width="317" height="447" rx="27"/>
+                <text x="160" y="118" font-size="12" text-anchor="middle" class="t-head">Scattered Notes folder</text>
+                <g fill="none" stroke="currentColor" stroke-width="1.4">
+                  <path d="M130 134 h22 l8 9 h30 v54 h-60z" style="fill:var(--surface)"/>
+                  <path d="M160 197 L52 282 M160 197 L123 282 M160 197 L197 278 M160 197 L270 278" stroke-dasharray="3 4" style="stroke:var(--accent)"/>
+                  <rect x="30" y="282" width="44" height="30" rx="3" style="fill:var(--surface)"/><path d="M24 316 h56"/>
+                  <rect x="101" y="282" width="44" height="30" rx="2" style="fill:var(--surface)"/><path d="M117 312 v6 h12 v-6"/>
+                  <rect x="186" y="278" width="22" height="40" rx="5" style="fill:var(--surface)"/>
+                  <rect x="258" y="278" width="24" height="40" rx="4" style="fill:var(--surface)"/>
+                </g>
+                <text x="160" y="173" font-size="11" text-anchor="middle" font-weight="600">.md</text>
+                <text x="52" y="338" font-size="11" text-anchor="middle">Mac</text>
+                <text x="123" y="338" font-size="11" text-anchor="middle">Windows</text>
+                <text x="197" y="338" font-size="11" text-anchor="middle">iPhone</text>
+                <text x="270" y="338" font-size="11" text-anchor="middle">Android</text>
               </g>
             </svg>
           </div>
@@ -472,26 +589,29 @@ sitemap: false
   <script>
   (function () {
     // The notes on the first screen. Each later lands in the dashboard row named by `row`.
-    // `desk` notes are left out on narrow screens.
+    // `m` is where a note sits on a phone: above and below the opening words, some running off the edge.
     var NOTES = [
-      { t: '- [ ] renew passport', x: 5, y: 13, r: -6, c: 1, row: 'r-passport' },
-      { t: 'call the bank tomorrow', x: 72, y: 11, r: 5, c: 2, row: 'r-bank' },
-      { t: 'team dinner on friday', x: 79, y: 42, r: -3, c: 3, row: 'r-dinner', desk: 1 },
-      { t: 'plan for next week:\n- book the venue', x: 4, y: 47, r: 4, c: 4, row: 'r-venue', desk: 1 },
-      { t: '#idea dark mode for the app', x: 31, y: 9, r: -2, c: 3, desk: 1 },
-      { t: 'ask @ana about the deck', x: 60, y: 87, r: 6, c: 1, row: 'r-ana' },
-      { t: 'write the hero copy +website', x: 15, y: 76, r: -5, c: 2, row: 'r-hero' },
-      { t: '- [ ] water the plants today', x: 50, y: 13, r: 3, c: 4, row: 'r-plants', desk: 1 },
-      { t: 'dentist oct 30 at 4pm', x: 82, y: 76, r: -6, c: 3, row: 'r-dentist' },
-      { t: '- [x] pay the electricity bill today', x: 81, y: 25, r: 4, c: 2, row: 'r-bill', done: 1, desk: 1 },
-      { t: 'buy oat milk', x: 13, y: 30, r: 7, c: 1, desk: 1 },
-      { t: 'what if the dashboard\nhad a calendar?', x: 76, y: 57, r: -4, c: 4, desk: 1 }
+      { t: '- [ ] renew passport', x: 5, y: 13, m: [-8, 6], r: -6, c: 1, row: 'r-passport' },
+      { t: 'call the bank tomorrow', x: 72, y: 11, m: [30, 4], r: 5, c: 2, row: 'r-bank' },
+      { t: 'team dinner on friday', x: 79, y: 42, m: [6, 83], r: -3, c: 3, row: 'r-dinner' },
+      { t: 'plan for next week:\n- book the venue', x: 4, y: 47, m: [86, 79], r: 4, c: 4, row: 'r-venue' },
+      { t: '#idea dark mode for the app', x: 31, y: 9, m: [70, 7], r: -2, c: 3 },
+      { t: 'ask @ana about the deck', x: 60, y: 87, m: [58, 85], r: 6, c: 1, row: 'r-ana' },
+      { t: 'write the hero copy +website', x: 15, y: 76, m: [-6, 70], r: -5, c: 2, row: 'r-hero' },
+      { t: '- [ ] water the plants today', x: 50, y: 13, m: [8, 15], r: 3, c: 4, row: 'r-plants' },
+      { t: 'dentist oct 30 at 4pm', x: 82, y: 76, m: [30, 74], r: -6, c: 3, row: 'r-dentist' },
+      { t: '- [x] pay the electricity bill today', x: 81, y: 25, m: [48, 14], r: 4, c: 2, row: 'r-bill', done: 1 },
+      { t: 'buy oat milk', x: 13, y: 30, m: [86, 15], r: 7, c: 1 },
+      { t: 'what if the dashboard\nhad a calendar?', x: 76, y: 57, m: [70, 69.5], r: -4, c: 4 }
     ];
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var layer = document.getElementById('notes');
     var overLayer = document.getElementById('notes-over');
     var unifyParts = ['#unify .kicker', '#unify .dash-wrap', '#unify .captions'].map(function (q) { return document.querySelector(q); });
     var dash = document.getElementById('dash');
+    // Both dashboard drawings, for wide screens and phones; only one shows, both are kept in step
+    var dashes = [dash, document.getElementById('dash-phone')];
+    var narrow = window.matchMedia('(max-width: 760px)');
     var typed = document.getElementById('typed');
     var placeholder = document.getElementById('placeholder');
     var status = document.getElementById('status');
@@ -551,8 +671,8 @@ sitemap: false
     if (reduce) {
       // Last frame of every step, with no motion
       typed.textContent = TEXT; placeholder.textContent = ''; status.textContent = '✓ Saved to Inbox'; status.className = 'status saved';
-      Array.prototype.forEach.call(dash.querySelectorAll('.row'), function (r) { r.style.opacity = 1; });
-      dash.classList.add('after2', 'after3');
+      Array.prototype.forEach.call(document.querySelectorAll('.dash .row'), function (r) { r.style.opacity = 1; });
+      dashes.forEach(function (d) { d.classList.add('after2', 'after3'); });
       return;
     }
 
@@ -560,8 +680,9 @@ sitemap: false
     // Everything that needs measuring is measured once, on load and on resize, so a frame only reads
     // the scroll position and writes styles, and never makes the browser lay the page out mid-frame
     var layout = null;
-    var rows = Array.prototype.slice.call(dash.querySelectorAll('.row')).map(function (row) {
-      return { el: row, card: cards.filter(function (c) { return c.n.row === row.id; })[0] };
+    var rows = Array.prototype.slice.call(document.querySelectorAll('.dash .row[data-row]')).map(function (row) {
+      var id = row.getAttribute('data-row');
+      return { el: row, id: id, card: cards.filter(function (c) { return c.n.row === id; })[0] };
     });
     var fadeInfo = fades.map(function (el) {
       var range = el.getAttribute('data-show').split(' ').map(Number);
@@ -583,10 +704,13 @@ sitemap: false
         mouthY: wrap.offsetTop + wrap.offsetHeight * .45
       };
       cards.forEach(function (c) {
+        var at = narrow.matches && c.n.m ? c.n.m : [c.n.x, c.n.y];
+        c.el.style.left = at[0] + 'vw';
+        c.el.style.top = at[1] + 'vh';
         c.shown = c.el.offsetParent !== null;
         var w = c.el.offsetWidth, h = c.el.offsetHeight;
-        c.sx = c.n.x / 100 * vw + w / 2;
-        c.sy = c.n.y / 100 * vh + h / 2;
+        c.sx = at[0] / 100 * vw + w / 2;
+        c.sy = at[1] / 100 * vh + h / 2;
         var l = c.sx - w / 2, t = c.sy - h / 2;
         // In Unify, a note that touches nothing where it rests flies over the dashboard; the others slip under it
         c.clear = parts.every(function (p) { return l + w < p.l || l > p.r || t + h < p.t || t > p.b; });
@@ -697,7 +821,7 @@ sitemap: false
 
       // Rows appear as their notes arrive. Rows of notes not shown on narrow screens arrive with the rest
       rows.forEach(function (r) {
-        var arrived = r.card && r.card.shown ? landed[r.el.id] : g > .8;
+        var arrived = r.card && r.card.shown ? landed[r.id] : g > .8;
         r.el.style.opacity = (pu > 0 && arrived) || pu >= GATHER ? 1 : 0;
       });
       var dashIn = clamp((g - .05) / .25);
@@ -713,10 +837,12 @@ sitemap: false
         cap.style.transform = 'translateY(' + (on ? 0 : (s < slot ? -12 : 12)) + 'px)';
         cap.setAttribute('aria-hidden', on ? 'false' : 'true');
       });
-      for (var f = 1; f <= FEATURES; f++) {
-        dash.classList.toggle('f' + f, slot === f);
-        dash.classList.toggle('after' + f, slot >= f);
-      }
+      dashes.forEach(function (d) {
+        for (var f = 1; f <= FEATURES; f++) {
+          d.classList.toggle('f' + f, slot === f);
+          d.classList.toggle('after' + f, slot >= f);
+        }
+      });
     }
 
     function start() { measure(); shown = targets(); render(shown); }
