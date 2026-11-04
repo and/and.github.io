@@ -255,6 +255,8 @@ sitemap: false
     /* Without motion, the story is a plain long page: nothing pins, every step shows its last frame */
     @media (prefers-reduced-motion: reduce) {
       #intro, #capture, #unify { height: auto; }
+      /* The sections follow each other instead of overlapping, which is how they sit when they pin */
+      #capture, #unify { margin-top: 0; }
       .stage { position: relative; height: auto; overflow: visible; }
       .center, .split, .stack { position: relative; }
       .center { padding: 100px 24px 40px; }
