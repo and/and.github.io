@@ -6,8 +6,8 @@
   },
   "ios": {
     "version": "2.8.10",
-    "build": 41,
+    "build": 42,
     "url": "itms-beta://",
-    "notes": "New optional Travelling status that sets itself on trips (needs Always location). Alerts when people in your list get busy."
+    "notes": "Long statuses in your People list keep scrolling. New optional Travelling status that sets itself on trips (needs Always location)."
   }
 }
