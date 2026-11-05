@@ -1,13 +1,13 @@
 {
   "android": {
-    "version": "2.8.7",
-    "build": 37,
-    "notes": "Sign in with a Vietnamese number. Pick your country at login."
+    "version": "2.8.10",
+    "build": 40,
+    "notes": "New Travelling status for bike and vehicle trips. Optional alerts when people in your list get busy."
   },
   "ios": {
-    "version": "2.8.7",
-    "build": 36,
+    "version": "2.8.10",
+    "build": 38,
     "url": "itms-beta://",
-    "notes": "Sign in with a Vietnamese number. Pick your country at login."
+    "notes": "Optional alerts when people in your list get busy."
   }
 }
