@@ -6,8 +6,8 @@
   },
   "ios": {
     "version": "2.8.10",
-    "build": 38,
+    "build": 39,
     "url": "itms-beta://",
-    "notes": "Optional alerts when people in your list get busy."
+    "notes": "Optional alerts when people in your list get busy. The People list shows more of each name."
   }
 }
