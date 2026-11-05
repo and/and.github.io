@@ -6,8 +6,8 @@
   },
   "ios": {
     "version": "2.8.10",
-    "build": 40,
+    "build": 41,
     "url": "itms-beta://",
-    "notes": "Optional alerts when people in your list get busy. The People list shows more of each name and lines up the statuses."
+    "notes": "New optional Travelling status that sets itself on trips (needs Always location). Alerts when people in your list get busy."
   }
 }
