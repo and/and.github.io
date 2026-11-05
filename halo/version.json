@@ -6,8 +6,8 @@
   },
   "ios": {
     "version": "2.8.10",
-    "build": 43,
+    "build": 42,
     "url": "itms-beta://",
-    "notes": "New optional Low energy status, set from your sleep and heart data in Apple Health. Long statuses keep scrolling."
+    "notes": "Long statuses in your People list keep scrolling. New optional Travelling status that sets itself on trips (needs Always location)."
   }
 }
