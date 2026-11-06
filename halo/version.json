@@ -1,13 +1,13 @@
 {
   "android": {
-    "version": "2.8.10",
-    "build": 40,
-    "notes": "New Travelling status for bike and vehicle trips. Optional alerts when people in your list get busy."
+    "version": "2.8.11",
+    "build": 41,
+    "notes": "Optional: show the title of your meeting to people with full access. New Travelling status for bike and vehicle trips."
   },
   "ios": {
     "version": "2.8.10",
-    "build": 43,
+    "build": 44,
     "url": "itms-beta://",
-    "notes": "New optional Low energy status, set from your sleep and heart data in Apple Health. Long statuses keep scrolling."
+    "notes": "Optional energy level (🔋 😐 🪫) next to your status for people with full access, from your Apple Health sleep and heart data."
   }
 }
