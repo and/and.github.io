@@ -3,5 +3,5 @@ layout: home
 title: "and.log"
 ---
 
-Notes on what I'm learning.
+A logbook of things learned, built, and discovered.
 
