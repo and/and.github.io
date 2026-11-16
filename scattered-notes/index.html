@@ -592,15 +592,15 @@ sitemap: false
       <h2>Try it.</h2>
       <p class="intro">Free.</p>
       <div class="platforms">
-        <a class="platform" href="https://github.com/and/scattered-notes/releases/latest"><strong>Mac</strong><span>macOS 14 or later, Apple silicon and Intel.</span><em>.zip ↓</em></a>
-        <a class="platform" href="https://github.com/and/scattered-notes/releases/latest"><strong>Windows</strong><span>Windows 11, Intel, AMD and Arm PCs.</span><em>.exe ↓</em></a>
-        <a class="platform" href="https://github.com/and/scattered-notes/releases/latest"><strong>Android</strong><span>Android 8 or later. Google Play is on its way.</span><em>.apk ↓</em></a>
+        <a class="platform" data-asset="-mac.zip" href="https://github.com/and/scattered-notes/releases/latest"><strong>Mac</strong><span>macOS 14 or later, Apple silicon and Intel.</span><em>.zip ↓</em></a>
+        <a class="platform" data-asset="-windows.exe" href="https://github.com/and/scattered-notes/releases/latest"><strong>Windows</strong><span>Windows 11. A preview: Windows may ask you to confirm the first time you open it.</span><em>.exe ↓</em></a>
+        <a class="platform" data-asset="-android.apk" href="https://github.com/and/scattered-notes/releases/latest"><strong>Android</strong><span>Android 8 or later.</span><em>.apk ↓</em></a>
         <div class="platform soon"><strong>iPhone and iPad</strong><span>In testing on TestFlight.</span><em>Coming soon</em></div>
       </div>
       <p class="more">
         <a href="{{ '/utilities/scattered-notes/' | relative_url }}">The longer write-up</a>
       </p>
-      <p class="signoff"><svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21.6 10.3 20C4.3 14.6.5 11.1.5 6.8.5 3.3 3.2.5 6.7.5c2 0 3.9.9 5.3 2.4C13.4 1.4 15.3.5 17.3.5c3.5 0 6.2 2.8 6.2 6.3 0 4.3-3.8 7.8-9.8 13.2z"/></svg><span>The Scattered Notes team</span></p>
+      <p class="signoff"><svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21.6 10.3 20C4.3 14.6.5 11.1.5 6.8.5 3.3 3.2.5 6.7.5c2 0 3.9.9 5.3 2.4C13.4 1.4 15.3.5 17.3.5c3.5 0 6.2 2.8 6.2 6.3 0 4.3-3.8 7.8-9.8 13.2z"/></svg><span>Keep taking notes</span></p>
     </div></div>
   </section>
 
@@ -889,6 +889,25 @@ sitemap: false
     window.addEventListener('load', start);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
   })();
+  </script>
+  <script>
+    // Each download card starts as a link to the latest release page. When GitHub answers, the card
+    // points straight at its own file in that release, so one click downloads it.
+    (function () {
+      var cards = document.querySelectorAll('a.platform[data-asset]');
+      if (!cards.length || !window.fetch) return;
+      fetch('https://api.github.com/repos/and/scattered-notes/releases/latest')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (release) {
+          if (!release || !release.assets) return;
+          cards.forEach(function (card) {
+            var ending = card.getAttribute('data-asset');
+            var file = release.assets.filter(function (a) { return a.name.slice(-ending.length) === ending; })[0];
+            if (file && file.browser_download_url) card.href = file.browser_download_url;
+          });
+        })
+        .catch(function () {});
+    })();
   </script>
   {% include analytics.html %}
 </body>
