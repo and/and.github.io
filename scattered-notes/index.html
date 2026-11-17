@@ -210,6 +210,9 @@ sitemap: false
     .platform.soon em { color: var(--faint); }
     .more { margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; font-size: 1rem; }
     .more a { color: var(--accent); }
+    .feedback { margin-top: 36px; }
+    .feedback h3 { font-size: 1.15rem; font-weight: 700; }
+    .feedback .more { margin-top: 10px; }
     .signoff { margin-top: 36px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
     /* The heart on its own line above the words. Only the words are handwritten; the heart is drawn */
     .signoff span { font-family: "Oooh Baby", cursive; font-size: clamp(1.4rem, 2.4vw, 1.8rem); line-height: 1.2; color: var(--text); }
@@ -233,6 +236,7 @@ sitemap: false
       .platform { padding: 14px 12px; }
       .platform em { padding-top: 10px; }
       .more { margin-top: 18px; }
+      .feedback { margin-top: 24px; }
       .signoff { margin-top: 20px; }
       .badges { display: none; }
       .panel-foot { justify-content: flex-end; }
@@ -600,6 +604,13 @@ sitemap: false
       <p class="more">
         <a href="{{ '/utilities/scattered-notes/' | relative_url }}">The longer write-up</a>
       </p>
+      <div class="feedback">
+        <h3>Feedback</h3>
+        <p class="more">
+          <a href="mailto:anands.www.email@gmail.com?subject=Scattered%20Notes%20feedback">Tried it? Tell me what's missing</a>
+          <a href="https://calendly.com/anands-www-email/15-minute-meeting">Or book 15 minutes</a>
+        </p>
+      </div>
       <p class="signoff"><svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21.6 10.3 20C4.3 14.6.5 11.1.5 6.8.5 3.3 3.2.5 6.7.5c2 0 3.9.9 5.3 2.4C13.4 1.4 15.3.5 17.3.5c3.5 0 6.2 2.8 6.2 6.3 0 4.3-3.8 7.8-9.8 13.2z"/></svg><span>Keep taking notes</span></p>
     </div></div>
   </section>

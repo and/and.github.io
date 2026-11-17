@@ -9,6 +9,9 @@ permalink: /about/
   <div>
     <p class="about-name">ānand</p>
     <p class="about-link"><a href="https://github.com/and/">github.com/and</a></p>
+    <p class="about-link"><a href="mailto:anands.www.email@gmail.com">anands.www.email@gmail.com</a></p>
+    <p class="about-link"><a href="https://www.linkedin.com/in/anandhms/">linkedin.com/in/anandhms</a></p>
+    <p class="about-link"><a href="https://calendly.com/anands-www-email/15-minute-meeting">Book a 15-minute call</a></p>
   </div>
 </div>
 
